@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { render } from "./lib/render.ts";
 import { CHAPTERS as BASE_CHAPTERS, TODO, type Chapter, type Page } from "./lib/site.ts";
 import { layout, editor, denied } from "./lib/views.ts";
+import { arrange, move, toSaved, type Saved } from "./lib/layout.ts";
 
 const ROOT = import.meta.dir;
 const DATA = process.env.HOSTING_DATA_DIR ?? join(ROOT, ".data");
@@ -14,15 +15,30 @@ const sharesFile = join(DATA, "shares.json");
 const customFile = join(DATA, "custom-pages.json");
 type Custom = Page & { chapter: number };
 const readCustom = (): Custom[] => (existsSync(customFile) ? JSON.parse(readFileSync(customFile, "utf8")) : []);
-const chapters = (): Chapter[] => BASE_CHAPTERS.map((c) => ({ ...c, pages: [...c.pages, ...readCustom().filter((p) => p.chapter === c.number)] }));
+const layoutFile = join(DATA, "layout.json");
+const readLayout = (): Saved => (existsSync(layoutFile) ? JSON.parse(readFileSync(layoutFile, "utf8")) : []);
+function chapters(): Chapter[] {
+  const custom = readCustom();
+  const saved = readLayout();
+  const defaults: Chapter[] = [
+    ...BASE_CHAPTERS.map((c) => ({ ...c, pages: [...c.pages, ...custom.filter((p) => p.chapter === c.number)] })),
+    ...saved.filter((s) => !BASE_CHAPTERS.some((c) => c.number === s.number)).map((s) => ({ number: s.number, title: s.title, pages: custom.filter((p) => p.chapter === s.number) })),
+  ];
+  return arrange(defaults, saved);
+}
+function saveLayout(cs: Chapter[]) {
+  mkdirSync(DATA, { recursive: true });
+  writeFileSync(layoutFile, JSON.stringify(toSaved(cs), null, 2));
+  queueMicrotask(() => broadcast("*"));
+}
 const pages = (): Page[] => [TODO, ...chapters().flatMap((c) => c.pages)];
 const slugify = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
 
 function addPage(chapter: number, title: string): Page | null {
-  const c = BASE_CHAPTERS.find((x) => x.number === chapter);
+  const c = chapters().find((x) => x.number === chapter);
   const name = slugify(title);
   if (!c || !name) return null;
-  const dir = c.pages[0].slug.split("/")[0];
+  const dir = BASE_CHAPTERS.find((x) => x.number === chapter)?.pages[0].slug.split("/")[0] ?? slugify(c.title);
   const page: Custom = { chapter, slug: `${dir}/${name}`, path: `${dir}/${name}`, title: title.trim() };
   if (pages().some((p) => p.slug === page.slug)) return null;
   mkdirSync(DATA, { recursive: true });
@@ -149,6 +165,32 @@ const server = Bun.serve({
         const page = addPage(Number(chapter), String(title ?? ""));
         return page ? json({ ok: true, path: page.path }) : json({ error: "pick a new, non-empty title" }, 400);
       }
+      if (req.method === "POST" && path === "api/new-section") {
+        if (!isOwner(who)) return json({ error: "only the wiki owner can do this" }, 403);
+        const title = String((await req.json()).title ?? "").trim();
+        const cs = chapters();
+        if (!slugify(title) || cs.some((c) => c.title.toLowerCase() === title.toLowerCase())) return json({ error: "pick a new, non-empty title" }, 400);
+        const number = Math.max(0, ...cs.map((c) => c.number)) + 1;
+        saveLayout([...cs, { number, title, pages: [] }]);
+        return json({ ok: true, chapter: number });
+      }
+      if (req.method === "POST" && path === "api/remove-section") {
+        if (!isOwner(who)) return json({ error: "only the wiki owner can do this" }, 403);
+        const { chapter } = await req.json();
+        const cs = chapters();
+        const c = cs.find((x) => x.number === Number(chapter));
+        if (!c || c.pages.length) return json({ error: "only an empty section can be removed" }, 400);
+        saveLayout(cs.filter((x) => x !== c));
+        return json({ ok: true });
+      }
+      if (req.method === "POST" && path === "api/move") {
+        if (!isOwner(who)) return json({ error: "only the wiki owner can do this" }, 403);
+        const { slug, chapter, index } = await req.json();
+        const cs = move(chapters(), String(slug), Number(chapter), Number(index ?? Infinity));
+        if (!cs) return json({ error: "unknown page or section" }, 400);
+        saveLayout(cs);
+        return json({ ok: true });
+      }
       if (req.method === "GET" && path === "api/events") {
         if (!who) return json({ error: "sign in" }, 403);
         let ctl: ReadableStreamDefaultController<string>;
@@ -205,7 +247,7 @@ const server = Bun.serve({
 
 function navFor(who: string) {
   const visible = (p: Page) => canRead(who, p.slug);
-  return { todo: visible(TODO) ? TODO : null, chapters: chapters().map((c) => ({ ...c, pages: c.pages.filter(visible) })).filter((c) => c.pages.length) };
+  return { todo: visible(TODO) ? TODO : null, chapters: chapters().map((c) => ({ ...c, pages: c.pages.filter(visible) })).filter((c) => c.pages.length || isOwner(who)) };
 }
 
 console.log(`jean-wiki on :${server.port}`);

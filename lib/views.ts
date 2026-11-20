@@ -20,7 +20,7 @@ const shareLabel = (s?: Share) =>
 export function layout(o: { base: string; page: Page; nav: Nav; body: string; headings: Heading[]; owner: boolean; share?: Share }) {
   const { base, page, nav } = o;
   const link = (p: Page, label: string) =>
-    `<a href="${base}${p.path}" class="${p.slug === page.slug ? "active" : ""}">${label}</a>`;
+    `<a href="${base}${p.path}" class="${p.slug === page.slug ? "active" : ""}"${o.owner && p.slug !== "todo" ? ` draggable="true" data-slug="${esc(p.slug)}"` : ""}>${label}</a>`;
   const order = [nav.todo, ...nav.chapters.flatMap((c) => c.pages)].filter(Boolean) as Page[];
   const i = order.findIndex((p) => p.slug === page.slug);
   const prev = i > 0 ? order[i - 1] : null;
@@ -32,9 +32,10 @@ ${o.owner ? `<div class="actions"><span class="share-state">${shareLabel(o.share
 <button class="menu" aria-label="Menu" onclick="document.body.classList.toggle('nav-open')">☰</button></header>
 <nav class="side">
 ${nav.todo ? `<div class="part">${link(nav.todo, "Todo")}</div>` : ""}
-${nav.chapters.map((c) => `<div class="part"><div class="chapter">${c.number}&nbsp; ${esc(c.title)}</div>
-${c.pages.map((p, j) => link(p, `<span class="num">${c.number}.${j + 1}</span> ${esc(p.title)}`)).join("\n")}
-${o.owner ? `<button class="new-page" data-chapter="${c.number}">+ New page</button>` : ""}</div>`).join("\n")}
+${nav.chapters.map((c, ci) => `<div class="part" data-chapter="${c.number}"><div class="chapter">${ci + 1}&nbsp; ${esc(c.title)}</div>
+${c.pages.map((p, j) => link(p, `<span class="num">${ci + 1}.${j + 1}</span> ${esc(p.title)}`)).join("\n")}
+${o.owner ? `<div class="section-tools">${c.pages.length ? "" : `<span class="empty">Drag pages here</span>`}<button class="new-page" data-chapter="${c.number}">+ New page</button>${c.pages.length ? "" : `<button class="remove-section" data-chapter="${c.number}">Remove section</button>`}</div>` : ""}</div>`).join("\n")}
+${o.owner ? `<button class="new-section">+ New section</button>` : ""}
 </nav>
 <main><article>${o.body}${sourcesBox(page)}</article>
 <footer class="pager">${prev ? `<a href="${base}${prev.path}">← ${esc(prev.title)}</a>` : "<span></span>"}${next ? `<a href="${base}${next.path}">${esc(next.title)} →</a>` : ""}</footer>

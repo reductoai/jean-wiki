@@ -39,6 +39,10 @@ bun install
 WIKI_DEV_EMAIL=jean@reducto.ai PORT=3000 bun server.ts
 ```
 
+## Sections and page order
+
+The owner sees "+ New section" at the bottom of the sidebar and can drag any page into another section or to a new spot. The order saves live to `$HOSTING_DATA_DIR/layout.json`. A page keeps its URL when it moves. An empty section shows "Remove section". Agents can do the same with the bearer token: `POST /api/new-section {"title":...}`, `POST /api/move {"slug":...,"chapter":<section number from /api/pages>,"index":<0-based spot>}`, `POST /api/remove-section {"chapter":...}`. Pages added to `lib/site.ts` later appear in their own section until moved.
+
 ## Redeploy
 
 Today the site is the Devin App `jean-wiki` at https://jean-wiki--jk7mnqxh.preview.devinapps.com. Only the session that manages the app can deploy it.
