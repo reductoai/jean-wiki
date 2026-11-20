@@ -2,24 +2,7 @@
 
 Problem. We pay for Modal dev and staging inference while production GPUs sit partly idle by day: decode pools averaged 11% to 36% GPU busy time from 09:00 to 18:00 PT over the measured week. Some evaluation calls could use models already on the clusters, but…
 
-<div class="ws-head">
-<div class="ws-stat"><b>2</b><span>steps left</span></div>
-<div class="ws-stat"><b>1</b><span>PRs merged</span></div>
-<div class="ws-stat"><b>0</b><span>PRs open</span></div>
-<div class="ws-stat"><b>1</b><span>impact measures</span></div>
-</div>
-
-## Next steps
-
-<ol class="steps"><li class="now">PR: wire in the v4c shadow R-1 re-parse as opt-in. Pilot against a matched 09:00 to 18:00 PT baseline including a peak; compare…</li><li>PR: a second line in the router, where low calls wait instead of getting 429 low_refused. Waits on Jean's stamp.</li></ol>
-
-## Impact
-
-<div class="impact-grid"><div class="impact-card"><div class="ic-label">Cluster utilization and p99 latency of priority calls</div><div class="ic-value">not measured yet; measure before vs after once it ships.</div></div></div>
-
-## PRs
-
-<div class="pr-grid"><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/15178"><b>#15178</b><span>merged</span><em>2026-11-17 13:30 PT (PT): Admission PR open: #15178. New /admit-low route, off until a…</em></a></div>
+{{dashboard:lower-priority-calls}}
 
 ## Details
 

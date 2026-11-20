@@ -2,24 +2,7 @@
 
 Today, our warm capacity in the EU and AU is not very much used. However, we do have some workloads that have global residency: serving them anywhere is fair game. If these workloads can use that global capacity, while scaling up their regional capacity, this…
 
-<div class="ws-head">
-<div class="ws-stat"><b>6</b><span>steps left</span></div>
-<div class="ws-stat"><b>3</b><span>PRs merged</span></div>
-<div class="ws-stat"><b>1</b><span>PRs open</span></div>
-<div class="ws-stat"><b>6</b><span>impact measures</span></div>
-</div>
-
-## Next steps
-
-<ol class="steps"><li class="now">Step 1: router and R-1 calls know global (PR 15234, merged)</li><li>Step 2: count global calls and time the US to EU path</li><li>Step 3: US calls borrow EU capacity as low-priority calls through the EU router (on top of PR 15178)</li><li>Step 4: EU lend limit set by feedback (same controller code as the low-priority limit)</li><li>Step 5: US router sends global calls to the EU router</li><li>Step 6: one Doppler key for the EU router in the US router Secret (Jean)</li></ol>
-
-## Impact
-
-<div class="impact-grid"><div class="impact-card"><div class="ic-label">Baseline</div><div class="ic-value"><b>98.1%</b> of US jobs (<b>99.4%</b> of pages) have no residency limit, so they can run in EU or AU. Measured on US prod jobs, Nov <b>12</b> to <b>18 </b>(Jensen), reported 2026-11-18.</div></div><div class="impact-card"><div class="ic-label">Before, EU warm slots in use (Tinybird, Nov 16 to 18 UTC)</div><div class="ic-value">maverick <b>3.1%</b> of <b>155,</b> figsum <b>2.0%</b> of <b>198,</b> fpp-35b <b>1.2%</b> of <b>97,</b> extract-v4-magpie <b>0.5%</b> of <b>23,</b> citation-7b <b>0.3%</b> of <b>12,</b> fpp-2b <b>0.2%</b> of <b>92.</b></div></div><div class="impact-card"><div class="ic-label">Before, minutes with a US queue</div><div class="ic-value"><b>2.2%</b> (fpp-2b) to <b>11.1%</b> (citation-7b); the largest average queue is <b>22.0</b> calls (fpp-35b). In each of those minutes the EU had an idle slot.</div></div><div class="impact-card"><div class="ic-label">After</div><div class="ic-value">no call moves yet. Step <b>1 </b>(PR <b>15234</b>) is merged and no environment has a global_only cluster.</div></div><div class="impact-card"><div class="ic-value">First split of router admits (Datadog router.admit.global, #<b>15396,</b> read 2026-11-19 <b>15</b>:<b>00</b> PT). US prod, <b>10</b>:<b>18</b> to <b>15</b>:<b>00</b> PT Nov <b>19</b>: <b>89%</b> of <b>6.36M</b> admits come from jobs with no…</div></div><div class="impact-card"><div class="ic-value">EU utilization, calls served on EU slots instead of waiting, US waited share and GPU cost per 1k pages: not measured yet; measure at step <b>8.</b></div></div></div>
-
-## PRs
-
-<div class="pr-grid"><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/15234"><b>#15234</b><span>merged</span><em>Step 1: router and R-1 calls know global (PR 15234, merged)</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/15396"><b>#15396</b><span>merged</span><em>Counter per namespace, global or resident (PR 15396, merged). Only R-1 calls send global…</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/15397"><b>#15397</b><span>merged</span><em>Counter per namespace, global or resident (PR 15396, merged). Only R-1 calls send global…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15178"><b>#15178</b><span>open</span><em>Step 3: US calls borrow EU capacity as low-priority calls through the EU router (on top…</em></a></div>
+{{dashboard:global-is-fair-game}}
 
 ## Details
 

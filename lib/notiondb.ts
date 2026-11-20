@@ -7,6 +7,8 @@ export type Dash = {
   apps: { name: string; state: string; status: string; note: string }[];
   steps: { step: string; detail: string; state: string }[];
   costs: { app: string; before: number; after: number }[];
+  impact: { measure: string; value: string }[];
+  prs: { pr: string; repo: string; state: string; note: string }[];
 };
 type Kind = keyof Dash;
 
@@ -32,6 +34,8 @@ const pick: Record<Kind, (p: any) => any> = {
   apps: (p) => ({ name: text(p.Name), state: STATES.includes(p.State?.select?.name) ? p.State.select.name : "later", status: text(p.Status), note: text(p.Note) }),
   steps: (p) => ({ step: text(p.Step), detail: text(p.Detail), state: p.State?.select?.name ?? "next" }),
   costs: (p) => ({ app: text(p.App), before: p.Before?.number ?? 0, after: p.After?.number ?? 0 }),
+  impact: (p) => ({ measure: text(p.Measure), value: text(p.Value) }),
+  prs: (p) => ({ pr: text(p.PR), repo: text(p.Repo) || "api", state: p.State?.select?.name === "merged" ? "merged" : "open", note: text(p.Note) }),
 };
 
 async function query(db: string, token: string): Promise<any[]> {
@@ -59,7 +63,7 @@ export async function refresh(token: string): Promise<boolean> {
     for (const row of await query(CFG.databases[kind], token)) {
       const ws = row.properties.Workstream?.select?.name;
       if (!ws) continue;
-      next[ws] ??= { stats: [], apps: [], steps: [], costs: [] };
+      next[ws] ??= { stats: [], apps: [], steps: [], costs: [], impact: [], prs: [] };
       (next[ws][kind] as any[]).push(pick[kind](row.properties));
     }
   }
@@ -74,18 +78,27 @@ export async function refresh(token: string): Promise<boolean> {
 }
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+const nums = (s: string) => esc(s).replace(/(?<![\w.-])(\$?\d[\d,.]*\s?(?:%|ms|s|K|M|GPUs?|USD|x)?)(?![\w-])/g, "<b>$1</b>");
 const prLinks = (s: string) => esc(s).replace(/#(\d{4,6})/g, '<a href="https://github.com/reductoai/api/pull/$1">#$1</a>');
 
 export function dashboardHtml(ws: string): string {
-  const d = dashboard(ws);
-  if (!d) return `_No dashboard rows for "${ws}" yet._`;
-  let out = `<div class="ws-head">${d.stats.map((s) => `<div class="ws-stat"><b>${esc(s.value)}</b><span>${esc(s.label)}</span></div>`).join("")}</div>\n\n`;
+  const found = dashboard(ws);
+  if (!found) return `_No dashboard rows for "${ws}" yet._`;
+  const d: Dash = { stats: [], apps: [], steps: [], costs: [], impact: [], prs: [], ...found };
+  const steps = d.steps.filter((s) => s.state !== "done");
+  const mergedPrs = d.prs.filter((p) => p.state === "merged").length;
+  const stats = d.stats.length ? d.stats : [
+    { value: String(steps.length), label: "steps left" },
+    { value: String(mergedPrs), label: "PRs merged" },
+    { value: String(d.prs.length - mergedPrs), label: "PRs open" },
+    { value: String(d.impact.length), label: "impact measures" },
+  ];
+  let out = `<div class="ws-head">${stats.map((s) => `<div class="ws-stat"><b>${esc(s.value)}</b><span>${esc(s.label)}</span></div>`).join("")}</div>\n\n`;
   if (d.apps.length) {
     const order = ["on", "wait", "later"];
     const apps = [...d.apps].sort((a, b) => order.indexOf(a.state) - order.indexOf(b.state));
     out += `## Apps\n\n<div class="app-grid">${apps.map((a) => `<div class="app-card ${esc(a.state)}"><div class="ac-name">${esc(a.name)}</div><div class="ac-state">${esc(a.status)}</div><div class="ac-note">${prLinks(a.note)}</div></div>`).join("")}</div>\n\n`;
   }
-  const steps = d.steps.filter((s) => s.state !== "done");
   if (steps.length) out += `## Next steps\n\n<ol class="steps">${steps.map((s) => `<li${s.state === "now" ? ' class="now"' : ""}><b>${esc(s.step)}</b>${s.detail ? `: ${prLinks(s.detail)}` : ""}</li>`).join("")}</ol>\n\n`;
   if (d.costs.length) {
     out += `## Cost per call\n\nUSD per 1k calls (per 1k pages for R-1 and R-1 mini), all regions, before and after the move.\n\n<div class="cost-bars"><div class="cb-legend"><span class="cb before"></span> before <span class="cb after good"></span> after</div>${d.costs.map((c) => {
@@ -93,5 +106,7 @@ export function dashboardHtml(ws: string): string {
       return `<div class="cb-row"><div class="cb-app">${esc(c.app)}</div><div class="cb-bars"><div class="cb before" style="width:${(c.before / m) * 100}%"><span>${c.before}</span></div><div class="cb after ${cls}" style="width:${(c.after / m) * 100}%"><span>${c.after}</span></div></div><div class="cb-ch ${cls}">${ch > 0 ? "+" : ""}${ch}%</div></div>`;
     }).join("")}</div>\n\n`;
   }
-  return out + `<p class="source">Cards, steps and chart come from <a href="${notionPage}">Jean's wiki content</a> in Notion. Edit the rows there; this page updates within a minute.</p>\n\n`;
+  if (d.impact.length) out += `## Impact\n\n<div class="impact-grid">${d.impact.map((m) => `<div class="impact-card">${m.measure ? `<div class="ic-label">${esc(m.measure)}</div>` : ""}<div class="ic-value">${nums(m.value)}</div></div>`).join("")}</div>\n\n`;
+  if (d.prs.length) out += `## PRs\n\n<div class="pr-grid">${d.prs.map((p) => `<a class="pr-chip ${p.state}" href="https://github.com/reductoai/${encodeURIComponent(p.repo)}/pull/${encodeURIComponent(p.pr.replace(/\D/g, ""))}"><b>${esc(p.pr)}</b><span>${p.state}</span><em>${esc(p.note)}</em></a>`).join("")}</div>\n\n`;
+  return out + `<p class="source">Numbers, cards and steps come from <a href="${notionPage}">Jean's wiki content</a> in Notion. Edit the rows there; this page updates within a minute.</p>\n\n`;
 }

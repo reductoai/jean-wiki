@@ -1,0 +1,147 @@
+{
+ "steps": [
+  {
+   "step": "RL 299 on B200",
+   "detail": "",
+   "state": "now"
+  },
+  {
+   "step": "RL 299 on H100 and H200 (AU's engine)",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "RL 299 on A100 80GB",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "RL 299 on B300",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Roofline for every chip (plan, awaiting Jean's stamp; asked on #15276: \"this is the most we can get from the gpu? do we have a…",
+   "detail": "",
+   "state": "next"
+  }
+ ],
+ "impact": [
+  {
+   "measure": "B300 vs B200, back to back",
+   "value": "21.4 vs 32.2 pages/s per container (B300 range 21.4 to 31.0). Measured on dev, 2026-11-18 (Jensen)."
+  },
+  {
+   "measure": "",
+   "value": "B300 FP8 vision attention (#15385, 20261117-b300-fp8attn vs 20261117-b300-nvfp4, back to back on one dev B300, AIPerf rep-1k): AMD hosts +6.2% to +9.7% at 64 in flight and +9.2%…"
+  },
+  {
+   "measure": "B300 package",
+   "value": "28 pages/s at 128 in flight, about 10% under B200. Measured on dev, 2026-11-18."
+  },
+  {
+   "measure": "A100 roofline",
+   "value": "99% busy at 16 in flight; slow kernels leave about 30%. All-chip kernels at 32 to 73% of roof. Measured 2026-11-18."
+  },
+  {
+   "measure": "GPU cost per 1k pages at saturation, dev, one container",
+   "value": "RL 299 on B200 $0.055 at 128 in flight (31.31 pages/s); on H100 INT8 $0.085 at 32 in flight (12.94 pages/s)."
+  },
+  {
+   "measure": "Quality, RL 299 against BF16",
+   "value": "judge net -3 on rep-1k (floor -30) and -23 on public 2k (floor -60)."
+  }
+ ],
+ "prs": [
+  {
+   "pr": "#15276",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15276: add RL 299 as 20261117-a100-int8"
+  },
+  {
+   "pr": "#15274",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15274 ✅ Nov 18, 11:12 PT + Deploy (Nov 18, 11:46 PT, Modal dev shadow fpp-flash-rl299,…"
+  },
+  {
+   "pr": "#15317",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15317 ✅ Nov 18, 12:28 PT. Tables only, nothing to deploy: the same table from the shared…"
+  },
+  {
+   "pr": "#15324",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15324 ✅ Nov 18, 12:46 PT + Deploy (Nov 18, 12:26 PT, Modal dev, from its branch, Jean's…"
+  },
+  {
+   "pr": "#15275",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15275 ✅ Nov 18, 12:49 PT. Not in a prod release yet: v1.12.24-724 was cut before it. Its…"
+  },
+  {
+   "pr": "#15245",
+   "repo": "api",
+   "state": "open",
+   "note": "#15245, the 1028 version, closed unmerged Nov 17, 21:11 PT (Jean: RL 299 only)."
+  },
+  {
+   "pr": "#15342",
+   "repo": "api",
+   "state": "open",
+   "note": "Roofline (Nov 18, one Modal dev pod, #15342): saturated at 16 in flight, with headroom in…"
+  },
+  {
+   "pr": "#15223",
+   "repo": "api",
+   "state": "open",
+   "note": "#15223 closed unmerged Nov 18, 12:03 PT (RL 299 replaces 1028). Not deployed."
+  },
+  {
+   "pr": "#15240",
+   "repo": "api",
+   "state": "open",
+   "note": "#15240: B300 tables for b200-n128 and b200-b300-128"
+  },
+  {
+   "pr": "#15239",
+   "repo": "api",
+   "state": "open",
+   "note": "#15239: L4 as l4-1112"
+  },
+  {
+   "pr": "#15246",
+   "repo": "api",
+   "state": "open",
+   "note": "#15246: A100 40GB as a100-int8 with 20 seats"
+  },
+  {
+   "pr": "#15231",
+   "repo": "api",
+   "state": "open",
+   "note": "#15231: A10G as a10g-int8"
+  },
+  {
+   "pr": "#15247",
+   "repo": "api",
+   "state": "open",
+   "note": "#15247: Inferentia2 as inf2-1028. Marketplace picks stay on 20260928."
+  },
+  {
+   "pr": "#15229",
+   "repo": "api",
+   "state": "open",
+   "note": "#15229: TPU v6e INT8 latency columns and judge result in the README"
+  },
+  {
+   "pr": "#15385",
+   "repo": "api",
+   "state": "open",
+   "note": "B300 FP8 vision attention (#15385, 20261117-b300-fp8attn vs 20261117-b300-nvfp4, back to…"
+  }
+ ]
+}

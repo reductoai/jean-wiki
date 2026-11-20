@@ -1,0 +1,138 @@
+{
+ "steps": [
+  {
+   "step": "Fixing now",
+   "detail": "",
+   "state": "now"
+  },
+  {
+   "step": "Not fixing now",
+   "detail": "",
+   "state": "next"
+  }
+ ],
+ "impact": [
+  {
+   "measure": "Cancel on disconnect (#15195, live in prod Nov 17, 16",
+   "value": "25 PT). Before: about 750 of 942 cancelled R-1 pages were still generated in full on Modal. After: none of 299 cancelled calls ran more than 0.2 s past the drop; 297 stopped a…"
+  },
+  {
+   "measure": "Same fix on staging",
+   "value": "5 dropped pages ran 10 to 11 s to the end before, none after. 24 dropped at once left no running or waiting request within 1.2 s."
+  },
+  {
+   "measure": "Modal share monitor (#15233, applied Nov 17, 18",
+   "value": "08 PT). Before: 1 false alert (99.891% Modal for fpp-2b in prod_eu). False alerts since: not measured yet."
+  },
+  {
+   "measure": "GPU cost per 1k calls or pages after the router move",
+   "value": "on the router migration page, refreshed daily."
+  },
+  {
+   "measure": "R-1 on one GPU, dev only, nothing deployed",
+   "value": "0.612 USD per 1k pages on an A100 80GB and 0.387 on an H100 at 16 in flight, 0.341 on an H200 at 20 in flight, against 0.131 for the B200 package in prod."
+  },
+  {
+   "measure": "",
+   "value": "Utilization (autoscaler queue signal) and fallback counts (reducto.inference.backend_fallbacks, added by #15185): not measured yet; measure before vs after once the fixes ship."
+  }
+ ],
+ "prs": [
+  {
+   "pr": "#15184",
+   "repo": "api",
+   "state": "merged",
+   "note": "✅ (2) Router share defaults, done in #15184: Triton, Magpie, citation 7B and FigSum are…"
+  },
+  {
+   "pr": "#15185",
+   "repo": "api",
+   "state": "merged",
+   "note": "✅ (5) FallbackBackend, done in #15185: falls through on any exception, so a deterministic…"
+  },
+  {
+   "pr": "#15182",
+   "repo": "api",
+   "state": "merged",
+   "note": "✅ (8) together-inference delete, done in #15182: together-inference/ looks dead (static…"
+  },
+  {
+   "pr": "#15195",
+   "repo": "api",
+   "state": "merged",
+   "note": "\\[2026-11-17 15:35 PT\\] Finding 9 fix (c): #15195 open. The R1 wrapper cancels a buffered…"
+  },
+  {
+   "pr": "#15188",
+   "repo": "api",
+   "state": "merged",
+   "note": "\\[2026-11-17 15:42 PT\\] Found while measuring for #15185: #15188 ✅ merged by Jean. The…"
+  },
+  {
+   "pr": "#15230",
+   "repo": "api",
+   "state": "open",
+   "note": "\\[2026-11-17 17:50 PT\\] R-1 35B A100 80GB profile (a100-fp8-tp1): #15230 open. Adds the…"
+  },
+  {
+   "pr": "#15237",
+   "repo": "api",
+   "state": "open",
+   "note": "\\[2026-11-17 18:19 PT\\] R-1 35B single-H100 profile (h100-fp8-tp1, FP8 weights, no TP2):…"
+  },
+  {
+   "pr": "#15249",
+   "repo": "api",
+   "state": "open",
+   "note": "\\[2026-11-17 21:35 PT\\] R-1 35B single-H200 profile, #15249 open (variant h200-fp8-tp1, a…"
+  },
+  {
+   "pr": "#15212",
+   "repo": "api",
+   "state": "open",
+   "note": "#15212: inference-health family patterns now take fpp-2b-tiered, fpp-2b-snapshot and…"
+  },
+  {
+   "pr": "#15226",
+   "repo": "api",
+   "state": "open",
+   "note": "#15226: the efficiency view's cluster rows now fold the workers of every Dynamo graph…"
+  },
+  {
+   "pr": "#15233",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15233: the 50% monitor and its 65% triton-qwen-rfdetr copy leave out cluster:unknown, so…"
+  },
+  {
+   "pr": "#15209",
+   "repo": "api",
+   "state": "open",
+   "note": "The Scalr plan also updates inference_router_all_clusters_down (29297426), the unapplied…"
+  },
+  {
+   "pr": "#15191",
+   "repo": "api",
+   "state": "open",
+   "note": "R-1 mini on 11-18: 1.2M pages went to Modal fpp-flash between 00:00 and 02:00 UTC…"
+  },
+  {
+   "pr": "#15232",
+   "repo": "api",
+   "state": "open",
+   "note": "R-1 mini 2.21 to 2.16, volume-driven, no verdict. On 11-18 the US had 7.43M pages at 0.42…"
+  },
+  {
+   "pr": "#15235",
+   "repo": "api",
+   "state": "open",
+   "note": "R-1 mini 2.21 to 2.16, volume-driven, no verdict. On 11-18 the US had 7.43M pages at 0.42…"
+  },
+  {
+   "pr": "#15336",
+   "repo": "api",
+   "state": "open",
+   "note": "FigSum is the one regression that holds at equal volume. US: 752k calls cost 1,108 USD on…"
+  }
+ ]
+}

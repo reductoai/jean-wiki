@@ -1,0 +1,28 @@
+{
+ "steps": [
+  {
+   "step": "PR: wire in the v4c shadow R-1 re-parse as opt-in. Pilot against a matched 09:00 to 18:00 PT baseline including a peak; compare…",
+   "detail": "",
+   "state": "now"
+  },
+  {
+   "step": "PR: a second line in the router, where low calls wait instead of getting 429 low_refused. Waits on Jean's stamp.",
+   "detail": "",
+   "state": "next"
+  }
+ ],
+ "impact": [
+  {
+   "measure": "Cluster utilization and p99 latency of priority calls",
+   "value": "not measured yet; measure before vs after once it ships."
+  }
+ ],
+ "prs": [
+  {
+   "pr": "#15178",
+   "repo": "api",
+   "state": "merged",
+   "note": "2026-11-17 13:30 PT (PT): Admission PR open: #15178. New /admit-low route, off until a…"
+  }
+ ]
+}

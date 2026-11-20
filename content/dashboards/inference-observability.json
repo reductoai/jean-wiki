@@ -1,0 +1,142 @@
+{
+ "steps": [
+  {
+   "step": "inference-health-internal: Latency, Reliability, Efficiency, Automations views",
+   "detail": "",
+   "state": "now"
+  },
+  {
+   "step": "GPU alerts",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Standard per-model monitors",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Coverage per prod model",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Uniform tags, then one dashboard",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "GPU hardware signals and logs",
+   "detail": "",
+   "state": "next"
+  }
+ ],
+ "impact": [
+  {
+   "measure": "Failed/fallback pages caught and false pages",
+   "value": "not measured yet; measure before vs after once it ships."
+  },
+  {
+   "measure": "False pages",
+   "value": "three monitors paged on healthy traffic, e.g. qwen-rfdetr \"100% on Modal\" read 99% when the real share was 1.7%; Gemini 3.7 Flash empty answers above 2% came from one org's custom…"
+  }
+ ],
+ "prs": [
+  {
+   "pr": "#13977",
+   "repo": "api",
+   "state": "open",
+   "note": "Merge #13977 (carries #14382 and #14045)"
+  },
+  {
+   "pr": "#13195",
+   "repo": "api",
+   "state": "merged",
+   "note": "COGS Worker + 6-hourly snapshot #13195 ✅ + Deploy"
+  },
+  {
+   "pr": "#14675",
+   "repo": "api",
+   "state": "merged",
+   "note": "Modal bill read 7 days at a time #14675 ✅ + Deploy"
+  },
+  {
+   "pr": "#14382",
+   "repo": "api",
+   "state": "merged",
+   "note": "Efficiency #14382 ✅ into #13977; Automations #14045 folded into #14382"
+  },
+  {
+   "pr": "#14045",
+   "repo": "api",
+   "state": "merged",
+   "note": "Efficiency #14382 ✅ into #13977; Automations #14045 folded into #14382"
+  },
+  {
+   "pr": "#14670",
+   "repo": "api",
+   "state": "merged",
+   "note": "Span metrics + generic monitors #14670 ✅ (Scalr apply not checked)"
+  },
+  {
+   "pr": "#14707",
+   "repo": "api",
+   "state": "merged",
+   "note": "Traffic stopped, idle GPUs, empty answers #14707 ✅, downtime timezone #14765 ✅"
+  },
+  {
+   "pr": "#14765",
+   "repo": "api",
+   "state": "merged",
+   "note": "Traffic stopped, idle GPUs, empty answers #14707 ✅, downtime timezone #14765 ✅"
+  },
+  {
+   "pr": "#14715",
+   "repo": "api",
+   "state": "merged",
+   "note": "finish_reason from typed completions #14715 ✅ + Deploy"
+  },
+  {
+   "pr": "#14439",
+   "repo": "api",
+   "state": "merged",
+   "note": "GPU monitor fixes #14439 ✅ + Apply (live 2026-11-12T11:28:00)"
+  },
+  {
+   "pr": "#14440",
+   "repo": "api",
+   "state": "merged",
+   "note": "usw3 dcgm-exporter #14440 ✅ + Apply, #14451 ✅, #14738 ✅, pod tags #14834 ✅"
+  },
+  {
+   "pr": "#14451",
+   "repo": "api",
+   "state": "merged",
+   "note": "usw3 dcgm-exporter #14440 ✅ + Apply, #14451 ✅, #14738 ✅, pod tags #14834 ✅"
+  },
+  {
+   "pr": "#14738",
+   "repo": "api",
+   "state": "merged",
+   "note": "usw3 dcgm-exporter #14440 ✅ + Apply, #14451 ✅, #14738 ✅, pod tags #14834 ✅"
+  },
+  {
+   "pr": "#14834",
+   "repo": "api",
+   "state": "merged",
+   "note": "usw3 dcgm-exporter #14440 ✅ + Apply, #14451 ✅, #14738 ✅, pod tags #14834 ✅"
+  },
+  {
+   "pr": "#14431",
+   "repo": "api",
+   "state": "merged",
+   "note": "usw3 in GKE B200 monitors #14431 ✅, in decode-speed drift #14756 ✅"
+  },
+  {
+   "pr": "#14756",
+   "repo": "api",
+   "state": "merged",
+   "note": "usw3 in GKE B200 monitors #14431 ✅, in decode-speed drift #14756 ✅"
+  }
+ ]
+}

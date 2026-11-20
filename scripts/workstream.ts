@@ -38,23 +38,22 @@ const impactSec = find(/impact|result/i);
 const impact = impactSec ? topItems(impactSec.body).slice(0, 6) : [];
 const problem = find(/problem|why/i);
 
-let out = `# ${title}\n\n${clip(goalLine, 260)}\n\n<div class="ws-head">
-<div class="ws-stat"><b>${steps.length}</b><span>steps left</span></div>
-<div class="ws-stat"><b>${merged}</b><span>PRs merged</span></div>
-<div class="ws-stat"><b>${prs.size - merged}</b><span>PRs open</span></div>
-<div class="ws-stat"><b>${impact.length}</b><span>impact measures</span></div>
-</div>\n\n`;
+const prState = (p: { merged: boolean }) => (p.merged ? "merged" : "open");
+const seed = {
+  steps: steps.map((s, i) => ({ step: clip(s, 130), detail: "", state: i ? "next" : "now" })),
+  impact: impact.map((s) => {
+    const [label, ...rest] = s.split(":");
+    const hasLabel = rest.length > 0 && label.length < 60;
+    return { measure: hasLabel ? label : "", value: clip(hasLabel ? rest.join(":").trim() : s, 180) };
+  }),
+  prs: [...prs].slice(0, 16).map(([k, p]) => ({ pr: `#${k.split("#")[1]}`, repo: k.startsWith("#") ? "api" : k.split("#")[0], state: prState(p), note: p.text })),
+};
+await Bun.write(`content/dashboards/${slug}.json`, JSON.stringify(seed, null, 1));
+
+let out = `# ${title}\n\n${clip(goalLine, 260)}\n\n`;
 const problemLine = problem ? plain(problem.body.split("\n").find((l) => plain(l)) ?? "").replace(/^- /, "") : "";
 if (problem && !goalLine.startsWith(problemLine.slice(0, 40))) out += `<div class="callout">\n\n**Problem.** ${clip(problemLine, 300)}\n\n</div>\n\n`;
-if (steps.length) out += `## Next steps\n\n<ol class="steps">${steps.map((s, i) => `<li${i ? "" : ' class="now"'}>${esc(clip(s, 130))}</li>`).join("")}</ol>\n\n`;
-if (impact.length) {
-  out += `## Impact\n\n<div class="impact-grid">${impact.map((s) => {
-    const [label, ...rest] = s.split(":");
-    const hasLabel = rest.length && label.length < 60;
-    return `<div class="impact-card">${hasLabel ? `<div class="ic-label">${esc(label)}</div>` : ""}<div class="ic-value">${nums(clip(hasLabel ? rest.join(":").trim() : s, 180))}</div></div>`;
-  }).join("")}</div>\n\n`;
-}
-if (prs.size) out += `## PRs\n\n<div class="pr-grid">${[...prs].slice(0, 16).map(([k, p]) => `<a class="pr-chip ${p.merged ? "merged" : "open"}" href="https://github.com/reductoai/${k.startsWith("#") ? "api" : k.split("#")[0]}/pull/${k.split("#")[1]}"><b>${k}</b><span>${p.merged ? "merged" : "open"}</span><em>${esc(p.text)}</em></a>`).join("")}</div>\n\n`;
+out += `{{dashboard:${slug}}}\n\n`;
 out += `## Details\n\n`;
 if (intro.trim()) out += `<details>\n<summary>Overview</summary>\n\n${intro.trim()}\n\n</details>\n\n`;
 for (const s of sections) out += `<details>\n<summary>${esc(s.title)}</summary>\n\n${s.body.replace(/^###/gm, "####")}\n\n</details>\n\n`;

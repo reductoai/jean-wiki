@@ -1,0 +1,49 @@
+{
+ "steps": [
+  {
+   "step": "Recipe PR (route head): rebase onto the training scaffold, add --checkpoint",
+   "detail": "",
+   "state": "now"
+  },
+  {
+   "step": "Relabel the route head for RL 299 (Wed)",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Train and export the route head (Thu AM)",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Retrain the old router (Thu AM)",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Offline comparison on the 2,000 ParseArena pages, never trained on (Thu AM)",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Autoeval the best one or two on RL 299 for at least 24 h (must start Thu PM)",
+   "detail": "",
+   "state": "next"
+  }
+ ],
+ "impact": [],
+ "prs": [
+  {
+   "pr": "#15274",
+   "repo": "api",
+   "state": "open",
+   "note": "Goal. By Fri 11/20, pick the page router for R-1 mini RL 299…"
+  },
+  {
+   "pr": "#14939",
+   "repo": "api",
+   "state": "open",
+   "note": "Goal. By Fri 11/20, pick the page router for R-1 mini RL 299…"
+  }
+ ]
+}
