@@ -139,7 +139,7 @@ article > h1:first-of-type { margin: 0 0 12px; }
   --honey:#a1a1aa; --honey-soft:#f4f4f5; --pine:#52525b; --pine-soft:#f4f4f5; --slate:#71717a; --slate-soft:#f4f4f5; --rust:#2563eb; --rust-soft:#f4f4f5; }
 header.top::before { display: none; }
 .brand::before { background: var(--ink); }
-article { font-family: "Geist", ui-sans-serif, system-ui, sans-serif; font-size: 15px; }
+article { font-family: "Valkyrie", "Valkyrie T4", Charter, "Iowan Old Style", Georgia, serif; font-size: 17px; }
 h2, h3, h2 a.anchor, h3 a.anchor { color: var(--ink); }
 nav.side .chapter { color: var(--ink); }
 nav.side a.on { color: var(--ink); background: #e4e4e7; box-shadow: none; }
