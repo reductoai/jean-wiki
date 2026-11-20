@@ -1,0 +1,18 @@
+{
+ "steps": [],
+ "impact": [],
+ "prs": [
+  {
+   "pr": "#15163",
+   "repo": "api",
+   "state": "merged",
+   "note": "Nov 17: Inference deploy docs cleanup. Shorter Flux, manual deploy and Modal fingerprint…"
+  },
+  {
+   "pr": "#15310",
+   "repo": "api",
+   "state": "merged",
+   "note": "Nov 18: GPU inference README fix. usw3 now listed as serving maverick, fpp-35b and…"
+  }
+ ]
+}

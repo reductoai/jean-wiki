@@ -2,16 +2,7 @@
 
 Ask: stamp this replay plan and its quality gate. Modeled, $1 per 10k pages is reachable if Reducto hosts every page; $0.25 only if Exa keeps routing in its stack. Quality on Exa's PDFs is unmeasured. All prices are illustrative, not quotes.
 
-<div class="ws-head">
-<div class="ws-stat"><b>4</b><span>steps left</span></div>
-<div class="ws-stat"><b>0</b><span>PRs merged</span></div>
-<div class="ws-stat"><b>0</b><span>PRs open</span></div>
-<div class="ws-stat"><b>0</b><span>impact measures</span></div>
-</div>
-
-## Next steps
-
-<ol class="steps"><li class="now">Fix the replay set. 40,007 representative pages (30,003 index, 10,004 latest crawls) set price and quality; 10,000 hard cases…</li><li>Compare three setups on the same output (text, reading order, tables):</li><li>Pick the cheapest safe threshold. Log trust score, outcome, attempts and timings per page. Sweep on a calibration split from the…</li><li>Check scale after quality passes. 20M pages/day is 231 pages/s hosted, 46 pages/s at a 20% handoff; if 20M is the handoff, 231…</li></ol>
+{{dashboard:exa-eval}}
 
 ## Details
 

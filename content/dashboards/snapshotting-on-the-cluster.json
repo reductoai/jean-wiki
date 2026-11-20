@@ -1,0 +1,191 @@
+{
+ "steps": [
+  {
+   "step": "Capture commit: still ~19–20 min for a 65 GiB image after #15157 (direct writes). Measured 11-17 with random data: the 1 TiB…",
+   "detail": "",
+   "state": "now"
+  },
+  {
+   "step": "Parked until sleep level 2 is back: CRIU lazy pages. The chart's criu.lazyPages is dump-only (post-copy, needs a page server; the…",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Image 74 → 25 GiB (sleep level 2, chart knob and shim in place since #15019): blocked on a vLLM whose in-place weight reload…",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Coverage, 9 targets (3 Dynamo models × uss1/usw3/use1), 1 live today. Jean's rule (11-17): every step ships to all three regions…",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Alert on a failed capture or a restore that fell back to cold start: #15200 (gate clean 11-17 3:50 PM PT; Jean merges, then…",
+   "detail": "",
+   "state": "next"
+  }
+ ],
+ "impact": [
+  {
+   "measure": "fpp-35b worker start on uss1",
+   "value": "3 to 17 min cold start → ~24 s restore from node SSD. Measured on uss1, reported 2026-11-18."
+  },
+  {
+   "measure": "fpp-35b share of calls on Modal",
+   "value": "21% → 2.3% fleet-wide after the 4-cluster promote (all four clusters on 8122ce7), measured fleet-wide by Mary, 2026-11-19 09:00 PT."
+  },
+  {
+   "measure": "Pending GPU pods after the promote",
+   "value": "use1 0 → 3 (burst waiting for GPUs, by design), uss1 and usw3 stayed at 0. Measured 2026-11-19 (Mary)."
+  },
+  {
+   "measure": "uss1 reuse trial",
+   "value": "fpp-35b burst pod start 5 to 6 min cold → 1.6 to 1.7 min restore (19 min to capture). fpp-35b Modal share on uss1: 0.7 to 0.8% (20 min of data). Measured on uss1, 2026-11-19…"
+  },
+  {
+   "measure": "",
+   "value": "GPU cost per 1k pages and failed/fallback pages during scale-ups: not measured yet; measure before vs after once it ships."
+  }
+ ],
+ "prs": [
+  {
+   "pr": "#15210",
+   "repo": "api",
+   "state": "merged",
+   "note": "Done 11-17 5:00 PM PT (Logs): pruner deletes on (#15210); first run removed exactly the…"
+  },
+  {
+   "pr": "#15157",
+   "repo": "api",
+   "state": "merged",
+   "note": "Capture commit: still ~19–20 min for a 65 GiB image after #15157 (direct writes).…"
+  },
+  {
+   "pr": "#15019",
+   "repo": "api",
+   "state": "merged",
+   "note": "Image 74 → 25 GiB (sleep level 2, chart knob and shim in place since #15019): blocked on…"
+  },
+  {
+   "pr": "#15256",
+   "repo": "api",
+   "state": "merged",
+   "note": "Coverage, 9 targets (3 Dynamo models × uss1/usw3/use1), 1 live today. Jean's rule…"
+  },
+  {
+   "pr": "#15257",
+   "repo": "api",
+   "state": "merged",
+   "note": "Coverage, 9 targets (3 Dynamo models × uss1/usw3/use1), 1 live today. Jean's rule…"
+  },
+  {
+   "pr": "#15225",
+   "repo": "api",
+   "state": "merged",
+   "note": "Coverage, 9 targets (3 Dynamo models × uss1/usw3/use1), 1 live today. Jean's rule…"
+  },
+  {
+   "pr": "#15248",
+   "repo": "api",
+   "state": "merged",
+   "note": "Coverage, 9 targets (3 Dynamo models × uss1/usw3/use1), 1 live today. Jean's rule…"
+  },
+  {
+   "pr": "#15200",
+   "repo": "api",
+   "state": "merged",
+   "note": "Alert on a failed capture or a restore that fell back to cold start: #15200 (gate clean…"
+  },
+  {
+   "pr": "#15154",
+   "repo": "api",
+   "state": "open",
+   "note": "Alert on a failed capture or a restore that fell back to cold start: #15200 (gate clean…"
+  },
+  {
+   "pr": "#15314",
+   "repo": "api",
+   "state": "merged",
+   "note": "## \\[2026-11-18 11:55 PT\\] Step 6a done: Snapshot live on usw3 and use1. #15256 merged…"
+  },
+  {
+   "pr": "#15222",
+   "repo": "api",
+   "state": "merged",
+   "note": "## \\[2026-11-17 20:00 PT\\] Jean keeps the share at 1 TiB (captures stay ~19 min).…"
+  },
+  {
+   "pr": "#15174",
+   "repo": "api",
+   "state": "merged",
+   "note": "## \\[2026-11-17 17:25 PT\\] Pilot re-capture (8897baf8, #15174): dump 40 s, PageBroker…"
+  },
+  {
+   "pr": "#14887",
+   "repo": "api",
+   "state": "open",
+   "note": "## \\[2026-11-13 15:36 PT\\] Snapshot agent memory 64Gi → 256Gi live on uss1: #14887. The…"
+  },
+  {
+   "pr": "#14906",
+   "repo": "api",
+   "state": "open",
+   "note": "## \\[2026-11-16 10:50 PT\\] PageBroker staging 64Gi → 200Gi live on uss1: #14906. CRIU…"
+  },
+  {
+   "pr": "#14982",
+   "repo": "api",
+   "state": "open",
+   "note": "## \\[2026-11-16 11:12 PT\\] Pilot fpp-35b-snapshot back on, live on uss1: #14982 (off…"
+  },
+  {
+   "pr": "#14904",
+   "repo": "api",
+   "state": "open",
+   "note": "## \\[2026-11-16 11:12 PT\\] Pilot fpp-35b-snapshot back on, live on uss1: #14982 (off…"
+  },
+  {
+   "pr": "#14995",
+   "repo": "api",
+   "state": "merged",
+   "note": "## \\[2026-11-16 12:15 PT\\] Restore fixes merged: #14995. TVM_FFI_CACHE_DIR on the rootfs…"
+  },
+  {
+   "pr": "#15014",
+   "repo": "api",
+   "state": "merged",
+   "note": "## \\[2026-11-16 13:57 PT\\] Checkpoint back on for live fpp-35b: #15014 merged and…"
+  },
+  {
+   "pr": "#15031",
+   "repo": "api",
+   "state": "open",
+   "note": "## \\[2026-11-16 15:55 PT\\] Level 2 dropped: the restored worker answered 200 with…"
+  },
+  {
+   "pr": "#15043",
+   "repo": "api",
+   "state": "open",
+   "note": "## \\[2026-11-16 17:27 PT\\] Node-cache fill live on uss1: #15043 (agent image…"
+  },
+  {
+   "pr": "#15055",
+   "repo": "api",
+   "state": "merged",
+   "note": "## \\[2026-11-16 18:55 PT\\] #15055 ready (gate clear): checkpoint-prune CronJob, uss1, dry…"
+  },
+  {
+   "pr": "#15415",
+   "repo": "api",
+   "state": "merged",
+   "note": "Nov 19: #15415 ✅, rolled back on uss1 (an old fpp-35b burst worker crashlooped without…"
+  },
+  {
+   "pr": "#15453",
+   "repo": "api",
+   "state": "merged",
+   "note": "Nov 19: step 1 #15453 ✅ (stop injecting NATS_SERVER)."
+  }
+ ]
+}

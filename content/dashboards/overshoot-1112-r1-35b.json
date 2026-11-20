@@ -1,0 +1,31 @@
+{
+ "steps": [],
+ "impact": [
+  {
+   "measure": "Speed gate PASS",
+   "value": "at C16, p50 0.66x prod; at C32, p50 0.54x prod. p99 at C64 is higher than prod (24.77 s vs 18.96 s)."
+  },
+  {
+   "measure": "For reference, 1109 on 11-09 (another day, another pod)",
+   "value": "1.93 / 14.30 / 16.48 / 18.63 pages/s at C1/16/32/64. C96 not measured."
+  },
+  {
+   "measure": "Quality",
+   "value": "judge vs BF16 nets -3 (prod fold-44 +2, 1109 was -6); head to head 1112 nets +6 over prod. No malformed markup on pages that stopped normally."
+  }
+ ],
+ "prs": [
+  {
+   "pr": "#14671",
+   "repo": "api",
+   "state": "open",
+   "note": "🟡 Autoeval: 1112 gets its own dev app fpp-flash-overshoot-1112 and domain…"
+  },
+  {
+   "pr": "#14630",
+   "repo": "api",
+   "state": "open",
+   "note": "PR https://github.com/reductoai/api/pull/14630: registers unpicked b200-1112-20; Devin…"
+  }
+ ]
+}

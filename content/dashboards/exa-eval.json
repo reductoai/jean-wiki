@@ -1,0 +1,26 @@
+{
+ "steps": [
+  {
+   "step": "Fix the replay set. 40,007 representative pages (30,003 index, 10,004 latest crawls) set price and quality; 10,000 hard cases…",
+   "detail": "",
+   "state": "now"
+  },
+  {
+   "step": "Compare three setups on the same output (text, reading order, tables):",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Pick the cheapest safe threshold. Log trust score, outcome, attempts and timings per page. Sweep on a calibration split from the…",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Check scale after quality passes. 20M pages/day is 231 pages/s hosted, 46 pages/s at a 20% handoff; if 20M is the handoff, 231…",
+   "detail": "",
+   "state": "next"
+  }
+ ],
+ "impact": [],
+ "prs": []
+}

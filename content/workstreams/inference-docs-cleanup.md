@@ -2,16 +2,7 @@
 
 Goal. Keep inference knowledge in reductoai/api (READMEs, docs, skills) and in the Bots' memory short, correct and easy to follow. Repo edits go as PRs; Bot memory edits are proposed to the Bot that owns them.
 
-<div class="ws-head">
-<div class="ws-stat"><b>0</b><span>steps left</span></div>
-<div class="ws-stat"><b>2</b><span>PRs merged</span></div>
-<div class="ws-stat"><b>0</b><span>PRs open</span></div>
-<div class="ws-stat"><b>0</b><span>impact measures</span></div>
-</div>
-
-## PRs
-
-<div class="pr-grid"><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/15163"><b>#15163</b><span>merged</span><em>Nov 17: Inference deploy docs cleanup. Shorter Flux, manual deploy and Modal fingerprint…</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/15310"><b>#15310</b><span>merged</span><em>Nov 18: GPU inference README fix. usw3 now listed as serving maverick, fpp-35b and…</em></a></div>
+{{dashboard:inference-docs-cleanup}}
 
 ## Details
 

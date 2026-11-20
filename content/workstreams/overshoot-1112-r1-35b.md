@@ -2,20 +2,7 @@
 
 Overshoot's fpp_35b-b200-2026-11-12 package: the 1111 engine plus 8-bit vision attention, with scales calibrated for our 20261028 encoder (Reducto's weights unchanged; only vision_scales/ and the vision_scales entry of config.json added). 96 seats, 24576…
 
-<div class="ws-head">
-<div class="ws-stat"><b>0</b><span>steps left</span></div>
-<div class="ws-stat"><b>0</b><span>PRs merged</span></div>
-<div class="ws-stat"><b>2</b><span>PRs open</span></div>
-<div class="ws-stat"><b>3</b><span>impact measures</span></div>
-</div>
-
-## Impact
-
-<div class="impact-grid"><div class="impact-card"><div class="ic-label">Speed gate PASS</div><div class="ic-value">at C16, p50 <b>0.66x</b> prod; at C32, p50 <b>0.54x</b> prod. p99 at C64 is higher than prod (<b>24.77 s</b> vs <b>18.96 s</b>).</div></div><div class="impact-card"><div class="ic-label">For reference, 1109 on 11-09 (another day, another pod)</div><div class="ic-value"><b>1.93 </b>/ <b>14.30 </b>/ <b>16.48 </b>/ <b>18.63</b> pages/s at C1/<b>16</b>/<b>32</b>/<b>64.</b> C96 not measured.</div></div><div class="impact-card"><div class="ic-label">Quality</div><div class="ic-value">judge vs BF16 nets -3 (prod fold-44 +<b>2,</b> <b>1109</b> was -6); head to head <b>1112</b> nets +<b>6</b> over prod. No malformed markup on pages that stopped normally.</div></div></div>
-
-## PRs
-
-<div class="pr-grid"><a class="pr-chip open" href="https://github.com/reductoai/api/pull/14671"><b>#14671</b><span>open</span><em>🟡 Autoeval: 1112 gets its own dev app fpp-flash-overshoot-1112 and domain…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/14630"><b>#14630</b><span>open</span><em>PR https://github.com/reductoai/api/pull/14630: registers unpicked b200-1112-20; Devin…</em></a></div>
+{{dashboard:overshoot-1112-r1-35b}}
 
 ## Details
 

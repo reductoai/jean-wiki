@@ -2,24 +2,7 @@
 
 inference-health-internal: Latency, Reliability, Efficiency, Automations views
 
-<div class="ws-head">
-<div class="ws-stat"><b>6</b><span>steps left</span></div>
-<div class="ws-stat"><b>25</b><span>PRs merged</span></div>
-<div class="ws-stat"><b>1</b><span>PRs open</span></div>
-<div class="ws-stat"><b>2</b><span>impact measures</span></div>
-</div>
-
-## Next steps
-
-<ol class="steps"><li class="now">inference-health-internal: Latency, Reliability, Efficiency, Automations views</li><li>GPU alerts</li><li>Standard per-model monitors</li><li>Coverage per prod model</li><li>Uniform tags, then one dashboard</li><li>GPU hardware signals and logs</li></ol>
-
-## Impact
-
-<div class="impact-grid"><div class="impact-card"><div class="ic-label">Failed/fallback pages caught and false pages</div><div class="ic-value">not measured yet; measure before vs after once it ships.</div></div><div class="impact-card"><div class="ic-label">False pages</div><div class="ic-value">three monitors paged on healthy traffic, e.g. qwen-rfdetr "<b>100%</b> on Modal" read <b>99%</b> when the real share was <b>1.7%</b>; Gemini <b>3.7</b> Flash empty answers above <b>2%</b> came from one org's custom…</div></div></div>
-
-## PRs
-
-<div class="pr-grid"><a class="pr-chip open" href="https://github.com/reductoai/api/pull/13977"><b>#13977</b><span>open</span><em>Merge #13977 (carries #14382 and #14045)</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/13195"><b>#13195</b><span>merged</span><em>COGS Worker + 6-hourly snapshot #13195 ✅ + Deploy</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14675"><b>#14675</b><span>merged</span><em>Modal bill read 7 days at a time #14675 ✅ + Deploy</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14382"><b>#14382</b><span>merged</span><em>Efficiency #14382 ✅ into #13977; Automations #14045 folded into #14382</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14045"><b>#14045</b><span>merged</span><em>Efficiency #14382 ✅ into #13977; Automations #14045 folded into #14382</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14670"><b>#14670</b><span>merged</span><em>Span metrics + generic monitors #14670 ✅ (Scalr apply not checked)</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14707"><b>#14707</b><span>merged</span><em>Traffic stopped, idle GPUs, empty answers #14707 ✅, downtime timezone #14765 ✅</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14765"><b>#14765</b><span>merged</span><em>Traffic stopped, idle GPUs, empty answers #14707 ✅, downtime timezone #14765 ✅</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14715"><b>#14715</b><span>merged</span><em>finish_reason from typed completions #14715 ✅ + Deploy</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14439"><b>#14439</b><span>merged</span><em>GPU monitor fixes #14439 ✅ + Apply (live 2026-11-12T11:28:00)</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14440"><b>#14440</b><span>merged</span><em>usw3 dcgm-exporter #14440 ✅ + Apply, #14451 ✅, #14738 ✅, pod tags #14834 ✅</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14451"><b>#14451</b><span>merged</span><em>usw3 dcgm-exporter #14440 ✅ + Apply, #14451 ✅, #14738 ✅, pod tags #14834 ✅</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14738"><b>#14738</b><span>merged</span><em>usw3 dcgm-exporter #14440 ✅ + Apply, #14451 ✅, #14738 ✅, pod tags #14834 ✅</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14834"><b>#14834</b><span>merged</span><em>usw3 dcgm-exporter #14440 ✅ + Apply, #14451 ✅, #14738 ✅, pod tags #14834 ✅</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14431"><b>#14431</b><span>merged</span><em>usw3 in GKE B200 monitors #14431 ✅, in decode-speed drift #14756 ✅</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14756"><b>#14756</b><span>merged</span><em>usw3 in GKE B200 monitors #14431 ✅, in decode-speed drift #14756 ✅</em></a></div>
+{{dashboard:inference-observability}}
 
 ## Details
 

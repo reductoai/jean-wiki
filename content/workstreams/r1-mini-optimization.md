@@ -2,24 +2,7 @@
 
 RL 299 on B200
 
-<div class="ws-head">
-<div class="ws-stat"><b>5</b><span>steps left</span></div>
-<div class="ws-stat"><b>5</b><span>PRs merged</span></div>
-<div class="ws-stat"><b>10</b><span>PRs open</span></div>
-<div class="ws-stat"><b>6</b><span>impact measures</span></div>
-</div>
-
-## Next steps
-
-<ol class="steps"><li class="now">RL 299 on B200</li><li>RL 299 on H100 and H200 (AU's engine)</li><li>RL 299 on A100 80GB</li><li>RL 299 on B300</li><li>Roofline for every chip (plan, awaiting Jean's stamp; asked on #15276: "this is the most we can get from the gpu? do we have a…</li></ol>
-
-## Impact
-
-<div class="impact-grid"><div class="impact-card"><div class="ic-label">B300 vs B200, back to back</div><div class="ic-value"><b>21.4</b> vs <b>32.2</b> pages/s per container (B300 range <b>21.4</b> to <b>31.0</b>). Measured on dev, 2026-11-18 (Jensen).</div></div><div class="impact-card"><div class="ic-value">B300 FP8 vision attention (#<b>15385,</b> 20261117-b300-fp8attn vs 20261117-b300-nvfp4, back to back on one dev B300, AIPerf rep-1k): AMD hosts +<b>6.2%</b> to +<b>9.7%</b> at <b>64</b> in flight and +<b>9.2%</b>…</div></div><div class="impact-card"><div class="ic-label">B300 package</div><div class="ic-value"><b>28</b> pages/s at <b>128</b> in flight, about <b>10%</b> under B200. Measured on dev, 2026-11-18.</div></div><div class="impact-card"><div class="ic-label">A100 roofline</div><div class="ic-value"><b>99%</b> busy at <b>16</b> in flight; slow kernels leave about <b>30%</b>. All-chip kernels at <b>32</b> to <b>73%</b> of roof. Measured 2026-11-18.</div></div><div class="impact-card"><div class="ic-label">GPU cost per 1k pages at saturation, dev, one container</div><div class="ic-value">RL <b>299</b> on B200 <b>$0.055</b> at <b>128</b> in flight (<b>31.31</b> pages/s); on H100 INT8 <b>$0.085</b> at <b>32</b> in flight (<b>12.94</b> pages/s).</div></div><div class="impact-card"><div class="ic-label">Quality, RL 299 against BF16</div><div class="ic-value">judge net -3 on rep-1k (floor -30) and -23 on public 2k (floor -60).</div></div></div>
-
-## PRs
-
-<div class="pr-grid"><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/15276"><b>#15276</b><span>merged</span><em>#15276: add RL 299 as 20261117-a100-int8</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/15274"><b>#15274</b><span>merged</span><em>#15274 ✅ Nov 18, 11:12 PT + Deploy (Nov 18, 11:46 PT, Modal dev shadow fpp-flash-rl299,…</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/15317"><b>#15317</b><span>merged</span><em>#15317 ✅ Nov 18, 12:28 PT. Tables only, nothing to deploy: the same table from the shared…</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/15324"><b>#15324</b><span>merged</span><em>#15324 ✅ Nov 18, 12:46 PT + Deploy (Nov 18, 12:26 PT, Modal dev, from its branch, Jean's…</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/15275"><b>#15275</b><span>merged</span><em>#15275 ✅ Nov 18, 12:49 PT. Not in a prod release yet: v1.12.24-724 was cut before it. Its…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15245"><b>#15245</b><span>open</span><em>#15245, the 1028 version, closed unmerged Nov 17, 21:11 PT (Jean: RL 299 only).</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15342"><b>#15342</b><span>open</span><em>Roofline (Nov 18, one Modal dev pod, #15342): saturated at 16 in flight, with headroom in…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15223"><b>#15223</b><span>open</span><em>#15223 closed unmerged Nov 18, 12:03 PT (RL 299 replaces 1028). Not deployed.</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15240"><b>#15240</b><span>open</span><em>#15240: B300 tables for b200-n128 and b200-b300-128</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15239"><b>#15239</b><span>open</span><em>#15239: L4 as l4-1112</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15246"><b>#15246</b><span>open</span><em>#15246: A100 40GB as a100-int8 with 20 seats</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15231"><b>#15231</b><span>open</span><em>#15231: A10G as a10g-int8</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15247"><b>#15247</b><span>open</span><em>#15247: Inferentia2 as inf2-1028. Marketplace picks stay on 20260928.</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15229"><b>#15229</b><span>open</span><em>#15229: TPU v6e INT8 latency columns and judge result in the README</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15385"><b>#15385</b><span>open</span><em>B300 FP8 vision attention (#15385, 20261117-b300-fp8attn vs 20261117-b300-nvfp4, back to…</em></a></div>
+{{dashboard:r1-mini-optimization}}
 
 ## Details
 

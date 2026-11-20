@@ -1,0 +1,86 @@
+{
+ "steps": [
+  {
+   "step": "Step 1: router and R-1 calls know global (PR 15234, merged)",
+   "detail": "",
+   "state": "now"
+  },
+  {
+   "step": "Step 2: count global calls and time the US to EU path",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Step 3: US calls borrow EU capacity as low-priority calls through the EU router (on top of PR 15178)",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Step 4: EU lend limit set by feedback (same controller code as the low-priority limit)",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Step 5: US router sends global calls to the EU router",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Step 6: one Doppler key for the EU router in the US router Secret (Jean)",
+   "detail": "",
+   "state": "next"
+  }
+ ],
+ "impact": [
+  {
+   "measure": "Baseline",
+   "value": "98.1% of US jobs (99.4% of pages) have no residency limit, so they can run in EU or AU. Measured on US prod jobs, Nov 12 to 18 (Jensen), reported 2026-11-18."
+  },
+  {
+   "measure": "Before, EU warm slots in use (Tinybird, Nov 16 to 18 UTC)",
+   "value": "maverick 3.1% of 155, figsum 2.0% of 198, fpp-35b 1.2% of 97, extract-v4-magpie 0.5% of 23, citation-7b 0.3% of 12, fpp-2b 0.2% of 92."
+  },
+  {
+   "measure": "Before, minutes with a US queue",
+   "value": "2.2% (fpp-2b) to 11.1% (citation-7b); the largest average queue is 22.0 calls (fpp-35b). In each of those minutes the EU had an idle slot."
+  },
+  {
+   "measure": "After",
+   "value": "no call moves yet. Step 1 (PR 15234) is merged and no environment has a global_only cluster."
+  },
+  {
+   "measure": "",
+   "value": "First split of router admits (Datadog router.admit.global, #15396, read 2026-11-19 15:00 PT). US prod, 10:18 to 15:00 PT Nov 19: 89% of 6.36M admits come from jobs with no…"
+  },
+  {
+   "measure": "",
+   "value": "EU utilization, calls served on EU slots instead of waiting, US waited share and GPU cost per 1k pages: not measured yet; measure at step 8."
+  }
+ ],
+ "prs": [
+  {
+   "pr": "#15234",
+   "repo": "api",
+   "state": "merged",
+   "note": "Step 1: router and R-1 calls know global (PR 15234, merged)"
+  },
+  {
+   "pr": "#15396",
+   "repo": "api",
+   "state": "merged",
+   "note": "Counter per namespace, global or resident (PR 15396, merged). Only R-1 calls send global…"
+  },
+  {
+   "pr": "#15397",
+   "repo": "api",
+   "state": "merged",
+   "note": "Counter per namespace, global or resident (PR 15396, merged). Only R-1 calls send global…"
+  },
+  {
+   "pr": "#15178",
+   "repo": "api",
+   "state": "open",
+   "note": "Step 3: US calls borrow EU capacity as low-priority calls through the EU router (on top…"
+  }
+ ]
+}

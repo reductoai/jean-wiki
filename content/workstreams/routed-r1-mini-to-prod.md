@@ -2,24 +2,7 @@
 
 Redeploy the autoeval-replay cron from current main (Jean): git fetch origin && git checkout origin/main, then uv run rd modal deploy cron prod autoeval-replay. Starts the judged auto_route leg from PR 15021.
 
-<div class="ws-head">
-<div class="ws-stat"><b>2</b><span>steps left</span></div>
-<div class="ws-stat"><b>0</b><span>PRs merged</span></div>
-<div class="ws-stat"><b>6</b><span>PRs open</span></div>
-<div class="ws-stat"><b>6</b><span>impact measures</span></div>
-</div>
-
-## Next steps
-
-<ol class="steps"><li class="now">Redeploy the autoeval-replay cron from current main (Jean): git fetch origin &amp;&amp; git checkout origin/main, then uv run rd modal…</li><li>Read results: judge score per leg. Routed should beat R-1 mini alone.</li></ol>
-
-## Impact
-
-<div class="impact-grid"><div class="impact-card"><div class="ic-label">Shadow, threshold 0.58</div><div class="ic-value"><b>28%</b> of pages to R-1; judge <b>9.32</b> vs <b>9.12</b> for R-1 mini alone and <b>9.45</b> for R-1 alone. Measured in shadow on prod traffic.</div></div><div class="impact-card"><div class="ic-label">Nov 19 threshold curve, 597 judged pages</div><div class="ic-value">R-1 mini alone <b>9.32,</b> routed at threshold <b>0.58</b> <b>9.48</b> with <b>19%</b> of pages sent to R-1, R-1 alone <b>9.53.</b> Measured in shadow on prod traffic, 2026-11-19; refreshed daily. The routed…</div></div><div class="impact-card"><div class="ic-value">PR <b>1 </b>#<b>15367</b> gates, routed 128-seat variant vs today's pick (b200-n128), one B200 container, rep-1k: <b>30.45</b> vs <b>30.24</b> pages/s at <b>128</b> in flight; no failed request <b>1</b> to <b>512</b> in flight;…</div></div><div class="impact-card"><div class="ic-label">Stress test, routed build, one container on dev</div><div class="ic-value">no failed request up to <b>512</b> in flight; <b>19.8</b> pages/s at <b>64</b> in flight on a B200, <b>10.8</b> on a B300.</div></div><div class="impact-card"><div class="ic-label">Shadow reliability (#15221, warm dev classes)</div><div class="ic-value">before, a cold class lost every strict R-1 mini page of one submit (<b>204</b> attempts); after, <b>53</b> of <b>53</b> and <b>52</b> of <b>52</b> succeeded.</div></div><div class="impact-card"><div class="ic-label">GPU cost per 1k pages</div><div class="ic-value">estimate only, about <b>$0.10</b> routed at <b>28%</b> against <b>$0.08</b> for R-1 mini and <b>$0.13</b> for R-1 (registry tables, at saturation).</div></div></div>
-
-## PRs
-
-<div class="pr-grid"><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15021"><b>#15021</b><span>open</span><em>Redeploy the autoeval-replay cron from current main (Jean): git fetch origin &amp;&amp; git…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15259"><b>#15259</b><span>open</span><em>Problem: at a full cluster, burst workers refuse calls (529), which go straight to Modal:…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/14939"><b>#14939</b><span>open</span><em>\[2026-11-16 11:45 PT\] In progress: PR 14939 adds settings.alpha.auto_route. R-1 mini's…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15324"><b>#15324</b><span>open</span><em>Left out of the curve: 103 pages from 2 of the 14 submits (05:45 and 07:45 PT). The…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15367"><b>#15367</b><span>open</span><em>PR 1 #15367 gates, routed 128-seat variant vs today's pick (b200-n128), one B200…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15221"><b>#15221</b><span>open</span><em>Shadow reliability (#15221, warm dev classes): before, a cold class lost every strict R-1…</em></a></div>
+{{dashboard:routed-r1-mini-to-prod}}
 
 ## Details
 

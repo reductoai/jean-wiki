@@ -1,0 +1,180 @@
+{
+ "stats": [
+  {
+   "label": "apps on the router",
+   "value": "7"
+  },
+  {
+   "label": "waiting on you",
+   "value": "4"
+  },
+  {
+   "label": "R-1 cost per 1k pages",
+   "value": "-41%"
+  },
+  {
+   "label": "a week of Modal still off the router",
+   "value": "$20.6K"
+  }
+ ],
+ "apps": [
+  {
+   "name": "Maverick",
+   "state": "on",
+   "status": "100%",
+   "note": "All regions"
+  },
+  {
+   "name": "R-1",
+   "state": "on",
+   "status": "100%",
+   "note": "US and EU"
+  },
+  {
+   "name": "R-1 mini",
+   "state": "on",
+   "status": "100%",
+   "note": "US and EU"
+  },
+  {
+   "name": "Citation 7B",
+   "state": "on",
+   "status": "100%",
+   "note": "US, no fallbacks"
+  },
+  {
+   "name": "FigSum",
+   "state": "on",
+   "status": "100%",
+   "note": "Slots mode, floor 1"
+  },
+  {
+   "name": "Magpie",
+   "state": "on",
+   "status": "100%",
+   "note": "US and EU"
+  },
+  {
+   "name": "Triton apps",
+   "state": "on",
+   "status": "100%",
+   "note": "US; EU at 100% since Nov 19"
+  },
+  {
+   "name": "Chicken",
+   "state": "wait",
+   "status": "Share 0 PR",
+   "note": "#15451 waits on your merge"
+  },
+  {
+   "name": "Extract confidence v3",
+   "state": "wait",
+   "status": "Share 0 PR",
+   "note": "#15468 waits on your merge"
+  },
+  {
+   "name": "Ordering",
+   "state": "wait",
+   "status": "Share 0 PR",
+   "note": "#15477 waits on your merge"
+  },
+  {
+   "name": "Extract confidence 1.7B",
+   "state": "wait",
+   "status": "Built",
+   "note": "Opens after #15451 merges"
+  },
+  {
+   "name": "Layout (Eve Legal)",
+   "state": "later",
+   "status": "Plan",
+   "note": "Needs an HTTP route first; waits on your stamp"
+  },
+  {
+   "name": "Promptable",
+   "state": "later",
+   "status": "Stays direct",
+   "note": "Router keeps the same floor"
+  },
+  {
+   "name": "Small apps",
+   "state": "later",
+   "status": "Later",
+   "note": "Only if the first four save"
+  }
+ ],
+ "steps": [
+  {
+   "step": "Merge the share 0 PRs",
+   "detail": "Chicken, extract confidence v3, ordering, and the unused confidence class (#15464, about $177 a day idle).",
+   "state": "now"
+  },
+  {
+   "step": "Ramp them",
+   "detail": "All regions together, as for Triton.",
+   "state": "next"
+  },
+  {
+   "step": "Layout",
+   "detail": "Replay Eve Legal first; build the HTTP route only if it saves.",
+   "state": "next"
+  },
+  {
+   "step": "Remove the ramp flags",
+   "detail": "For everyone.",
+   "state": "next"
+  }
+ ],
+ "costs": [
+  {
+   "app": "Magpie",
+   "before": 14.54,
+   "after": 7.1
+  },
+  {
+   "app": "R-1 (pages)",
+   "before": 3.73,
+   "after": 2.21
+  },
+  {
+   "app": "Highlight detection",
+   "before": 3.99,
+   "after": 2.25
+  },
+  {
+   "app": "Qwen RF-DETR",
+   "before": 0.75,
+   "after": 0.42
+  },
+  {
+   "app": "Triton core vision",
+   "before": 1.67,
+   "after": 1.23
+  },
+  {
+   "app": "Maverick",
+   "before": 0.66,
+   "after": 0.51
+  },
+  {
+   "app": "R-1 mini (pages)",
+   "before": 2.21,
+   "after": 2.16
+  },
+  {
+   "app": "Citation 7B",
+   "before": 2.28,
+   "after": 2.51
+  },
+  {
+   "app": "FigSum",
+   "before": 1.09,
+   "after": 1.5
+  },
+  {
+   "app": "Change tracking",
+   "before": 1.41,
+   "after": 3.59
+  }
+ ]
+}

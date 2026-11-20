@@ -1,0 +1,78 @@
+{
+ "steps": [
+  {
+   "step": "Redeploy the autoeval-replay cron from current main (Jean): git fetch origin && git checkout origin/main, then uv run rd modal…",
+   "detail": "",
+   "state": "now"
+  },
+  {
+   "step": "Read results: judge score per leg. Routed should beat R-1 mini alone.",
+   "detail": "",
+   "state": "next"
+  }
+ ],
+ "impact": [
+  {
+   "measure": "Shadow, threshold 0.58",
+   "value": "28% of pages to R-1; judge 9.32 vs 9.12 for R-1 mini alone and 9.45 for R-1 alone. Measured in shadow on prod traffic."
+  },
+  {
+   "measure": "Nov 19 threshold curve, 597 judged pages",
+   "value": "R-1 mini alone 9.32, routed at threshold 0.58 9.48 with 19% of pages sent to R-1, R-1 alone 9.53. Measured in shadow on prod traffic, 2026-11-19; refreshed daily. The routed…"
+  },
+  {
+   "measure": "",
+   "value": "PR 1 #15367 gates, routed 128-seat variant vs today's pick (b200-n128), one B200 container, rep-1k: 30.45 vs 30.24 pages/s at 128 in flight; no failed request 1 to 512 in flight;…"
+  },
+  {
+   "measure": "Stress test, routed build, one container on dev",
+   "value": "no failed request up to 512 in flight; 19.8 pages/s at 64 in flight on a B200, 10.8 on a B300."
+  },
+  {
+   "measure": "Shadow reliability (#15221, warm dev classes)",
+   "value": "before, a cold class lost every strict R-1 mini page of one submit (204 attempts); after, 53 of 53 and 52 of 52 succeeded."
+  },
+  {
+   "measure": "GPU cost per 1k pages",
+   "value": "estimate only, about $0.10 routed at 28% against $0.08 for R-1 mini and $0.13 for R-1 (registry tables, at saturation)."
+  }
+ ],
+ "prs": [
+  {
+   "pr": "#15021",
+   "repo": "api",
+   "state": "open",
+   "note": "Redeploy the autoeval-replay cron from current main (Jean): git fetch origin && git…"
+  },
+  {
+   "pr": "#15259",
+   "repo": "api",
+   "state": "open",
+   "note": "Problem: at a full cluster, burst workers refuse calls (529), which go straight to Modal:…"
+  },
+  {
+   "pr": "#14939",
+   "repo": "api",
+   "state": "open",
+   "note": "\\[2026-11-16 11:45 PT\\] In progress: PR 14939 adds settings.alpha.auto_route. R-1 mini's…"
+  },
+  {
+   "pr": "#15324",
+   "repo": "api",
+   "state": "open",
+   "note": "Left out of the curve: 103 pages from 2 of the 14 submits (05:45 and 07:45 PT). The…"
+  },
+  {
+   "pr": "#15367",
+   "repo": "api",
+   "state": "open",
+   "note": "PR 1 #15367 gates, routed 128-seat variant vs today's pick (b200-n128), one B200…"
+  },
+  {
+   "pr": "#15221",
+   "repo": "api",
+   "state": "open",
+   "note": "Shadow reliability (#15221, warm dev classes): before, a cold class lost every strict R-1…"
+  }
+ ]
+}

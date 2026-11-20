@@ -52,3 +52,7 @@ The planned home is Reducto Hosting at `apps.reducto.ai/internal/jean-wiki`, con
 ## Access
 
 Every page is private to the owners in `content/access.json`. An owner can share a page from the editor with anyone at Reducto or with listed emails. On the Devin App, every visitor counts as Jean (`WIKI_DEV_EMAIL`). Real per-user access needs Reducto Hosting, which sets `x-reducto-user-email`.
+
+## Workstream numbers live in Notion
+
+Each workstream page's headline numbers, app cards, steps, cost chart, impact cards and PR chips come from rows in the databases under [Jean's wiki content](https://app.notion.com/p/41e4a78a1c878141bc22dbccce23742d) (Stats, Apps, Steps, Costs, Impact, PRs). A page shows them with `{{dashboard:<workstream>}}`, matching rows on the `Workstream` select and sorting by `Order`. With `NOTION_TOKEN` set (the "Devin" Notion integration), the server re-reads them every 20 s, and open pages refresh when a row changes. To add a workstream, add rows with a new `Workstream` value, or write `content/dashboards/<slug>.json` and run `NOTION_TOKEN=... bun scripts/push-notion.ts <slug>`. The seed JSON is shown only before the first Notion sync.

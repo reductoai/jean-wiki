@@ -1,0 +1,185 @@
+{
+ "steps": [
+  {
+   "step": "vLLM 0.34 + FlashInfer 0.7.3: benchmark on one B200.",
+   "detail": "",
+   "state": "now"
+  },
+  {
+   "step": "B200 node pools: upgrade 1.35.5 → 1.35.8 on use1, uss1, usw1 together.",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "usw3: review static ScaledObjects and node-local cache.",
+   "detail": "",
+   "state": "next"
+  }
+ ],
+ "impact": [
+  {
+   "measure": "usw1 qwen RF-DETR at 5 seats vs 6, 24 h",
+   "value": "p99 1.33 s, under the 1.5 s line in all 8 windows; same throughput as 6 seats; Modal share 26% vs 15% with demand +10%. Measured on usw1, 24 h to 2026-11-19 11:47 PT."
+  },
+  {
+   "measure": "GPU cost per 1k pages",
+   "value": "$1.56 (Nov 18), $1.87 (Nov 17), $2.24 (Nov 16); $5.73–$6.96 on the weekend."
+  },
+  {
+   "measure": "Modal prod spend",
+   "value": "$13.4K, $8.4K, $7.3K, $11.6K, $13.0K, $17.7K per day (Nov 13 → 18)."
+  },
+  {
+   "measure": "GPU utilization (avg DCGM), Nov 18",
+   "value": "use1 26%, uss1 27%, usw3 28%, usw1 23%; 5–11% on the weekend."
+  },
+  {
+   "measure": "p99 per model call, Nov 18",
+   "value": "FPP-35B 3.5 s (9.0 s on Nov 13), FPP-2B 5.0 s."
+  },
+  {
+   "measure": "Fallbacks, Nov 18",
+   "value": "FPP-2B 6.94M (30K–220K/day before), FPP-35B 34K, Triton router live fallbacks 81K (1.29M on Nov 13)."
+  }
+ ],
+ "prs": [
+  {
+   "pr": "#15158",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15158 ✅ + Deploy — one main SHA across all Flux rollout cluster jobs."
+  },
+  {
+   "pr": "#15153",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15153 ✅ — EFA device plugin opt-in, off on prod-gpu-usw1."
+  },
+  {
+   "pr": "#15151",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15151 ✅ — cleanupOnFail false on all GPU clusters."
+  },
+  {
+   "pr": "#15156",
+   "repo": "api",
+   "state": "open",
+   "note": "#15156 🟡 — rollout-freeze-reaper retries Kubernetes API calls on HTTP 429."
+  },
+  {
+   "pr": "#15259",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15259 ✅ — B200 sharing: guarantee each model's minimum, share the rest (use1/uss1:…"
+  },
+  {
+   "pr": "#15374",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15374 ✅ — snapshot checkpoint completion grace 30m → 60m on use1, uss1, usw3. Opened…"
+  },
+  {
+   "pr": "#15380",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15380 ✅ — Flux rollback never restores the pin it replaced; GKE wait is a wait_minutes…"
+  },
+  {
+   "pr": "#15398",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15398 ✅ — a burst graph can restore from its baseline graph's checkpoint…"
+  },
+  {
+   "pr": "#15409",
+   "repo": "api",
+   "state": "merged",
+   "note": "Trial: #15409 ✅ + Deploy — reuse on for fpp-35b on uss1 only. Opened 2026-11-19 07:38 PT;…"
+  },
+  {
+   "pr": "#15415",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15415 ✅ + Deploy failed on uss1 — turn off Dynamo NATS on all GPU clusters…"
+  },
+  {
+   "pr": "#15453",
+   "repo": "api",
+   "state": "open",
+   "note": "Rollout 2026-11-19 13:24 PT: usw1 ok. On uss1 the gate restored 6349ee after an…"
+  },
+  {
+   "pr": "#15150",
+   "repo": "api",
+   "state": "open",
+   "note": "#15150 🟡 — ship snapshot and flux-system logs on GPU clusters."
+  },
+  {
+   "pr": "#15149",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15149 ✅ — pod restarts and CrashLoopBackOff."
+  },
+  {
+   "pr": "#15152",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15152 ✅ — checkpoint-prune job failures."
+  },
+  {
+   "pr": "#15154",
+   "repo": "api",
+   "state": "open",
+   "note": "#15154 🟡 — Modal cold-start regression (snapshot restore vs plain)."
+  },
+  {
+   "pr": "#15155",
+   "repo": "api",
+   "state": "open",
+   "note": "#15155 🟡 — DGD readiness and Triton ready pods."
+  },
+  {
+   "pr": "#15160",
+   "repo": "api",
+   "state": "open",
+   "note": "#15160 🟡 — Flux drift on prod GPU clusters."
+  },
+  {
+   "pr": "#15166",
+   "repo": "api",
+   "state": "open",
+   "note": "#15166 🟡 — stuck model downloads and slow model loads."
+  },
+  {
+   "pr": "#15161",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15161 ✅ — fix stuck and stale GPU monitors."
+  },
+  {
+   "pr": "#15168",
+   "repo": "api",
+   "state": "open",
+   "note": "#15168 🟡 — tag FPP shadow replay and autoeval judge calls so they leave the prod…"
+  },
+  {
+   "pr": "#15304",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15304 ✅ — terminal-throughput monitor 27401592 imported to Terraform with a 20-job…"
+  },
+  {
+   "pr": "#15355",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15355 ✅ — tag reducto.triton_flash.live_fallbacks with the error behind each router…"
+  },
+  {
+   "pr": "#15392",
+   "repo": "api",
+   "state": "open",
+   "note": "Split-pool deadline fix dropped 2026-11-19 01:38 PT (Xavier): the table_ensemble spike…"
+  }
+ ]
+}

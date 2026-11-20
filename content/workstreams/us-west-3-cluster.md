@@ -2,30 +2,13 @@
 
 
 
-<div class="ws-head">
-<div class="ws-stat"><b>4</b><span>steps left</span></div>
-<div class="ws-stat"><b>6</b><span>PRs merged</span></div>
-<div class="ws-stat"><b>12</b><span>PRs open</span></div>
-<div class="ws-stat"><b>3</b><span>impact measures</span></div>
-</div>
-
 <div class="callout">
 
 **Problem.** We accepted a GCP B200 reservation in us-west3 that comes online Thursday 2026-11-12. We need a GKE cluster ready to put it to work.
 
 </div>
 
-## Next steps
-
-<ol class="steps"><li class="now">Copy uss1 as a third GCP cluster, prod-gpu-usw3, with its own direct hostname gcp-inference-usw3.platform.reducto.ai and router…</li><li>Build everything except the GPU pool now. The gcp-gke module leaves out the b200 node pool until the reservation has a block, so…</li><li>Include the Snapshot cluster prerequisites like uss1 (Filestore CSI, the filestore-zonal-rwx storage class, the snapshot…</li><li>5 PRs: Terraform, Flux root, models on, monitors, router cutover. Traffic only moves in the last one, after a dev-style smoke on…</li></ol>
-
-## Impact
-
-<div class="impact-grid"><div class="impact-card"><div class="ic-value">Modal fell while pages rose <b>20%</b>, so cost per 1k pages fell <b>18%</b>. The B200 reservation is paid either way.</div></div><div class="impact-card"><div class="ic-value">Utilization per B200 fell because capacity rose <b>50%</b> and pages <b>20%</b>.</div></div><div class="impact-card"><div class="ic-value">The 11-18 peak (<b>22.5M</b> pages) still sent <b>6.0%</b> of fpp-35b calls to Modal (<b>$6.3K</b> of fpp-flash that day).</div></div></div>
-
-## PRs
-
-<div class="pr-grid"><a class="pr-chip open" href="https://github.com/reductoai/api/pull/14399"><b>#14399</b><span>open</span><em>Day one: rollouts that fit a full pool. fpp-35b maxSurge 0 / maxUnavailable 1 (from…</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14403"><b>#14403</b><span>merged</span><em>Day one: start on the current image. If #14403 (R-1 on Overshoot 1109, vLLM 0.31) is…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/14779"><b>#14779</b><span>open</span><em>🟢 Done. usw3 is a full router head for fpp-35b, fpp-2b and maverick: live /capacity…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/14405"><b>#14405</b><span>open</span><em>PR: #14405. Network plan: 16 to add, 1 in-place (proxy firewall), 0 to destroy.</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14438"><b>#14438</b><span>merged</span><em>2026-11-10 18:33 PT The gke apply failed: Master version "1.35.5-gke.1000000" is…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/14440"><b>#14440</b><span>open</span><em>2026-11-10 19:33 PT gke re-applied for #14440: managed DCGM is off on usw3 and the NVIDIA…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/14451"><b>#14451</b><span>open</span><em>2026-11-10 19:33 PT gke re-applied for #14440: managed DCGM is off on usw3 and the NVIDIA…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/14434"><b>#14434</b><span>open</span><em>2026-11-10 19:33 PT gke re-applied for #14440: managed DCGM is off on usw3 and the NVIDIA…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/14409"><b>#14409</b><span>open</span><em>PR: #14409</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/14572"><b>#14572</b><span>open</span><em>The fix is PR https://github.com/reductoai/api/pull/14572 (namespace list becomes a…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/14738"><b>#14738</b><span>open</span><em>2026-11-12 16:41 PT gke re-apply added the 4-node b200 pool. dcgm-exporter fixed by…</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14428"><b>#14428</b><span>merged</span><em>2026-11-12 16:41 PT #14428 merged; promote pinned usw3 at 2cde93b at 16:53. 2026-11-12…</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14754"><b>#14754</b><span>merged</span><em>2026-11-12 16:41 PT #14428 merged; promote pinned usw3 at 2cde93b at 16:53. 2026-11-12…</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14431"><b>#14431</b><span>merged</span><em>2026-11-12 17:43 PT #14431 merged (usw3 in the GKE B200 monitors). 2026-11-12 18:09 PT…</em></a><a class="pr-chip merged" href="https://github.com/reductoai/api/pull/14756"><b>#14756</b><span>merged</span><em>2026-11-12 17:43 PT #14431 merged (usw3 in the GKE B200 monitors). 2026-11-12 18:09 PT…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/14746"><b>#14746</b><span>open</span><em>2026-11-12 18:03 PT #14746 router target at cap 0. 2026-11-12 18:30 PT #14748 step 1 caps…</em></a></div>
+{{dashboard:us-west-3-cluster}}
 
 ## Details
 

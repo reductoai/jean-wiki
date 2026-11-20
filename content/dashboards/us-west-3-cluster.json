@@ -1,0 +1,148 @@
+{
+ "steps": [
+  {
+   "step": "Copy uss1 as a third GCP cluster, prod-gpu-usw3, with its own direct hostname gcp-inference-usw3.platform.reducto.ai and router…",
+   "detail": "",
+   "state": "now"
+  },
+  {
+   "step": "Build everything except the GPU pool now. The gcp-gke module leaves out the b200 node pool until the reservation has a block, so…",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "Include the Snapshot cluster prerequisites like uss1 (Filestore CSI, the filestore-zonal-rwx storage class, the snapshot…",
+   "detail": "",
+   "state": "next"
+  },
+  {
+   "step": "5 PRs: Terraform, Flux root, models on, monitors, router cutover. Traffic only moves in the last one, after a dev-style smoke on…",
+   "detail": "",
+   "state": "next"
+  }
+ ],
+ "impact": [
+  {
+   "measure": "",
+   "value": "Modal fell while pages rose 20%, so cost per 1k pages fell 18%. The B200 reservation is paid either way."
+  },
+  {
+   "measure": "",
+   "value": "Utilization per B200 fell because capacity rose 50% and pages 20%."
+  },
+  {
+   "measure": "",
+   "value": "The 11-18 peak (22.5M pages) still sent 6.0% of fpp-35b calls to Modal ($6.3K of fpp-flash that day)."
+  }
+ ],
+ "prs": [
+  {
+   "pr": "#14399",
+   "repo": "api",
+   "state": "open",
+   "note": "Day one: rollouts that fit a full pool. fpp-35b maxSurge 0 / maxUnavailable 1 (from…"
+  },
+  {
+   "pr": "#14403",
+   "repo": "api",
+   "state": "merged",
+   "note": "Day one: start on the current image. If #14403 (R-1 on Overshoot 1109, vLLM 0.31) is…"
+  },
+  {
+   "pr": "#14779",
+   "repo": "api",
+   "state": "open",
+   "note": "🟢 Done. usw3 is a full router head for fpp-35b, fpp-2b and maverick: live /capacity…"
+  },
+  {
+   "pr": "#14405",
+   "repo": "api",
+   "state": "open",
+   "note": "PR: #14405. Network plan: 16 to add, 1 in-place (proxy firewall), 0 to destroy."
+  },
+  {
+   "pr": "#14438",
+   "repo": "api",
+   "state": "merged",
+   "note": "2026-11-10 18:33 PT The gke apply failed: Master version \"1.35.5-gke.1000000\" is…"
+  },
+  {
+   "pr": "#14440",
+   "repo": "api",
+   "state": "open",
+   "note": "2026-11-10 19:33 PT gke re-applied for #14440: managed DCGM is off on usw3 and the NVIDIA…"
+  },
+  {
+   "pr": "#14451",
+   "repo": "api",
+   "state": "open",
+   "note": "2026-11-10 19:33 PT gke re-applied for #14440: managed DCGM is off on usw3 and the NVIDIA…"
+  },
+  {
+   "pr": "#14434",
+   "repo": "api",
+   "state": "open",
+   "note": "2026-11-10 19:33 PT gke re-applied for #14440: managed DCGM is off on usw3 and the NVIDIA…"
+  },
+  {
+   "pr": "#14409",
+   "repo": "api",
+   "state": "open",
+   "note": "PR: #14409"
+  },
+  {
+   "pr": "#14572",
+   "repo": "api",
+   "state": "open",
+   "note": "The fix is PR https://github.com/reductoai/api/pull/14572 (namespace list becomes a…"
+  },
+  {
+   "pr": "#14738",
+   "repo": "api",
+   "state": "open",
+   "note": "2026-11-12 16:41 PT gke re-apply added the 4-node b200 pool. dcgm-exporter fixed by…"
+  },
+  {
+   "pr": "#14428",
+   "repo": "api",
+   "state": "merged",
+   "note": "2026-11-12 16:41 PT #14428 merged; promote pinned usw3 at 2cde93b at 16:53. 2026-11-12…"
+  },
+  {
+   "pr": "#14754",
+   "repo": "api",
+   "state": "merged",
+   "note": "2026-11-12 16:41 PT #14428 merged; promote pinned usw3 at 2cde93b at 16:53. 2026-11-12…"
+  },
+  {
+   "pr": "#14431",
+   "repo": "api",
+   "state": "merged",
+   "note": "2026-11-12 17:43 PT #14431 merged (usw3 in the GKE B200 monitors). 2026-11-12 18:09 PT…"
+  },
+  {
+   "pr": "#14756",
+   "repo": "api",
+   "state": "merged",
+   "note": "2026-11-12 17:43 PT #14431 merged (usw3 in the GKE B200 monitors). 2026-11-12 18:09 PT…"
+  },
+  {
+   "pr": "#14746",
+   "repo": "api",
+   "state": "open",
+   "note": "2026-11-12 18:03 PT #14746 router target at cap 0. 2026-11-12 18:30 PT #14748 step 1 caps…"
+  },
+  {
+   "pr": "#14748",
+   "repo": "api",
+   "state": "open",
+   "note": "2026-11-12 18:03 PT #14746 router target at cap 0. 2026-11-12 18:30 PT #14748 step 1 caps…"
+  },
+  {
+   "pr": "#14769",
+   "repo": "api",
+   "state": "open",
+   "note": "2026-11-12 20:04 PT #14769 live /capacity (full). 2026-11-12 21:16 PT #14779 lane_dynamo."
+  }
+ ]
+}

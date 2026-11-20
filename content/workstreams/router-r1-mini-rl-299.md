@@ -2,20 +2,7 @@
 
 Goal. By Fri 11/20, pick the page router for R-1 mini RL 299 (reducto/fpp_2b_rl299_jev_20261117@153ee1ac, Modal dev shadow rl299, #15274). Retrain the route head (#14939) and the old router (fpp_router_0913) the way each was first trained, then compare them…
 
-<div class="ws-head">
-<div class="ws-stat"><b>6</b><span>steps left</span></div>
-<div class="ws-stat"><b>0</b><span>PRs merged</span></div>
-<div class="ws-stat"><b>2</b><span>PRs open</span></div>
-<div class="ws-stat"><b>0</b><span>impact measures</span></div>
-</div>
-
-## Next steps
-
-<ol class="steps"><li class="now">Recipe PR (route head): rebase onto the training scaffold, add --checkpoint</li><li>Relabel the route head for RL 299 (Wed)</li><li>Train and export the route head (Thu AM)</li><li>Retrain the old router (Thu AM)</li><li>Offline comparison on the 2,000 ParseArena pages, never trained on (Thu AM)</li><li>Autoeval the best one or two on RL 299 for at least 24 h (must start Thu PM)</li></ol>
-
-## PRs
-
-<div class="pr-grid"><a class="pr-chip open" href="https://github.com/reductoai/api/pull/15274"><b>#15274</b><span>open</span><em>Goal. By Fri 11/20, pick the page router for R-1 mini RL 299…</em></a><a class="pr-chip open" href="https://github.com/reductoai/api/pull/14939"><b>#14939</b><span>open</span><em>Goal. By Fri 11/20, pick the page router for R-1 mini RL 299…</em></a></div>
+{{dashboard:router-r1-mini-rl-299}}
 
 ## Details
 
