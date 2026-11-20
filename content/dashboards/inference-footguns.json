@@ -133,6 +133,36 @@
    "repo": "api",
    "state": "open",
    "note": "FigSum is the one regression that holds at equal volume. US: 752k calls cost 1,108 USD on…"
+  },
+  {
+   "pr": "#15050",
+   "repo": "api",
+   "state": "open",
+   "note": "Citation 7B: the US is not a regression going forward. 11-17 cost 2.64 (raise mode until…"
+  },
+  {
+   "pr": "#15134",
+   "repo": "api",
+   "state": "open",
+   "note": "Citation 7B: the US is not a regression going forward. 11-17 cost 2.64 (raise mode until…"
+  },
+  {
+   "pr": "#15142",
+   "repo": "api",
+   "state": "open",
+   "note": "Change tracking US 1.05 to 2.82 is mostly volume: 198k and 120k calls against 183k to…"
+  },
+  {
+   "pr": "#15187",
+   "repo": "api",
+   "state": "open",
+   "note": "(1) #15187 does not cover this: the clusters cannot add GPUs in 23 s, and direct calls…"
+  },
+  {
+   "pr": "#15449",
+   "repo": "api",
+   "state": "open",
+   "note": "PR (a) is open as stamped: #15449. CI and the Scalr plan pass, Codex has no finding. Not…"
   }
  ]
 }

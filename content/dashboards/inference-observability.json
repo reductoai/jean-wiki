@@ -137,6 +137,66 @@
    "repo": "api",
    "state": "merged",
    "note": "usw3 in GKE B200 monitors #14431 ✅, in decode-speed drift #14756 ✅"
+  },
+  {
+   "pr": "#14434",
+   "repo": "api",
+   "state": "merged",
+   "note": "Envoy failed-request logs #14434 ✅ + Apply"
+  },
+  {
+   "pr": "#14825",
+   "repo": "api",
+   "state": "merged",
+   "note": "FPP route health: one latency table per model × platform #14825 ✅ (Scalr apply not…"
+  },
+  {
+   "pr": "#15036",
+   "repo": "api",
+   "state": "merged",
+   "note": "FPP route health: page fallback rate split into R-1 and R-1 mini #15036 ✅ + Apply"
+  },
+  {
+   "pr": "#13738",
+   "repo": "api",
+   "state": "merged",
+   "note": "Inference router alerts ✅: #13738 → #14012 → #14211 → #14623 → EU paging #14871"
+  },
+  {
+   "pr": "#14012",
+   "repo": "api",
+   "state": "merged",
+   "note": "Inference router alerts ✅: #13738 → #14012 → #14211 → #14623 → EU paging #14871"
+  },
+  {
+   "pr": "#14211",
+   "repo": "api",
+   "state": "merged",
+   "note": "Inference router alerts ✅: #13738 → #14012 → #14211 → #14623 → EU paging #14871"
+  },
+  {
+   "pr": "#14623",
+   "repo": "api",
+   "state": "merged",
+   "note": "Inference router alerts ✅: #13738 → #14012 → #14211 → #14623 → EU paging #14871"
+  },
+  {
+   "pr": "#14871",
+   "repo": "api",
+   "state": "merged",
+   "note": "Inference router alerts ✅: #13738 → #14012 → #14211 → #14623 → EU paging #14871"
+  },
+  {
+   "pr": "#15391",
+   "repo": "api",
+   "state": "merged",
+   "note": "False pages: three monitors paged on healthy traffic, e.g. qwen-rfdetr \"100% on Modal\"…"
+  },
+  {
+   "pr": "#15394",
+   "repo": "api",
+   "state": "merged",
+   "note": "False pages: three monitors paged on healthy traffic, e.g. qwen-rfdetr \"100% on Modal\"…"
   }
  ]
 }

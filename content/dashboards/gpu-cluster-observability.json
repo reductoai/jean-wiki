@@ -138,6 +138,48 @@
    "repo": "api",
    "state": "open",
    "note": "#15155 🟡 — DGD readiness and Triton ready pods."
+  },
+  {
+   "pr": "#15160",
+   "repo": "api",
+   "state": "open",
+   "note": "#15160 🟡 — Flux drift on prod GPU clusters."
+  },
+  {
+   "pr": "#15166",
+   "repo": "api",
+   "state": "open",
+   "note": "#15166 🟡 — stuck model downloads and slow model loads."
+  },
+  {
+   "pr": "#15161",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15161 ✅ — fix stuck and stale GPU monitors."
+  },
+  {
+   "pr": "#15168",
+   "repo": "api",
+   "state": "open",
+   "note": "#15168 🟡 — tag FPP shadow replay and autoeval judge calls so they leave the prod…"
+  },
+  {
+   "pr": "#15304",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15304 ✅ — terminal-throughput monitor 27401592 imported to Terraform with a 20-job…"
+  },
+  {
+   "pr": "#15355",
+   "repo": "api",
+   "state": "merged",
+   "note": "#15355 ✅ — tag reducto.triton_flash.live_fallbacks with the error behind each router…"
+  },
+  {
+   "pr": "#15392",
+   "repo": "api",
+   "state": "open",
+   "note": "Split-pool deadline fix dropped 2026-11-19 01:38 PT (Xavier): the table_ensemble spike…"
   }
  ]
 }

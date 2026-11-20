@@ -131,6 +131,18 @@
    "repo": "api",
    "state": "open",
    "note": "2026-11-12 18:03 PT #14746 router target at cap 0. 2026-11-12 18:30 PT #14748 step 1 caps…"
+  },
+  {
+   "pr": "#14748",
+   "repo": "api",
+   "state": "open",
+   "note": "2026-11-12 18:03 PT #14746 router target at cap 0. 2026-11-12 18:30 PT #14748 step 1 caps…"
+  },
+  {
+   "pr": "#14769",
+   "repo": "api",
+   "state": "open",
+   "note": "2026-11-12 20:04 PT #14769 live /capacity (full). 2026-11-12 21:16 PT #14779 lane_dynamo."
   }
  ]
 }

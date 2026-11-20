@@ -144,6 +144,48 @@
    "repo": "api",
    "state": "open",
    "note": "## \\[2026-11-16 11:12 PT\\] Pilot fpp-35b-snapshot back on, live on uss1: #14982 (off…"
+  },
+  {
+   "pr": "#14995",
+   "repo": "api",
+   "state": "merged",
+   "note": "## \\[2026-11-16 12:15 PT\\] Restore fixes merged: #14995. TVM_FFI_CACHE_DIR on the rootfs…"
+  },
+  {
+   "pr": "#15014",
+   "repo": "api",
+   "state": "merged",
+   "note": "## \\[2026-11-16 13:57 PT\\] Checkpoint back on for live fpp-35b: #15014 merged and…"
+  },
+  {
+   "pr": "#15031",
+   "repo": "api",
+   "state": "open",
+   "note": "## \\[2026-11-16 15:55 PT\\] Level 2 dropped: the restored worker answered 200 with…"
+  },
+  {
+   "pr": "#15043",
+   "repo": "api",
+   "state": "open",
+   "note": "## \\[2026-11-16 17:27 PT\\] Node-cache fill live on uss1: #15043 (agent image…"
+  },
+  {
+   "pr": "#15055",
+   "repo": "api",
+   "state": "merged",
+   "note": "## \\[2026-11-16 18:55 PT\\] #15055 ready (gate clear): checkpoint-prune CronJob, uss1, dry…"
+  },
+  {
+   "pr": "#15415",
+   "repo": "api",
+   "state": "merged",
+   "note": "Nov 19: #15415 ✅, rolled back on uss1 (an old fpp-35b burst worker crashlooped without…"
+  },
+  {
+   "pr": "#15453",
+   "repo": "api",
+   "state": "merged",
+   "note": "Nov 19: step 1 #15453 ✅ (stop injecting NATS_SERVER)."
   }
  ]
 }

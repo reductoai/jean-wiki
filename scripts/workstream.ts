@@ -46,7 +46,7 @@ const seed = {
     const hasLabel = rest.length > 0 && label.length < 60;
     return { measure: hasLabel ? label : "", value: clip(hasLabel ? rest.join(":").trim() : s, 180) };
   }),
-  prs: [...prs].slice(0, 16).map(([k, p]) => ({ pr: `#${k.split("#")[1]}`, repo: k.startsWith("#") ? "api" : k.split("#")[0], state: prState(p), note: p.text })),
+  prs: [...prs].map(([k, p]) => ({ pr: `#${k.split("#")[1]}`, repo: k.startsWith("#") ? "api" : k.split("#")[0], state: prState(p), note: p.text })),
 };
 await Bun.write(`content/dashboards/${slug}.json`, JSON.stringify(seed, null, 1));
 
