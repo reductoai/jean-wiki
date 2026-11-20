@@ -3,7 +3,7 @@ import type { Chapter, Page, Source } from "./site.ts";
 
 
 type Share = { mode: "private" | "reducto" | "people"; emails: string[] };
-type Nav = { todo: Page | null; chapters: Chapter[] };
+type Nav = { todo: Page | null; chapters: (Chapter & { builtin?: boolean })[] };
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
 
@@ -34,7 +34,7 @@ ${o.owner ? `<div class="actions"><span class="share-state">${shareLabel(o.share
 ${nav.todo ? `<div class="part">${link(nav.todo, "Todo")}</div>` : ""}
 ${nav.chapters.map((c, ci) => `<div class="part" data-chapter="${c.number}"><div class="chapter">${ci + 1}&nbsp; ${esc(c.title)}</div>
 ${c.pages.map((p, j) => link(p, `<span class="num">${ci + 1}.${j + 1}</span> ${esc(p.title)}`)).join("\n")}
-${o.owner ? `<div class="section-tools">${c.pages.length ? "" : `<span class="empty">Drag pages here</span>`}<button class="new-page" data-chapter="${c.number}">+ New page</button>${c.pages.length ? "" : `<button class="remove-section" data-chapter="${c.number}">Remove section</button>`}</div>` : ""}</div>`).join("\n")}
+${o.owner ? `<div class="section-tools">${c.pages.length ? "" : `<span class="empty">Drag pages here</span>`}<button class="new-page" data-chapter="${c.number}">+ New page</button>${c.pages.length || c.builtin ? "" : `<button class="remove-section" data-chapter="${c.number}">Remove section</button>`}</div>` : ""}</div>`).join("\n")}
 ${o.owner ? `<button class="new-section">+ New section</button>` : ""}
 </nav>
 <main><article>${o.body}${sourcesBox(page)}</article>

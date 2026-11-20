@@ -24,6 +24,8 @@ function chapters(): Chapter[] {
     ...BASE_CHAPTERS.map((c) => ({ ...c, pages: [...c.pages, ...custom.filter((p) => p.chapter === c.number)] })),
     ...saved.filter((s) => !BASE_CHAPTERS.some((c) => c.number === s.number)).map((s) => ({ number: s.number, title: s.title, pages: custom.filter((p) => p.chapter === s.number) })),
   ];
+  const orphans = custom.filter((p) => !defaults.some((c) => c.number === p.chapter));
+  defaults[defaults.length - 1].pages.push(...orphans);
   return arrange(defaults, saved);
 }
 function saveLayout(cs: Chapter[]) {
@@ -38,7 +40,7 @@ function addPage(chapter: number, title: string): Page | null {
   const c = chapters().find((x) => x.number === chapter);
   const name = slugify(title);
   if (!c || !name) return null;
-  const dir = BASE_CHAPTERS.find((x) => x.number === chapter)?.pages[0].slug.split("/")[0] ?? slugify(c.title);
+  const dir = BASE_CHAPTERS.find((x) => x.number === chapter)?.pages[0].slug.split("/")[0] ?? `section-${slugify(c.title)}`;
   const page: Custom = { chapter, slug: `${dir}/${name}`, path: `${dir}/${name}`, title: title.trim() };
   if (pages().some((p) => p.slug === page.slug)) return null;
   mkdirSync(DATA, { recursive: true });
@@ -179,7 +181,7 @@ const server = Bun.serve({
         const { chapter } = await req.json();
         const cs = chapters();
         const c = cs.find((x) => x.number === Number(chapter));
-        if (!c || c.pages.length) return json({ error: "only an empty section can be removed" }, 400);
+        if (!c || c.pages.length || BASE_CHAPTERS.some((x) => x.number === c.number)) return json({ error: "only an empty section you added can be removed" }, 400);
         saveLayout(cs.filter((x) => x !== c));
         return json({ ok: true });
       }
@@ -247,7 +249,7 @@ const server = Bun.serve({
 
 function navFor(who: string) {
   const visible = (p: Page) => canRead(who, p.slug);
-  return { todo: visible(TODO) ? TODO : null, chapters: chapters().map((c) => ({ ...c, pages: c.pages.filter(visible) })).filter((c) => c.pages.length || isOwner(who)) };
+  return { todo: visible(TODO) ? TODO : null, chapters: chapters().map((c) => ({ ...c, builtin: BASE_CHAPTERS.some((b) => b.number === c.number), pages: c.pages.filter(visible) })).filter((c) => c.pages.length || isOwner(who)) };
 }
 
 console.log(`jean-wiki on :${server.port}`);
