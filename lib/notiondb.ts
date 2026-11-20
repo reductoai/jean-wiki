@@ -125,7 +125,11 @@ function progress(steps: Dash["steps"]): string {
 /** PR references in a step: "#123" is reductoai/api, "repo#123" another reductoai repo. */
 function stepPrs(s: Dash["steps"][number], prs: Dash["prs"]): string {
   const refs = new Map<string, { repo: string; num: string }>();
-  for (const m of `${s.prs ?? ""} ${s.step} ${s.detail}`.matchAll(/(?:([\w-]+)#|#)(\d{2,6})\b/g)) refs.set(`${m[1] ?? "api"}#${m[2]}`, { repo: m[1] ?? "api", num: m[2] });
+  const add = (text: string, re: RegExp) => {
+    for (const m of text.matchAll(re)) refs.set(`${m[1] ?? "api"}#${m[2]}`, { repo: m[1] ?? "api", num: m[2] });
+  };
+  add(s.prs ?? "", /(?:([\w-]+)#|#)(\d{1,6})\b/g);
+  add(`${s.step} ${s.detail}`, /(?:([\w-]+)#|#)(\d{2,6})\b/g);
   return [...refs.values()].map(({ repo, num }) => {
     const row = prs.find((p) => p.pr.replace(/\D/g, "") === num && (p.repo || "api") === repo);
     const state = row?.state ?? "";
