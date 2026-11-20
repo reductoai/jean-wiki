@@ -101,11 +101,23 @@ const html = (body: string, status = 200) => new Response(body, { status, header
 const json = (body: unknown, status = 200) => Response.json(body, { status });
 
 if (process.env.WIKI_GIT_SYNC) {
-  const head = () => Bun.spawnSync(["git", "rev-parse", "HEAD"], { cwd: ROOT }).stdout.toString().trim();
-  setInterval(() => {
-    const before = head();
-    Bun.spawnSync(["git", "pull", "--ff-only", "-q", process.env.WIKI_GIT_SYNC!, "main"], { cwd: ROOT });
-    if (head() !== before) broadcast("*");
+  const git = async (...args: string[]) => {
+    const p = Bun.spawn(["git", ...args], { cwd: ROOT, stdout: "pipe", stderr: "ignore", timeout: 20000 });
+    const out = await new Response(p.stdout).text();
+    await p.exited;
+    return out.trim();
+  };
+  let pulling = false;
+  setInterval(async () => {
+    if (pulling) return;
+    pulling = true;
+    try {
+      const before = await git("rev-parse", "HEAD");
+      await git("pull", "--ff-only", "-q", process.env.WIKI_GIT_SYNC!, "main");
+      if ((await git("rev-parse", "HEAD")) !== before) broadcast("*");
+    } finally {
+      pulling = false;
+    }
   }, 30000);
 }
 
