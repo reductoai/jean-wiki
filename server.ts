@@ -39,6 +39,8 @@ const readArchive = (): Archived => {
   const read = (f: string) => (existsSync(f) ? JSON.parse(readFileSync(f, "utf8")) : {});
   return { ...read(join(ROOT, "content", "archive.json")), ...read(join(DATA, "archive.json")) };
 };
+/** An archived page hides its children with it. */
+const archivedBy = (a: Archived) => (p: Page) => !!a[p.slug] || (!!p.parent && !!a[p.parent]);
 function archivedBanner(slug: string, base: string): string {
   const a = readArchive()[slug];
   if (!a) return "";
@@ -218,16 +220,17 @@ const server = Bun.serve({
         const { chapter } = await req.json();
         const cs = chapters();
         const c = cs.find((x) => x.number === Number(chapter));
-        if (!c || c.pages.some((p) => !p.sub) || BASE_CHAPTERS.some((x) => x.number === c.number)) return json({ error: "only an empty section you added can be removed" }, 400);
+        const hidden = archivedBy(readArchive());
+        if (!c || c.pages.some((p) => !p.sub && !hidden(p)) || BASE_CHAPTERS.some((x) => x.number === c.number)) return json({ error: "only an empty section you added can be removed" }, 400);
         saveLayout(cs.filter((x) => x !== c));
         return json({ ok: true });
       }
       if (req.method === "POST" && path === "api/move") {
         if (!isOwner(who)) return json({ error: "only the wiki owner can do this" }, 403);
         const { slug, chapter, index, parent } = await req.json();
-        const archived = readArchive();
+        const hidden = archivedBy(readArchive());
         const rest = (chapters().find((c) => c.number === Number(chapter))?.pages ?? []).filter((p) => p.slug !== String(slug) && p.parent !== String(slug));
-        const at = rest.filter((p) => !archived[p.slug])[Number(index ?? Infinity)];
+        const at = rest.filter((p) => !hidden(p))[Number(index ?? Infinity)];
         const cs = move(chapters(), String(slug), Number(chapter), at ? rest.indexOf(at) : rest.length, parent ? String(parent) : undefined);
         if (!cs) return json({ error: "unknown page or section" }, 400);
         saveLayout(cs);
@@ -340,8 +343,8 @@ const server = Bun.serve({
 });
 
 function navFor(who: string) {
-  const archived = readArchive();
-  const visible = (p: Page) => p.sub || (!archived[p.slug] && canRead(who, p.slug));
+  const hidden = archivedBy(readArchive());
+  const visible = (p: Page) => !hidden(p) && (p.sub || canRead(who, p.slug));
   const shown = (ps: Page[]) => (isOwner(who) ? ps : ps.filter((p) => !p.sub || ps.some((k) => k.parent === p.slug)));
   return { todo: visible(TODO) ? TODO : null, chapters: chapters().map((c) => ({ ...c, builtin: BASE_CHAPTERS.some((b) => b.number === c.number), pages: shown(c.pages.filter(visible)) })).filter((c) => c.pages.length || isOwner(who)) };
 }
