@@ -188,3 +188,4 @@ nav.side a { padding-top: 3px; padding-bottom: 3px; }
 .cb-ch { text-align: right; font-weight: 600; } .cb-ch.good { color: #16a34a; } .cb-ch.bad { color: #dc2626; }
 .cb-legend { font-size: 12px; color: var(--muted); margin-bottom: 4px; } .cb-legend .cb { width: 14px; vertical-align: -1px; }
 @media (max-width: 700px) { .ws-head { grid-template-columns: repeat(2, 1fr); } }
+.cb-bars { padding-right: 40px; }
