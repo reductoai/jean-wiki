@@ -1,6 +1,6 @@
 export type Source = { title: string; url: string; kind?: "code" };
 /** `parent` nests a page under another page or subsection; `sub` marks a subsection heading, which has no content of its own. */
-export type Page = { slug: string; path: string; title: string; sources?: Source[]; parent?: string; sub?: boolean };
+export type Page = { slug: string; path: string; title: string; sources?: Source[]; parent?: string; sub?: boolean; planOf?: string };
 
 const n = (title: string, id: string): Source => ({ title, url: `https://app.notion.com/p/${id}` });
 const gh = (path: string, title = path): Source => ({ title, url: `https://github.com/reductoai/api/${path.includes(".") ? "blob" : "tree"}/main/${path}`, kind: "code" });

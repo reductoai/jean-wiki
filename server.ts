@@ -34,6 +34,15 @@ function saveLayout(cs: Chapter[]) {
   queueMicrotask(() => broadcast("*"));
 }
 const pages = (): Page[] => [TODO, ...chapters().flatMap((c) => c.pages.filter((p) => !p.sub))];
+/** The workstream a page's dashboard shows, if any. */
+const wsOf = (slug: string) => source(slug).markdown.match(/\{\{dashboard:([\w-]+)\}\}/)?.[1];
+const planPage = (p: Page): Page => ({ slug: `${p.slug}/plan`, path: `${p.path.replace(/\/$/, "")}/plan`, title: `Plan: ${p.title}`, planOf: p.slug });
+/** Every page, plus a Plan subpage for each page with a dashboard. */
+const allPages = (): Page[] => {
+  const ps = pages();
+  return [...ps, ...ps.filter((p) => p.slug !== "todo" && wsOf(p.slug)).map(planPage)];
+};
+const findPage = (slug: string) => allPages().find((p) => p.slug === slug);
 const slugify = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
 
 function addPage(chapter: number, title: string): Page | null {
@@ -59,6 +68,9 @@ function source(slug: string): { markdown: string; edited: boolean } {
   const f = editedFile(slug);
   if (existsSync(f)) return { markdown: readFileSync(f, "utf8"), edited: true };
   if (existsSync(repoFile(slug))) return { markdown: readFileSync(repoFile(slug), "utf8"), edited: false };
+  const parent = slug.endsWith("/plan") ? pages().find((p) => `${p.slug}/plan` === slug) : undefined;
+  const ws = parent && wsOf(parent.slug);
+  if (parent && ws) return { markdown: `# Plan: ${parent.title}\n\n{{plan:${ws}}}\n`, edited: false };
   const title = pages().find((p) => p.slug === slug)?.title ?? slug;
   return { markdown: `# ${title}\n\nWrite here.\n`, edited: false };
 }
@@ -87,6 +99,15 @@ function save(slug: string, markdown: string, by: string) {
   writeFileSync(join(historyDir(slug), `${stamp}.json`), JSON.stringify({ at, by, file: `${stamp}.md` }));
 }
 
+export type Comment = { id: string; at: string; by: string; text: string; quote?: string; resolved?: boolean };
+const commentsFile = join(DATA, "comments.json");
+const readComments = (): Record<string, Comment[]> => (existsSync(commentsFile) ? JSON.parse(readFileSync(commentsFile, "utf8")) : {});
+function writeComments(all: Record<string, Comment[]>, slug: string) {
+  mkdirSync(DATA, { recursive: true });
+  writeFileSync(commentsFile, JSON.stringify(all, null, 2));
+  queueMicrotask(() => broadcast(slug));
+}
+
 const tokenFile = join(DATA, "agent-token");
 function agentToken(): string {
   if (process.env.WIKI_AGENT_TOKEN) return process.env.WIKI_AGENT_TOKEN;
@@ -105,7 +126,7 @@ const email = (req: Request) => {
 const isOwner = (who: string) => OWNERS.includes(who) || who.startsWith("agent:");
 const canRead = (who: string, slug: string) => {
   if (isOwner(who)) return true;
-  const s = shareOf(slug);
+  const s = shareOf(findPage(slug)?.planOf ?? slug);
   return (s.mode === "reducto" && who !== "") || (s.mode === "people" && s.emails.includes(who));
 };
 
@@ -224,12 +245,38 @@ const server = Bun.serve({
         return json({ pages: pages().map((p) => ({ slug: p.slug, path: p.path, title: p.title })), chapters: chapters().map((c) => ({ number: c.number, title: c.title })) });
       }
       const slug = url.searchParams.get("page") ?? "";
-      const page = pages().find((p) => p.slug === slug);
+      const page = findPage(slug);
       if (!page) return json({ error: "unknown page" }, 404);
+      if (path.startsWith("api/comment")) {
+        if (!who || !canRead(who, slug)) return json({ error: "you can't see this page" }, 403);
+        if (req.method === "GET" && path === "api/comments") return json({ comments: readComments()[slug] ?? [] });
+        const body = req.method === "POST" ? await req.json() : {};
+        const all = readComments();
+        const list = all[slug] ?? [];
+        if (req.method === "POST" && path === "api/comment") {
+          const text = String(body.text ?? "").trim();
+          if (!text) return json({ error: "write a comment" }, 400);
+          if (text.length > 4000) return json({ error: "comments are limited to 4,000 characters" }, 400);
+          const quote = String(body.quote ?? "").trim().slice(0, 500) || undefined;
+          const c: Comment = { id: crypto.randomUUID().slice(0, 8), at: new Date().toISOString(), by: who, text, quote };
+          all[slug] = [...list, c];
+          writeComments(all, slug);
+          return json({ ok: true, comment: c });
+        }
+        if (req.method === "POST" && path === "api/comment/resolve") {
+          const c = list.find((x) => x.id === String(body.id));
+          if (!c) return json({ error: "unknown comment" }, 404);
+          if (!isOwner(who) && c.by !== who) return json({ error: "only the author or the wiki owner can do this" }, 403);
+          c.resolved = body.resolved !== false;
+          writeComments(all, slug);
+          return json({ ok: true, comment: c });
+        }
+        return json({ error: "not found" }, 404);
+      }
       if (!isOwner(who)) return json({ error: "only the wiki owner can do this" }, 403);
       if (req.method === "POST" && path === "api/preview") {
         const { markdown } = await req.json();
-        return json({ html: render(markdown, base).html });
+        return json({ html: render(markdown, base, page.path.replace(/\/$/, "")).html });
       }
       if (req.method === "GET" && path === "api/page") return json(source(slug));
       if (req.method === "POST" && path === "api/save") {
@@ -246,24 +293,28 @@ const server = Bun.serve({
       if (req.method === "POST" && path === "api/share") {
         const body = (await req.json()) as Share;
         const shares = readShares();
-        shares[slug] = { mode: body.mode, emails: (body.emails ?? []).map((e) => e.trim().toLowerCase()).filter(Boolean) };
+        const target = page.planOf ?? slug;
+        delete shares[slug];
+        shares[target] = { mode: body.mode, emails: (body.emails ?? []).map((e) => e.trim().toLowerCase()).filter(Boolean) };
         mkdirSync(DATA, { recursive: true });
         writeFileSync(sharesFile, JSON.stringify(shares, null, 2));
-        return json({ ok: true, share: shares[slug] });
+        return json({ ok: true, share: shares[target] });
       }
       return json({ error: "not found" }, 404);
     }
 
-    const page = pages().find((p) => p.path === path || p.path === `${path}/`);
+    const page = allPages().find((p) => p.path === path || p.path === `${path}/`);
     if (!page) return html(layout({ base, page: TODO, nav: navFor(who), body: "<h1>Not found</h1>", headings: [], owner: false }), 404);
     if (!canRead(who, page.slug)) return html(denied(base, who), 403);
 
     const { markdown, edited } = source(page.slug);
     if (url.searchParams.has("edit") && isOwner(who)) {
-      return html(editor({ base, page, markdown, edited, history: history(page.slug), share: shareOf(page.slug) }));
+      return html(editor({ base, page, markdown, edited, history: history(page.slug), share: shareOf(page.planOf ?? page.slug) }));
     }
-    const { html: body, headings } = render(markdown, base);
-    return html(layout({ base, page, nav: navFor(who), body, headings, owner: isOwner(who), share: shareOf(page.slug) }));
+    const { html: body, headings } = render(markdown, base, page.path.replace(/\/$/, ""));
+    const overview = page.planOf ? pages().find((p) => p.slug === page.planOf)! : page;
+    const tabs = page.planOf || (page.slug !== "todo" && wsOf(page.slug)) ? { overview, plan: planPage(overview) } : undefined;
+    return html(layout({ base, page, nav: navFor(who), body, headings, owner: isOwner(who), share: shareOf(overview.slug), tabs, comments: readComments()[page.slug] ?? [], who }));
   },
 });
 

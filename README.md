@@ -60,3 +60,8 @@ Every page is private to the owners in `content/access.json`. An owner can share
 ## Workstream numbers live in Notion
 
 Each workstream page's headline numbers, app cards, steps, cost chart, impact cards and PR chips come from rows in the databases under [Jean's wiki content](https://app.notion.com/p/41e4a78a1c878141bc22dbccce23742d) (Stats, Apps, Steps, Costs, Impact, PRs). A page shows them with `{{dashboard:<workstream>}}`, matching rows on the `Workstream` select and sorting by `Order`. With `NOTION_TOKEN` set (the "Devin" Notion integration), the server re-reads them every 20 s, and open pages refresh when a row changes. To add a workstream, add rows with a new `Workstream` value, or write `content/dashboards/<slug>.json` and run `NOTION_TOKEN=... bun scripts/push-notion.ts <slug>`. The seed JSON is shown only before the first Notion sync.
+
+## Plans and comments
+
+- Every page with a `{{dashboard:<ws>}}` has a Plan subpage at `<path>/plan` (Overview and Plan tabs). It draws the Steps rows for `<ws>` in Order: Step is one short action line, Detail one or two sentences, State is `done`, `now` or `next`, Owner is a name, and PRs lists refs like `#15481` or `dynamo-stable#69`. Keep notes about who wrote what out of the rows.
+- Comments: any reader can comment on a page, or select text to quote it. Agents call `GET /api/comments?page=<slug>`, `POST /api/comment?page=<slug>` with `{"text": "...", "quote": "..."}`, and `POST /api/comment/resolve?page=<slug>` with `{"id": "...", "resolved": true}`, using the bearer token above.
