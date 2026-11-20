@@ -1,7 +1,7 @@
 import { Marked } from "marked";
 import { loadNotion, notionToMarkdown, section, shiftHeadings } from "./notion.ts";
 import { LINKS } from "./site.ts";
-import { dashboardHtml } from "./notiondb.ts";
+import { dashboardHtml, planHtml } from "./notiondb.ts";
 
 export type Heading = { depth: number; text: string; id: string };
 
@@ -12,8 +12,9 @@ const pt = (iso: string) =>
   new Date(iso).toLocaleString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) + " PT";
 
 /** Expands `{{notion:slug}}`, `{{notion:slug#Heading}}` (optional ` shift=N`) and `{{diagram:name}}`. */
-export function expand(md: string, base: string): string {
-  return md.replace(/\{\{dashboard:([\w-]+)\}\}/g, (_, ws) => dashboardHtml(ws)).replace(/\{\{(notion|diagram):([^}#\s]+)(?:#([^}]*?))?(?:\s+shift=(\d))?\}\}/g, (_, kind, slug, heading, shift) => {
+export function expand(md: string, base: string, self = ""): string {
+  return md.replace(/\{\{dashboard:([\w-]+)\}\}/g, (_, ws) => dashboardHtml(ws, self ? `${base}${self}/plan` : ""))
+    .replace(/\{\{plan:([\w-]+)\}\}/g, (_, ws) => planHtml(ws, self ? `${base}${self.replace(/\/plan$/, "")}` : "")).replace(/\{\{(notion|diagram):([^}#\s]+)(?:#([^}]*?))?(?:\s+shift=(\d))?\}\}/g, (_, kind, slug, heading, shift) => {
     if (kind === "diagram") return `<div class="diagram" data-diagram="${slug}"></div>`;
     const page = loadNotion(slug);
     if (!page) return `_Notion snapshot "${slug}" is missing._`;
@@ -28,7 +29,7 @@ export function expand(md: string, base: string): string {
   });
 }
 
-export function render(md: string, base: string): { html: string; headings: Heading[] } {
+export function render(md: string, base: string, self = ""): { html: string; headings: Heading[] } {
   const headings: Heading[] = [];
   const seen = new Map<string, number>();
   const marked = new Marked({ gfm: true });
@@ -45,6 +46,6 @@ export function render(md: string, base: string): { html: string; headings: Head
       },
     },
   });
-  const html = marked.parse(expand(md, base), { async: false }) as string;
+  const html = marked.parse(expand(md, base, self), { async: false }) as string;
   return { html, headings };
 }

@@ -229,3 +229,45 @@ nav.side .subhead:hover .remove-sub { visibility: visible; }
 .remove-sub:hover { background: #e4e4e7; }
 .new-sub { padding: 4px 8px; font: 13px "Geist", sans-serif; color: var(--muted); background: none; border: 1px solid transparent; border-radius: 6px; cursor: pointer; }
 nav.side .nest-target { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 6px; }
+
+/* Plan subpage */
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin: 0 0 8px; font-family: "Geist", sans-serif; font-size: 14px; }
+.tabs a { padding: 8px 14px; color: var(--muted); text-decoration: none; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabs a.active { color: inherit; font-weight: 600; border-bottom-color: #2563eb; }
+.progress { margin: 10px 0 14px; font-family: "Geist", sans-serif; }
+.pg-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: #f1f1f0; gap: 2px; }
+.pg.done { background: #16a34a; } .pg.now { background: #2563eb; } .pg.next { background: #d4d4d2; }
+.pg-legend { display: flex; gap: 16px; margin-top: 6px; font-size: 12px; color: var(--muted); }
+.pg-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; }
+ol.plan { list-style: none; padding: 0; margin: 0; position: relative; }
+ol.plan::before { content: ""; position: absolute; left: 13px; top: 14px; bottom: 14px; width: 2px; background: var(--line); }
+.pstep { display: flex; gap: 12px; margin: 0 0 10px; position: relative; }
+.ps-num { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font: 600 12px "Geist Mono", monospace; background: #fff; border: 2px solid #d4d4d2; color: var(--muted); z-index: 1; }
+.pstep.done .ps-num { background: #16a34a; border-color: #16a34a; color: #fff; }
+.pstep.now .ps-num { border-color: #2563eb; color: #2563eb; }
+.ps-body { flex: 1; border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; box-shadow: 0px 1px 2px 0px hsla(60, 2%, 10%, 0.05); }
+.pstep.now .ps-body { border-color: #bfdbfe; } .pstep.done .ps-body { opacity: .75; }
+.ps-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-family: "Geist", sans-serif; }
+.ps-state, .owner { font: 11px "Geist Mono", monospace; text-transform: uppercase; letter-spacing: .04em; padding: 2px 7px; border-radius: 999px; background: #f1f1f0; color: var(--muted); }
+.ps-state.now { background: #eff6ff; color: #2563eb; } .ps-state.done { background: #f0fdf4; color: #16a34a; }
+.ps-detail { margin-top: 6px; font-size: 15px; line-height: 1.5; }
+.ps-prs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; } .ps-prs:empty { display: none; }
+.pr-chip.mini { padding: 2px 8px; font-size: 12px; }
+.plan-link { font-family: "Geist", sans-serif; font-weight: 600; }
+/* Comments */
+.comments { max-width: 760px; margin: 32px 0 0; padding-top: 16px; border-top: 1px solid var(--line); font-family: "Geist", sans-serif; }
+.comments h2 { font-size: 18px; margin: 0 0 8px; }
+.cm-count { font: 11px "Geist Mono", monospace; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.comment-list ul { list-style: none; padding: 0; margin: 0; }
+.comment { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; }
+.comment.resolved { opacity: .6; }
+.cm-head { display: flex; gap: 10px; align-items: baseline; font-size: 13px; } .cm-head span { color: var(--muted); font-size: 12px; }
+.cm-resolve { margin-left: auto; border: 0; background: none; color: #2563eb; cursor: pointer; font-size: 12px; }
+.comment blockquote, .cm-quote blockquote { margin: 6px 0; padding: 2px 10px; border-left: 3px solid #fcd34d; color: var(--muted); font-size: 13px; }
+.cm-text { font-size: 14px; line-height: 1.5; }
+.cm-form { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.cm-form textarea { font: 14px "Geist", sans-serif; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; resize: vertical; }
+.cm-form .button { align-self: flex-end; }
+.cm-quote { position: relative; } .cm-unquote { position: absolute; right: 0; top: 0; border: 0; background: none; cursor: pointer; color: var(--muted); }
+.cm-pop { position: absolute; z-index: 50; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--line); background: #fff; box-shadow: 0 2px 8px hsla(0,0%,0%,.12); cursor: pointer; font: 600 12px "Geist", sans-serif; }
+mark.cm-mark { background: #fef3c7; cursor: pointer; border-radius: 2px; }
