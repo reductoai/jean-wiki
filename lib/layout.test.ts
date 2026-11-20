@@ -23,3 +23,15 @@ test("moving within a section reorders it and unknown targets are refused", () =
   expect(move(defaults, "r/a", 9, 0)).toBeNull();
   expect(move(defaults, "nope", 1, 0)).toBeNull();
 });
+
+test("pages nest under a page or a subsection, move with their parent, and survive a save", () => {
+  const withSub = [{ ...defaults[0], pages: [...defaults[0].pages, { slug: "§x", path: "", title: "Active", sub: true }] }, defaults[1]];
+  let cs = move(withSub, "w/c", 1, 3, "§x")!;
+  cs = move(cs, "w/d", 1, 1, "r/a")!;
+  expect(cs[0].pages.map((p) => [p.slug, p.parent])).toEqual([["r/a", undefined], ["w/d", "r/a"], ["r/b", undefined], ["§x", undefined], ["w/c", "§x"]]);
+  cs = arrange([{ ...defaults[0], pages: [...defaults[0].pages] }, { ...defaults[1] }], toSaved(cs));
+  expect(cs[0].pages.find((p) => p.slug === "§x")?.title).toBe("Active");
+  cs = move(cs, "r/a", 2, 0)!;
+  expect(cs[1].pages.map((p) => [p.slug, p.parent])).toEqual([["r/a", undefined], ["w/d", "r/a"]]);
+  expect(move(cs, "r/a", 1, 0, "r/b")).toBeNull();
+});

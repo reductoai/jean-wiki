@@ -41,7 +41,7 @@ WIKI_DEV_EMAIL=jean@reducto.ai PORT=3000 bun server.ts
 
 ## Sections and page order
 
-The owner sees "+ New section" at the bottom of the sidebar and can drag any page into another section or to a new spot. The order saves live to `$HOSTING_DATA_DIR/layout.json`. A page keeps its URL when it moves. An empty section shows "Remove section". Agents can do the same with the bearer token: `POST /api/new-section {"title":...}`, `POST /api/move {"slug":...,"chapter":<section number from /api/pages>,"index":<0-based spot>}`, `POST /api/remove-section {"chapter":...}`. Pages added to `lib/site.ts` later appear in their own section until moved.
+The owner sees "+ New section" at the bottom of the sidebar and can drag any page into another section or to a new spot. The order saves live to `$HOSTING_DATA_DIR/layout.json`. A page keeps its URL when it moves. An empty section shows "Remove section". Agents can do the same with the bearer token: `POST /api/new-section {"title":...}`, `POST /api/move {"slug":...,"chapter":<section number from /api/pages>,"index":<0-based spot>}`, `POST /api/remove-section {"chapter":...}`. Pages added to `lib/site.ts` later appear in their own section until moved. Pages nest one level deep: dropping a page on the middle of another page makes it a subpage (1.4 becomes the parent of 1.4.1), and "+ Subsection" adds a named heading that holds pages the same way. Agents nest with `"parent":<slug>` on `/api/move`, and use `POST /api/new-subsection {"chapter":...,"title":...}` and `POST /api/remove-subsection {"slug":"§..."}` (its pages move up a level).
 
 ## Redeploy
 

@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { render } from "./lib/render.ts";
 import { CHAPTERS as BASE_CHAPTERS, TODO, type Chapter, type Page } from "./lib/site.ts";
 import { layout, editor, denied } from "./lib/views.ts";
-import { arrange, move, toSaved, type Saved } from "./lib/layout.ts";
+import { arrange, isSub, move, toSaved, type Saved } from "./lib/layout.ts";
 
 const ROOT = import.meta.dir;
 const DATA = process.env.HOSTING_DATA_DIR ?? join(ROOT, ".data");
@@ -33,7 +33,7 @@ function saveLayout(cs: Chapter[]) {
   writeFileSync(layoutFile, JSON.stringify(toSaved(cs), null, 2));
   queueMicrotask(() => broadcast("*"));
 }
-const pages = (): Page[] => [TODO, ...chapters().flatMap((c) => c.pages)];
+const pages = (): Page[] => [TODO, ...chapters().flatMap((c) => c.pages.filter((p) => !p.sub))];
 const slugify = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
 
 function addPage(chapter: number, title: string): Page | null {
@@ -181,16 +181,36 @@ const server = Bun.serve({
         const { chapter } = await req.json();
         const cs = chapters();
         const c = cs.find((x) => x.number === Number(chapter));
-        if (!c || c.pages.length || BASE_CHAPTERS.some((x) => x.number === c.number)) return json({ error: "only an empty section you added can be removed" }, 400);
+        if (!c || c.pages.some((p) => !p.sub) || BASE_CHAPTERS.some((x) => x.number === c.number)) return json({ error: "only an empty section you added can be removed" }, 400);
         saveLayout(cs.filter((x) => x !== c));
         return json({ ok: true });
       }
       if (req.method === "POST" && path === "api/move") {
         if (!isOwner(who)) return json({ error: "only the wiki owner can do this" }, 403);
-        const { slug, chapter, index } = await req.json();
-        const cs = move(chapters(), String(slug), Number(chapter), Number(index ?? Infinity));
+        const { slug, chapter, index, parent } = await req.json();
+        const cs = move(chapters(), String(slug), Number(chapter), Number(index ?? Infinity), parent ? String(parent) : undefined);
         if (!cs) return json({ error: "unknown page or section" }, 400);
         saveLayout(cs);
+        return json({ ok: true });
+      }
+      if (req.method === "POST" && path === "api/new-subsection") {
+        if (!isOwner(who)) return json({ error: "only the wiki owner can do this" }, 403);
+        const body = await req.json();
+        const title = String(body.title ?? "").trim();
+        const cs = chapters();
+        const c = cs.find((x) => x.number === Number(body.chapter));
+        if (!c || !title) return json({ error: "pick a section and a non-empty title" }, 400);
+        const slug = `§${crypto.randomUUID().slice(0, 8)}`;
+        c.pages.push({ slug, path: "", title, sub: true });
+        saveLayout(cs);
+        return json({ ok: true, slug });
+      }
+      if (req.method === "POST" && path === "api/remove-subsection") {
+        if (!isOwner(who)) return json({ error: "only the wiki owner can do this" }, 403);
+        const slug = String((await req.json()).slug ?? "");
+        const cs = chapters();
+        if (!isSub(slug) || !cs.some((c) => c.pages.some((p) => p.slug === slug))) return json({ error: "unknown subsection" }, 400);
+        saveLayout(cs.map((c) => ({ ...c, pages: c.pages.filter((p) => p.slug !== slug).map((p) => (p.parent === slug ? { ...p, parent: undefined } : p)) })));
         return json({ ok: true });
       }
       if (req.method === "GET" && path === "api/events") {
@@ -248,8 +268,9 @@ const server = Bun.serve({
 });
 
 function navFor(who: string) {
-  const visible = (p: Page) => canRead(who, p.slug);
-  return { todo: visible(TODO) ? TODO : null, chapters: chapters().map((c) => ({ ...c, builtin: BASE_CHAPTERS.some((b) => b.number === c.number), pages: c.pages.filter(visible) })).filter((c) => c.pages.length || isOwner(who)) };
+  const visible = (p: Page) => p.sub || canRead(who, p.slug);
+  const shown = (ps: Page[]) => (isOwner(who) ? ps : ps.filter((p) => !p.sub || ps.some((k) => k.parent === p.slug)));
+  return { todo: visible(TODO) ? TODO : null, chapters: chapters().map((c) => ({ ...c, builtin: BASE_CHAPTERS.some((b) => b.number === c.number), pages: shown(c.pages.filter(visible)) })).filter((c) => c.pages.length || isOwner(who)) };
 }
 
 console.log(`jean-wiki on :${server.port}`);

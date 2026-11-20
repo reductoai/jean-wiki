@@ -211,7 +211,7 @@ article h2 { letter-spacing: -0.01em; }
 
 /* Sections and drag to move */
 .new-section { display: block; margin: 4px 0 0 0; padding: 4px 10px; font: 13px "Geist", sans-serif; color: var(--muted); background: none; border: 1px dashed var(--line); border-radius: 6px; cursor: pointer; width: 100%; text-align: left; }
-.new-section:hover, .remove-section:hover { background: #e4e4e7; }
+.new-section:hover, .remove-section:hover, .new-sub:hover { background: #e4e4e7; }
 .section-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .section-tools .new-page { margin-left: 10px; }
 .section-tools .empty { width: 100%; padding: 4px 10px; color: var(--muted); font-size: 13px; }
@@ -220,3 +220,12 @@ nav.side a[draggable] { cursor: grab; }
 nav.side a.dragging { opacity: .4; }
 nav.side .part.over { background: #ececef; border-radius: 8px; }
 .drop-here { height: 2px; margin: 1px 10px; background: var(--accent); border-radius: 1px; }
+
+nav.side a.child, .drop-here.child { margin-left: 26px; }
+nav.side .subhead { display: flex; align-items: center; gap: 4px; padding: 4px 10px; margin-top: 4px; font: 500 12px "Geist Mono", monospace; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+nav.side .subhead[draggable] { cursor: grab; }
+.remove-sub { margin-left: auto; padding: 0 6px; font: 14px "Geist", sans-serif; color: var(--muted); background: none; border: 0; border-radius: 4px; cursor: pointer; visibility: hidden; }
+nav.side .subhead:hover .remove-sub { visibility: visible; }
+.remove-sub:hover { background: #e4e4e7; }
+.new-sub { padding: 4px 8px; font: 13px "Geist", sans-serif; color: var(--muted); background: none; border: 1px solid transparent; border-radius: 6px; cursor: pointer; }
+nav.side .nest-target { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 6px; }

@@ -21,7 +21,23 @@ export function layout(o: { base: string; page: Page; nav: Nav; body: string; he
   const { base, page, nav } = o;
   const link = (p: Page, label: string) =>
     `<a href="${base}${p.path}" class="${p.slug === page.slug ? "active" : ""}"${o.owner && p.slug !== "todo" ? ` draggable="true" data-slug="${esc(p.slug)}"` : ""}>${label}</a>`;
-  const order = [nav.todo, ...nav.chapters.flatMap((c) => c.pages)].filter(Boolean) as Page[];
+  const item = (p: Page, num: string, child: boolean) => {
+    const label = `<span class="num">${num}</span> ${esc(p.title)}`;
+    const drag = o.owner ? ` draggable="true" data-slug="${esc(p.slug)}"${child ? ` data-parent="${esc(p.parent!)}"` : ""}` : "";
+    if (!p.sub) return `<a href="${base}${p.path}" class="${p.slug === page.slug ? "active" : ""}${child ? " child" : ""}"${drag}>${label}</a>`;
+    return `<div class="subhead"${drag}>${label}${o.owner ? `<button class="remove-sub" data-slug="${esc(p.slug)}" title="Remove subsection">×</button>` : ""}</div>`;
+  };
+  const items = (c: Chapter, ci: number) => {
+    let j = 0, k = 0;
+    const tops = new Set(c.pages.filter((p) => !p.parent).map((p) => p.slug));
+    return c.pages.map((p) => {
+      const child = !!p.parent && tops.has(p.parent);
+      if (child) k++;
+      else (j++, (k = 0));
+      return item(p, child ? `${ci + 1}.${j}.${k}` : `${ci + 1}.${j}`, child);
+    }).join("\n");
+  };
+  const order = [nav.todo, ...nav.chapters.flatMap((c) => c.pages.filter((p) => !p.sub))].filter(Boolean) as Page[];
   const i = order.findIndex((p) => p.slug === page.slug);
   const prev = i > 0 ? order[i - 1] : null;
   const next = i >= 0 && i < order.length - 1 ? order[i + 1] : null;
@@ -33,8 +49,8 @@ ${o.owner ? `<div class="actions"><span class="share-state">${shareLabel(o.share
 <nav class="side">
 ${nav.todo ? `<div class="part">${link(nav.todo, "Todo")}</div>` : ""}
 ${nav.chapters.map((c, ci) => `<div class="part" data-chapter="${c.number}"><div class="chapter">${ci + 1}&nbsp; ${esc(c.title)}</div>
-${c.pages.map((p, j) => link(p, `<span class="num">${ci + 1}.${j + 1}</span> ${esc(p.title)}`)).join("\n")}
-${o.owner ? `<div class="section-tools">${c.pages.length ? "" : `<span class="empty">Drag pages here</span>`}<button class="new-page" data-chapter="${c.number}">+ New page</button>${c.pages.length || c.builtin ? "" : `<button class="remove-section" data-chapter="${c.number}">Remove section</button>`}</div>` : ""}</div>`).join("\n")}
+${items(c, ci)}
+${o.owner ? `<div class="section-tools">${c.pages.length ? "" : `<span class="empty">Drag pages here</span>`}<button class="new-page" data-chapter="${c.number}">+ New page</button><button class="new-sub" data-chapter="${c.number}">+ Subsection</button>${c.pages.length || c.builtin ? "" : `<button class="remove-section" data-chapter="${c.number}">Remove section</button>`}</div>` : ""}</div>`).join("\n")}
 ${o.owner ? `<button class="new-section">+ New section</button>` : ""}
 </nav>
 <main><article>${o.body}${sourcesBox(page)}</article>
