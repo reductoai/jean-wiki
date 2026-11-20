@@ -63,7 +63,7 @@
     for (const name in EDGES) edges[name] = el("path", { d: path(name), class: "edge", "marker-end": "url(#arrow)" }, svg);
     const nodes = {};
     for (const [id, n] of Object.entries(NODES)) {
-      const g = el("g", { class: "node", tabindex: 0 }, svg);
+      const g = el("g", { class: `node n-${id}`, tabindex: 0 }, svg);
       el("rect", { x: n.x, y: n.y, width: n.w, height: H, rx: 10 }, g);
       el("text", { x: n.x + n.w / 2, y: n.y + 24, class: "label" }, g).textContent = n.label;
       el("text", { x: n.x + n.w / 2, y: n.y + 42, class: "sub" }, g).textContent = n.sub;
