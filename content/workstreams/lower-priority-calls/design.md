@@ -1,6 +1,18 @@
 # Design: one priority for every call
 
-Every call gets a priority, a class plus an org weight, and the router serves calls in priority order.
+**Problem.** The router serves each namespace's calls in arrival order, plus an on/off `low` flag ([#15178](https://github.com/reductoai/api/pull/15178)). It cannot tell a 1-page interactive call from a 3-day bulk job, or an enterprise org from a trial org. So one org's burst makes everyone wait, and internal work is refused or competes with customers.
+
+**Requirements**
+
+- Customer calls are never dropped. Internal work (staging, autoeval, shadows) can be shed.
+- An org's priority can change any time, without a deploy.
+- Latency targets are settings, not fixed numbers.
+- No org and no class waits forever.
+- One org's burst can't block the others.
+- Only Interactive and Standard calls scale up prod Modal.
+- Defaults keep today's behavior. Each namespace has a kill switch.
+
+**Solution.** Every call gets a priority, a class plus an org weight, and the router serves calls in priority order.
 
 <figure class="diagram">
 <svg viewBox="0 0 720 330" role="img" aria-label="Call classes from interactive to sheddable, and org weight" font-family="Geist, ui-sans-serif, system-ui, sans-serif" font-size="13">
@@ -60,9 +72,7 @@ Every call gets a priority, a class plus an org weight, and the router serves ca
 <figcaption class="diagram-caption">A Standard call near its due time goes before a fresh Interactive call, so no class waits forever.</figcaption>
 </figure>
 
-**Problem.** The router serves each namespace's calls in arrival order, plus an on/off `low` flag ([#15178](https://github.com/reductoai/api/pull/15178)). It cannot tell a 1-page interactive call from a 3-day bulk job, or an enterprise org from a trial org. So one org's burst makes everyone wait, and internal work is refused or competes with customers.
-
-**Solution.** On `/admit`, the worker sends each call's class and weight:
+**How it works.** On `/admit`, the worker sends each call's class and weight:
 
 - **Class:** how fast the call must finish. Calls above the line are never dropped. Sheddable calls below it run only on spare cluster slots.
 - **Weight:** the org's share when calls of one class wait together, set by its tier or a per-org override row.
