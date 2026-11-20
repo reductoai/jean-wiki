@@ -35,10 +35,9 @@ Click a part to see what it does, or play a scenario.
 
 ## Current status
 
-{{notion:workstreams#More apps on the inference router}}
-
-{{notion:workstreams#Inference footguns}}
+- [More apps on the router](more-apps): R-1, R-1 mini, Magpie and the EU Triton apps on the router; R-1 cost per 1,000 pages down from $3.73 to $2.21.
+- [EU R-1 through the router](eu-r1): EU router up, smoke checks pass.
 
 ## In this chapter
 
-- [Workstreams and impact](workstreams): plan, logs and cost per call for each app moved to the router.
+- [Workstreams and impact](workstreams): every router workstream with its goal and impact.
