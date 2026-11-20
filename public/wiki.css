@@ -154,3 +154,18 @@ code { background: #f4f4f5; color: var(--ink); }
 .dot { fill: var(--accent); stroke: #fff; }
 .diagram-bar button.on, .diagram-bar button:hover { background: var(--ink); border-color: var(--ink); }
 .pager a { background: none; border: 1px solid var(--line); }
+
+/* DeepWiki density */
+body, article { line-height: 1.5; }
+article { font-size: 16px; }
+main { padding: 20px 32px 48px; }
+article p, article ul, article ol, article table, article .diagram { margin: 0 0 0.6em; }
+article li { margin: 0.1em 0; }
+article li > ul, article li > ol { margin: 0.1em 0 0.2em; }
+article > h1:first-of-type { font-size: 28px; margin: 0 0 8px; }
+h2 { margin: 22px 0 8px; padding-top: 0; border-top: 0; font-size: 21px; }
+h3 { margin: 16px 0 6px; font-size: 17px; }
+h4 { margin: 12px 0 4px; }
+.notion { padding: 2px 0 2px 16px; margin: 8px 0; }
+.sources { margin: 24px 0 0; }
+nav.side a { padding-top: 3px; padding-bottom: 3px; }
