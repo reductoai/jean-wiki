@@ -222,7 +222,8 @@ const server = Bun.serve({
         const c = cs.find((x) => x.number === Number(chapter));
         const hidden = archivedBy(readArchive());
         if (!c || c.pages.some((p) => !p.sub && !hidden(p)) || BASE_CHAPTERS.some((x) => x.number === c.number)) return json({ error: "only an empty section you added can be removed" }, 400);
-        saveLayout(cs.filter((x) => x !== c));
+        const home = cs.find((x) => x !== c && BASE_CHAPTERS.some((b) => b.number === x.number))!;
+        saveLayout(cs.filter((x) => x !== c).map((x) => (x === home ? { ...x, pages: [...x.pages, ...c.pages.filter((p) => !p.sub)] } : x)));
         return json({ ok: true });
       }
       if (req.method === "POST" && path === "api/move") {
