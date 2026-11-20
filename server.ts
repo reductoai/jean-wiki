@@ -249,11 +249,11 @@ const server = Bun.serve({
       if (!page) return json({ error: "unknown page" }, 404);
       if (path.startsWith("api/comment")) {
         if (!who || !canRead(who, slug)) return json({ error: "you can't see this page" }, 403);
+        if (req.method === "GET" && path === "api/comments") return json({ comments: readComments()[slug] ?? [] });
+        const body = req.method === "POST" ? await req.json() : {};
         const all = readComments();
         const list = all[slug] ?? [];
-        if (req.method === "GET" && path === "api/comments") return json({ comments: list });
         if (req.method === "POST" && path === "api/comment") {
-          const body = await req.json();
           const text = String(body.text ?? "").trim().slice(0, 4000);
           if (!text) return json({ error: "write a comment" }, 400);
           const quote = String(body.quote ?? "").trim().slice(0, 500) || undefined;
@@ -263,7 +263,6 @@ const server = Bun.serve({
           return json({ ok: true, comment: c });
         }
         if (req.method === "POST" && path === "api/comment/resolve") {
-          const body = await req.json();
           const c = list.find((x) => x.id === String(body.id));
           if (!c) return json({ error: "unknown comment" }, 404);
           if (!isOwner(who) && c.by !== who) return json({ error: "only the author or the wiki owner can do this" }, 403);
