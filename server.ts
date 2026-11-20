@@ -293,10 +293,12 @@ const server = Bun.serve({
       if (req.method === "POST" && path === "api/share") {
         const body = (await req.json()) as Share;
         const shares = readShares();
-        shares[slug] = { mode: body.mode, emails: (body.emails ?? []).map((e) => e.trim().toLowerCase()).filter(Boolean) };
+        const target = page.planOf ?? slug;
+        delete shares[slug];
+        shares[target] = { mode: body.mode, emails: (body.emails ?? []).map((e) => e.trim().toLowerCase()).filter(Boolean) };
         mkdirSync(DATA, { recursive: true });
         writeFileSync(sharesFile, JSON.stringify(shares, null, 2));
-        return json({ ok: true, share: shares[slug] });
+        return json({ ok: true, share: shares[target] });
       }
       return json({ error: "not found" }, 404);
     }
@@ -307,7 +309,7 @@ const server = Bun.serve({
 
     const { markdown, edited } = source(page.slug);
     if (url.searchParams.has("edit") && isOwner(who)) {
-      return html(editor({ base, page, markdown, edited, history: history(page.slug), share: shareOf(page.slug) }));
+      return html(editor({ base, page, markdown, edited, history: history(page.slug), share: shareOf(page.planOf ?? page.slug) }));
     }
     const { html: body, headings } = render(markdown, base, page.path.replace(/\/$/, ""));
     const overview = page.planOf ? pages().find((p) => p.slug === page.planOf)! : page;
