@@ -34,14 +34,21 @@ const pick: Record<Kind, (p: any) => any> = {
 };
 
 async function query(db: string, token: string): Promise<any[]> {
-  const r = await fetch(`https://api.notion.com/v1/databases/${db}/query`, {
-    method: "POST",
-    headers: { authorization: `Bearer ${token}`, "notion-version": "2022-06-28", "content-type": "application/json" },
-    body: JSON.stringify({ sorts: [{ property: "Order", direction: "ascending" }], page_size: 100 }),
-    signal: AbortSignal.timeout(15000),
-  });
-  if (!r.ok) throw new Error(`Notion ${r.status}`);
-  return (await r.json()).results;
+  const rows: any[] = [];
+  let cursor: string | undefined;
+  do {
+    const r = await fetch(`https://api.notion.com/v1/databases/${db}/query`, {
+      method: "POST",
+      headers: { authorization: `Bearer ${token}`, "notion-version": "2022-06-28", "content-type": "application/json" },
+      body: JSON.stringify({ sorts: [{ property: "Order", direction: "ascending" }], page_size: 100, ...(cursor ? { start_cursor: cursor } : {}) }),
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!r.ok) throw new Error(`Notion ${r.status}`);
+    const page = await r.json();
+    rows.push(...page.results);
+    cursor = page.has_more ? page.next_cursor : undefined;
+  } while (cursor);
+  return rows;
 }
 
 /** Re-reads every database; returns true when any row changed. */
