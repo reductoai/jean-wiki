@@ -12,6 +12,24 @@ Jean's wiki and project tracker. The Todo page links every workstream. After it 
 
 Run `bun test`, then open a PR. Get Jean's approval before you merge.
 
+## Live content edits (no deploy)
+
+Page content lives in app storage, not git. A save shows on the next page load, with no deploy. Jean saves from the browser (Edit and share, New page). Agents save through the same API:
+
+```sh
+W=http://localhost:3200                          # the running wiki
+TOK=$(cat $HOSTING_DATA_DIR/agent-token)         # created on first start, mode 600
+H=(-H "Authorization: Bearer $TOK" -H "X-Agent-Name: <your session>")
+curl "${H[@]}" $W/api/pages                                       # list pages
+curl "${H[@]}" "$W/api/page?page=inference-router/eu-r1"           # read one page
+curl "${H[@]}" -XPOST "$W/api/save?page=inference-router/eu-r1" -d '{"markdown":"# EU R-1 ..."}'
+curl "${H[@]}" -XPOST $W/api/new-page -d '{"chapter":1,"title":"Router runbook"}'
+```
+
+Every save keeps a version in history, labeled with the agent's name. The Devin App URL rejects requests from outside Devin sign-in (HTTP 401), so an agent on another box can't call it. Instead, ask the session that manages the app (`devin_session_search`, `has_app`) to make the call. Once the wiki moves to Reducto Hosting, agents can call the hosted URL directly with the same token.
+
+The repo holds only code and layout. Copy browser and agent edits from `$HOSTING_DATA_DIR/pages/` into `content/` when you want them in git.
+
 ## Run locally
 
 ```sh

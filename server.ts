@@ -61,8 +61,22 @@ function save(slug: string, markdown: string, by: string) {
   writeFileSync(join(historyDir(slug), `${stamp}.json`), JSON.stringify({ at, by, file: `${stamp}.md` }));
 }
 
-const email = (req: Request) => (req.headers.get("x-reducto-user-email") ?? process.env.WIKI_DEV_EMAIL ?? "").toLowerCase();
-const isOwner = (who: string) => OWNERS.includes(who);
+const tokenFile = join(DATA, "agent-token");
+function agentToken(): string {
+  if (process.env.WIKI_AGENT_TOKEN) return process.env.WIKI_AGENT_TOKEN;
+  if (!existsSync(tokenFile)) {
+    mkdirSync(DATA, { recursive: true });
+    writeFileSync(tokenFile, crypto.randomUUID() + crypto.randomUUID(), { mode: 0o600 });
+  }
+  return readFileSync(tokenFile, "utf8").trim();
+}
+const TOKEN = agentToken();
+const email = (req: Request) => {
+  const auth = req.headers.get("authorization") ?? "";
+  if (auth === `Bearer ${TOKEN}`) return `agent:${(req.headers.get("x-agent-name") ?? "devin").replace(/[^\w.@-]/g, "").slice(0, 60)}`;
+  return (req.headers.get("x-reducto-user-email") ?? process.env.WIKI_DEV_EMAIL ?? "").toLowerCase();
+};
+const isOwner = (who: string) => OWNERS.includes(who) || who.startsWith("agent:");
 const canRead = (who: string, slug: string) => {
   if (isOwner(who)) return true;
   const s = shareOf(slug);
@@ -98,6 +112,10 @@ const server = Bun.serve({
         const page = addPage(Number(chapter), String(title ?? ""));
         return page ? json({ ok: true, path: page.path }) : json({ error: "pick a new, non-empty title" }, 400);
       }
+      if (req.method === "GET" && path === "api/pages") {
+        if (!isOwner(who)) return json({ error: "only the wiki owner can do this" }, 403);
+        return json({ pages: pages().map((p) => ({ slug: p.slug, path: p.path, title: p.title })), chapters: chapters().map((c) => ({ number: c.number, title: c.title })) });
+      }
       const slug = url.searchParams.get("page") ?? "";
       const page = pages().find((p) => p.slug === slug);
       if (!page) return json({ error: "unknown page" }, 404);
@@ -106,6 +124,7 @@ const server = Bun.serve({
         const { markdown } = await req.json();
         return json({ html: render(markdown, base).html });
       }
+      if (req.method === "GET" && path === "api/page") return json(source(slug));
       if (req.method === "POST" && path === "api/save") {
         const { markdown } = await req.json();
         if (typeof markdown !== "string") return json({ error: "markdown required" }, 400);
