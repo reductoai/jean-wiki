@@ -1,5 +1,5 @@
 import type { Heading } from "./render.ts";
-import type { Chapter, Page } from "./site.ts";
+import type { Chapter, Page, Source } from "./site.ts";
 
 
 type Share = { mode: "private" | "reducto" | "people"; emails: string[] };
@@ -80,5 +80,7 @@ export function denied(base: string, who: string) {
 
 function sourcesBox(page: Page) {
   if (!page.sources?.length) return "";
-  return `<details class="sources"><summary>Relevant sources</summary><ul>${page.sources.map((s) => `<li><a href="${s.url}">${esc(s.title)}</a></li>`).join("")}</ul></details>`;
+  const group = (label: string, items: Source[]) =>
+    items.length ? `<div class="src-group">${label}</div><ul>${items.map((s) => `<li><a href="${s.url}">${s.kind ? `<code>${esc(s.title)}</code>` : esc(s.title)}</a></li>`).join("")}</ul>` : "";
+  return `<details class="sources"><summary>Relevant sources</summary>${group("Notion", page.sources.filter((s) => !s.kind))}${group("Code in reductoai/api", page.sources.filter((s) => s.kind === "code"))}</details>`;
 }

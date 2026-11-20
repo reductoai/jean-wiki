@@ -66,3 +66,4 @@ details { border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; 
   .menu { display: block; } main { margin-left: 0; padding: 20px; } .editing .editor { grid-template-columns: 1fr; height: auto; }
 }
 .sources { font-size: 14px; background: var(--soft); border-color: var(--line); margin: 0 0 20px; } .sources ul { margin: 6px 0; }
+.src-group { font-weight: 600; font-size: 13px; color: var(--muted); margin-top: 8px; }
