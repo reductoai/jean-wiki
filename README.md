@@ -1,22 +1,34 @@
 # Jean's wiki
 
-Jean's wiki and project tracker: a central todo page, then one chapter per system, each with an intro and current status page and a workstreams and impact page. Chapter 1 is the inference router.
+Jean's wiki and project tracker. The Todo page links every workstream. After it comes one chapter per system, starting with the inference router: an intro and status page, a workstreams and impact page, and one page per workstream.
 
-## Where content lives
+## Edit
 
-- `content/*.md`: the wiki's own pages. Edit them in the browser (Edit and share) or in git.
-- `notion/*.md`: read-only snapshots of Jean's Notion Daily notes pages. Notion stays the source of truth; refresh a snapshot instead of editing it.
-- In any page, `{{notion:<snapshot>}}` shows a whole Notion page and `{{notion:<snapshot>#<heading>}}` one section; `shift=N` demotes its headings. `{{diagram:router}}` shows the interactive router diagram.
-- `lib/site.ts`: the chapters, their pages, and which Notion links stay inside the wiki.
+- **Pages:** `content/<chapter>/<page>.md`, in Markdown. `{{diagram:router}}` embeds the interactive router diagram (`public/diagram.js`).
+- **Chapters and the sidebar:** `lib/site.ts`. Add a page there and add its Markdown file in `content/`. Each page's `sources` list (Notion pages and `reductoai/api` files) shows at the bottom of the page.
+- **Style:** `public/wiki.css`, which uses Reducto's tokens (plum, honey, pine) and Geist.
+- **In the browser:** Jean can use Edit and share, and New page in the sidebar. Those edits are saved in app storage (`$HOSTING_DATA_DIR/pages/`, plus `custom-pages.json`), not in git, and they override the git copy. Before you change a page in git, copy any newer browser edit of it into `content/` first.
+- **Notion snapshots:** `notion/*.md` are read only. Never edit Jean's Notion pages.
 
-## Access
-
-Every page is private to the owners in `content/access.json` until an owner shares it from the editor: with anyone at Reducto, or with listed emails. Browser edits and sharing are saved in app storage (`/data`), with a history of every save; a browser edit replaces the git version of that page until restored from history.
+Run `bun test`, then open a PR. Get Jean's approval before you merge.
 
 ## Run locally
 
 ```sh
 bun install
-WIKI_DEV_EMAIL=jean@reducto.ai bun server.ts   # http://localhost:3000
-bun test
+WIKI_DEV_EMAIL=jean@reducto.ai PORT=3000 bun server.ts
 ```
+
+## Redeploy
+
+Today the site is the Devin App `jean-wiki` at https://jean-wiki--jk7mnqxh.preview.devinapps.com. Only the session that manages the app can deploy it.
+
+1. Find that session with `devin_session_search` (`has_app`) and ask it to redeploy.
+2. It pulls `main`, starts `HOSTING_DATA_DIR=/home/ubuntu/work/jean-wiki-data WIKI_DEV_EMAIL=jean@reducto.ai PORT=<free port> bun server.ts`, and runs `deploy_devin_app` with that command.
+3. It alternates between ports 3200 and 3201, and stops the old server 15 s after the deploy.
+
+The planned home is Reducto Hosting at `apps.reducto.ai/internal/jean-wiki`, configured in `reductoapp.toml`. There, a push to the app's Internal Git remote deploys the site. That push is blocked until Internal Access → Agents lets Devin sessions exchange credentials (today it returns HTTP 403).
+
+## Access
+
+Every page is private to the owners in `content/access.json`. An owner can share a page from the editor with anyone at Reducto or with listed emails. On the Devin App, every visitor counts as Jean (`WIKI_DEV_EMAIL`). Real per-user access needs Reducto Hosting, which sets `x-reducto-user-email`.
