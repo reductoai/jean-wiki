@@ -273,3 +273,4 @@ ol.plan::before { content: ""; position: absolute; left: 13px; top: 14px; bottom
 .cm-quote { position: relative; } .cm-unquote { position: absolute; right: 0; top: 0; border: 0; background: none; cursor: pointer; color: var(--muted); }
 .cm-pop { position: absolute; z-index: 50; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--line); background: #fff; box-shadow: 0 2px 8px hsla(0,0%,0%,.12); cursor: pointer; font: 600 12px "Geist", sans-serif; }
 mark.cm-mark { background: #fef3c7; cursor: pointer; border-radius: 2px; }
+.archived { margin: 0 0 16px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 6px; background: #f6f7f9; color: var(--muted); font-family: "Geist", sans-serif; font-size: 14px; }

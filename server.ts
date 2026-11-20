@@ -33,6 +33,19 @@ function saveLayout(cs: Chapter[]) {
   writeFileSync(layoutFile, JSON.stringify(toSaved(cs), null, 2));
   queueMicrotask(() => broadcast("*"));
 }
+/** Finished workstreams: off the sidebar and Todo, still reachable by link. Their impact lives on the `into` page. */
+type Archived = Record<string, { date: string; into: string }>;
+const readArchive = (): Archived => {
+  const read = (f: string) => (existsSync(f) ? JSON.parse(readFileSync(f, "utf8")) : {});
+  return { ...read(join(ROOT, "content", "archive.json")), ...read(join(DATA, "archive.json")) };
+};
+function archivedBanner(slug: string, base: string): string {
+  const a = readArchive()[slug];
+  if (!a) return "";
+  const into = pages().find((p) => p.slug === a.into);
+  const when = new Date(`${a.date}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  return `<div class="archived">Finished and archived ${when}.${into ? ` Its impact is on <a href="${base}${into.path}">${into.title}</a>.` : ""}</div>`;
+}
 const pages = (): Page[] => [TODO, ...chapters().flatMap((c) => c.pages.filter((p) => !p.sub))];
 /** The workstream a page's dashboard shows, if any. */
 const wsOf = (slug: string) => source(slug).markdown.match(/\{\{dashboard:([\w-]+)\}\}/)?.[1];
@@ -212,7 +225,10 @@ const server = Bun.serve({
       if (req.method === "POST" && path === "api/move") {
         if (!isOwner(who)) return json({ error: "only the wiki owner can do this" }, 403);
         const { slug, chapter, index, parent } = await req.json();
-        const cs = move(chapters(), String(slug), Number(chapter), Number(index ?? Infinity), parent ? String(parent) : undefined);
+        const archived = readArchive();
+        const rest = (chapters().find((c) => c.number === Number(chapter))?.pages ?? []).filter((p) => p.slug !== String(slug) && p.parent !== String(slug));
+        const at = rest.filter((p) => !archived[p.slug])[Number(index ?? Infinity)];
+        const cs = move(chapters(), String(slug), Number(chapter), at ? rest.indexOf(at) : rest.length, parent ? String(parent) : undefined);
         if (!cs) return json({ error: "unknown page or section" }, 400);
         saveLayout(cs);
         return json({ ok: true });
@@ -314,7 +330,9 @@ const server = Bun.serve({
     if (url.searchParams.has("edit") && isOwner(who)) {
       return html(editor({ base, page, markdown, edited, history: history(page.slug), share: shareOf(page.planOf ?? page.slug) }));
     }
-    const { html: body, headings } = render(markdown, base, page.path.replace(/\/$/, ""));
+    const rendered = render(markdown, base, page.path.replace(/\/$/, ""));
+    const body = archivedBanner(page.planOf ?? page.slug, base) + rendered.html;
+    const headings = rendered.headings;
     const overview = page.planOf ? pages().find((p) => p.slug === page.planOf)! : page;
     const tabs = page.planOf || (page.slug !== "todo" && wsOf(page.slug)) ? { overview, plan: planPage(overview), design: designPage(overview) } : undefined;
     return html(layout({ base, page, nav: navFor(who), body, headings, owner: isOwner(who), share: shareOf(overview.slug), tabs, comments: readComments()[page.slug] ?? [], who }));
@@ -322,7 +340,8 @@ const server = Bun.serve({
 });
 
 function navFor(who: string) {
-  const visible = (p: Page) => p.sub || canRead(who, p.slug);
+  const archived = readArchive();
+  const visible = (p: Page) => p.sub || (!archived[p.slug] && canRead(who, p.slug));
   const shown = (ps: Page[]) => (isOwner(who) ? ps : ps.filter((p) => !p.sub || ps.some((k) => k.parent === p.slug)));
   return { todo: visible(TODO) ? TODO : null, chapters: chapters().map((c) => ({ ...c, builtin: BASE_CHAPTERS.some((b) => b.number === c.number), pages: shown(c.pages.filter(visible)) })).filter((c) => c.pages.length || isOwner(who)) };
 }

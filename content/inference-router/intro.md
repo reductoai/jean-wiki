@@ -36,8 +36,14 @@ Click a part to see what it does, or play a scenario.
 ## Current status
 
 - [More apps on the router](more-apps): R-1, R-1 mini, Magpie and the EU Triton apps on the router; R-1 cost per 1,000 pages down from $3.73 to $2.21.
-- [EU R-1 through the router](eu-r1): EU router up, smoke checks pass.
+- EU R-1 and R-1 mini: 100% of calls go through the router, with Modal floors at 1 ([#15004](https://github.com/reductoai/api/pull/15004)).
 
 ## In this chapter
 
 - [Workstreams and impact](workstreams): every router workstream with its goal and impact.
+
+## Impact of finished workstreams
+
+- [EU R-1 through the router](eu-r1): EU R-1 and R-1 mini floors went from 6 and 5 to 1 ([#15004](https://github.com/reductoai/api/pull/15004)).
+- [us-west-3 cluster](../workstreams/us-west-3-cluster): cost per 1,000 pages fell 18%. Modal spend fell while pages rose 20%.
+- [Overshoot 1112 R-1 35B package](../workstreams/overshoot-1112-r1-35b): US 35B p99 per page went from 7.69 to 3.38 s. EU Modal GPU cost per 1,000 pages went from $16.10 to $4.65, partly because EU floors also fell to 1 on Nov 16.

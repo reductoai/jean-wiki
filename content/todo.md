@@ -17,12 +17,10 @@ My workstreams by priority. Each one opens its page.
 
 - **p0** [B200 GPU sharing](workstreams/b200-gpu-sharing)
 - **p0** [Router for R-1 mini RL 299](workstreams/router-r1-mini-rl-299)
-- **p0** [us-west-3 cluster](workstreams/us-west-3-cluster)
 - **p1** vLLM 0.34 migration
 - **p1** [Lower priority calls to the cluster](workstreams/lower-priority-calls)
 - **p1** [R-1 mini optimization and productionizing](workstreams/r1-mini-optimization)
 - **p1** Serving improvements across all models
-- **p1** [Overshoot 1112 R-1 35B package](workstreams/overshoot-1112-r1-35b)
 - **p1** [Exa eval](workstreams/exa-eval)
 - **p1** R-1 nano serving throughput
 - **p2** [GPU cluster observability and utilization](workstreams/gpu-cluster-observability)
