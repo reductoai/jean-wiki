@@ -39,6 +39,10 @@ bun install
 WIKI_DEV_EMAIL=jean@reducto.ai PORT=3000 bun server.ts
 ```
 
+## Sections and page order
+
+The owner sees "+ New section" at the bottom of the sidebar and can drag any page into another section or to a new spot. The order saves live to `$HOSTING_DATA_DIR/layout.json`. A page keeps its URL when it moves. An empty section shows "Remove section". Agents can do the same with the bearer token: `POST /api/new-section {"title":...}`, `POST /api/move {"slug":...,"chapter":<section number from /api/pages>,"index":<0-based spot>}`, `POST /api/remove-section {"chapter":...}`. Pages added to `lib/site.ts` later appear in their own section until moved. Pages nest one level deep: dropping a page on the middle of another page makes it a subpage (1.4 becomes the parent of 1.4.1), and "+ Subsection" adds a named heading that holds pages the same way. Agents nest with `"parent":<slug>` on `/api/move`, and use `POST /api/new-subsection {"chapter":...,"title":...}` and `POST /api/remove-subsection {"slug":"§..."}` (its pages move up a level).
+
 ## Redeploy
 
 Today the site is the Devin App `jean-wiki` at https://jean-wiki--jk7mnqxh.preview.devinapps.com. Only the session that manages the app can deploy it.
@@ -56,3 +60,8 @@ Every page is private to the owners in `content/access.json`. An owner can share
 ## Workstream numbers live in Notion
 
 Each workstream page's headline numbers, app cards, steps, cost chart, impact cards and PR chips come from rows in the databases under [Jean's wiki content](https://app.notion.com/p/41e4a78a1c878141bc22dbccce23742d) (Stats, Apps, Steps, Costs, Impact, PRs). A page shows them with `{{dashboard:<workstream>}}`, matching rows on the `Workstream` select and sorting by `Order`. With `NOTION_TOKEN` set (the "Devin" Notion integration), the server re-reads them every 20 s, and open pages refresh when a row changes. To add a workstream, add rows with a new `Workstream` value, or write `content/dashboards/<slug>.json` and run `NOTION_TOKEN=... bun scripts/push-notion.ts <slug>`. The seed JSON is shown only before the first Notion sync.
+
+## Plans and comments
+
+- Every page with a `{{dashboard:<ws>}}` has a Plan subpage at `<path>/plan` (Overview and Plan tabs). It draws the Steps rows for `<ws>` in Order: Step is one short action line, Detail one or two sentences, State is `done`, `now` or `next`, Owner is a name, and PRs lists refs like `#15481` or `dynamo-stable#69`. Keep notes about who wrote what out of the rows.
+- Comments: any reader can comment on a page, or select text to quote it. Agents call `GET /api/comments?page=<slug>`, `POST /api/comment?page=<slug>` with `{"text": "...", "quote": "..."}`, and `POST /api/comment/resolve?page=<slug>` with `{"id": "...", "resolved": true}`, using the bearer token above.

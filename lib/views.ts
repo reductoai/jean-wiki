@@ -3,7 +3,7 @@ import type { Chapter, Page, Source } from "./site.ts";
 
 
 type Share = { mode: "private" | "reducto" | "people"; emails: string[] };
-type Nav = { todo: Page | null; chapters: Chapter[] };
+type Nav = { todo: Page | null; chapters: (Chapter & { builtin?: boolean })[] };
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
 
@@ -17,11 +17,37 @@ const head = (base: string, title: string) => `<!doctype html>
 const shareLabel = (s?: Share) =>
   !s || s.mode === "private" ? "Private" : s.mode === "reducto" ? "Shared with Reducto" : `Shared with ${s.emails.length} ${s.emails.length === 1 ? "person" : "people"}`;
 
-export function layout(o: { base: string; page: Page; nav: Nav; body: string; headings: Heading[]; owner: boolean; share?: Share }) {
+type Comment = { id: string; at: string; by: string; text: string; quote?: string; resolved?: boolean };
+const ptTime = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) + " PT";
+const who = (by: string) => (by.startsWith("agent:") ? `${by.slice(6)} (agent)` : by.replace(/@reducto\.ai$/, ""));
+
+export function commentList(comments: Comment[], me: string, owner: boolean): string {
+  const open = comments.filter((c) => !c.resolved), done = comments.filter((c) => c.resolved);
+  const one = (c: Comment) => `<li class="comment${c.resolved ? " resolved" : ""}" data-id="${esc(c.id)}"><div class="cm-head"><b>${esc(who(c.by))}</b><span>${ptTime(c.at)}</span>${owner || c.by === me ? `<button class="cm-resolve" data-id="${esc(c.id)}" data-resolved="${c.resolved ? "false" : "true"}">${c.resolved ? "Reopen" : "Resolve"}</button>` : ""}</div>${c.quote ? `<blockquote>${esc(c.quote)}</blockquote>` : ""}<div class="cm-text">${esc(c.text).replace(/\n/g, "<br>")}</div></li>`;
+  return `<div class="comment-list"><div class="cm-count">${open.length} open${done.length ? ` · ${done.length} resolved` : ""}</div><ul>${open.map(one).join("")}</ul>${done.length ? `<details class="cm-done"><summary>Resolved (${done.length})</summary><ul>${done.map(one).join("")}</ul></details>` : ""}</div>`;
+}
+
+export function layout(o: { base: string; page: Page; nav: Nav; body: string; headings: Heading[]; owner: boolean; share?: Share; tabs?: { overview: Page; plan: Page; design?: Page }; comments?: Comment[]; who?: string }) {
   const { base, page, nav } = o;
   const link = (p: Page, label: string) =>
-    `<a href="${base}${p.path}" class="${p.slug === page.slug ? "active" : ""}">${label}</a>`;
-  const order = [nav.todo, ...nav.chapters.flatMap((c) => c.pages)].filter(Boolean) as Page[];
+    `<a href="${base}${p.path}" class="${p.slug === page.slug ? "active" : ""}"${o.owner && p.slug !== "todo" ? ` draggable="true" data-slug="${esc(p.slug)}"` : ""}>${label}</a>`;
+  const item = (p: Page, num: string, child: boolean) => {
+    const label = `<span class="num">${num}</span> ${esc(p.title)}`;
+    const drag = o.owner ? ` draggable="true" data-slug="${esc(p.slug)}"${child ? ` data-parent="${esc(p.parent!)}"` : ""}` : "";
+    if (!p.sub) return `<a href="${base}${p.path}" class="${p.slug === page.slug ? "active" : ""}${child ? " child" : ""}"${drag}>${label}</a>`;
+    return `<div class="subhead"${drag}>${label}${o.owner ? `<button class="remove-sub" data-slug="${esc(p.slug)}" title="Remove subsection">×</button>` : ""}</div>`;
+  };
+  const items = (c: Chapter, ci: number) => {
+    let j = 0, k = 0;
+    const tops = new Set(c.pages.filter((p) => !p.parent).map((p) => p.slug));
+    return c.pages.map((p) => {
+      const child = !!p.parent && tops.has(p.parent);
+      if (child) k++;
+      else (j++, (k = 0));
+      return item(p, child ? `${ci + 1}.${j}.${k}` : `${ci + 1}.${j}`, child);
+    }).join("\n");
+  };
+  const order = [nav.todo, ...nav.chapters.flatMap((c) => c.pages.filter((p) => !p.sub))].filter(Boolean) as Page[];
   const i = order.findIndex((p) => p.slug === page.slug);
   const prev = i > 0 ? order[i - 1] : null;
   const next = i >= 0 && i < order.length - 1 ? order[i + 1] : null;
@@ -32,16 +58,19 @@ ${o.owner ? `<div class="actions"><span class="share-state">${shareLabel(o.share
 <button class="menu" aria-label="Menu" onclick="document.body.classList.toggle('nav-open')">☰</button></header>
 <nav class="side">
 ${nav.todo ? `<div class="part">${link(nav.todo, "Todo")}</div>` : ""}
-${nav.chapters.map((c) => `<div class="part"><div class="chapter">${c.number}&nbsp; ${esc(c.title)}</div>
-${c.pages.map((p, j) => link(p, `<span class="num">${c.number}.${j + 1}</span> ${esc(p.title)}`)).join("\n")}
-${o.owner ? `<button class="new-page" data-chapter="${c.number}">+ New page</button>` : ""}</div>`).join("\n")}
+${nav.chapters.map((c, ci) => `<div class="part" data-chapter="${c.number}"><div class="chapter">${ci + 1}&nbsp; ${esc(c.title)}</div>
+${items(c, ci)}
+${o.owner ? `<div class="section-tools">${c.pages.length ? "" : `<span class="empty">Drag pages here</span>`}<button class="new-page" data-chapter="${c.number}">+ New page</button><button class="new-sub" data-chapter="${c.number}">+ Subsection</button>${c.pages.length || c.builtin ? "" : `<button class="remove-section" data-chapter="${c.number}">Remove section</button>`}</div>` : ""}</div>`).join("\n")}
+${o.owner ? `<button class="new-section">+ New section</button>` : ""}
 </nav>
-<main><article>${o.body}${sourcesBox(page)}</article>
+<main>${o.tabs ? `<div class="tabs">${[o.tabs.overview, o.tabs.plan, o.tabs.design].filter((t) => t).map((t, i) => `<a href="${base}${t!.path}" class="${t!.slug === page.slug ? "active" : ""}">${["Overview", "Plan", "Design"][i]}</a>`).join("")}</div>` : ""}<article>${o.body}${sourcesBox(page)}</article>
+<section class="comments" id="comments"><h2>Comments</h2>${commentList(o.comments ?? [], o.who ?? "", o.owner)}
+<form class="cm-form"><div class="cm-quote" hidden><blockquote></blockquote><button type="button" class="cm-unquote" title="Remove quote">×</button></div><textarea name="text" rows="3" maxlength="4000" placeholder="Add a comment. Select text on the page to quote it."></textarea><button class="button" type="submit">Comment</button></form></section>
 <footer class="pager">${prev ? `<a href="${base}${prev.path}">← ${esc(prev.title)}</a>` : "<span></span>"}${next ? `<a href="${base}${next.path}">${esc(next.title)} →</a>` : ""}</footer>
 </main>
 <aside class="toc">${o.headings.length ? `<div class="toc-title">On this page</div>${o.headings.map((h) => `<a class="d${h.depth}" href="#${h.id}">${esc(h.text)}</a>`).join("")}` : ""}</aside>
 <script src="${base}static/diagram.js"></script>
-<script>window.WIKI_BASE=${JSON.stringify(base)}</script><script src="${base}static/newpage.js"></script><script src="${base}static/live.js"></script>
+<script>window.WIKI_BASE=${JSON.stringify(base)}</script><script src="${base}static/newpage.js"></script><script src="${base}static/live.js"></script><script src="${base}static/comments.js"></script>
 </body></html>`;
 }
 
