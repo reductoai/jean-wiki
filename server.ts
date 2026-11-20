@@ -27,6 +27,7 @@ function addPage(chapter: number, title: string): Page | null {
   if (pages().some((p) => p.slug === page.slug)) return null;
   mkdirSync(DATA, { recursive: true });
   writeFileSync(customFile, JSON.stringify([...readCustom(), page], null, 2));
+  queueMicrotask(() => broadcast("*"));
   return page;
 }
 const readShares = (): Record<string, Share> => (existsSync(sharesFile) ? JSON.parse(readFileSync(sharesFile, "utf8")) : {});
@@ -51,7 +52,14 @@ function history(slug: string) {
     .map((f) => JSON.parse(readFileSync(join(dir, f), "utf8")) as { at: string; by: string; file: string });
 }
 
+const listeners = new Set<ReadableStreamDefaultController<string>>();
+function broadcast(slug: string) {
+  for (const c of listeners) { try { c.enqueue(`data: ${JSON.stringify({ slug })}\n\n`); } catch { listeners.delete(c); } }
+}
+setInterval(() => { for (const c of listeners) { try { c.enqueue(": ping\n\n"); } catch { listeners.delete(c); } } }, 20000);
+
 function save(slug: string, markdown: string, by: string) {
+  queueMicrotask(() => broadcast(slug));
   const at = new Date().toISOString();
   const stamp = at.replace(/[:.]/g, "-");
   mkdirSync(join(DATA, "pages", slug, ".."), { recursive: true });
@@ -94,6 +102,7 @@ const json = (body: unknown, status = 200) => Response.json(body, { status });
 
 const server = Bun.serve({
   port: Number(process.env.PORT ?? 3000),
+  idleTimeout: 0,
   async fetch(req) {
     const url = new URL(req.url);
     const base = basePath(url.pathname);
@@ -111,6 +120,12 @@ const server = Bun.serve({
         const { chapter, title } = await req.json();
         const page = addPage(Number(chapter), String(title ?? ""));
         return page ? json({ ok: true, path: page.path }) : json({ error: "pick a new, non-empty title" }, 400);
+      }
+      if (req.method === "GET" && path === "api/events") {
+        if (!who) return json({ error: "sign in" }, 403);
+        let ctl: ReadableStreamDefaultController<string>;
+        const stream = new ReadableStream<string>({ start(c) { ctl = c; listeners.add(c); c.enqueue(": open\n\n"); }, cancel() { listeners.delete(ctl); } });
+        return new Response(stream, { headers: { "content-type": "text/event-stream", "cache-control": "no-cache", connection: "keep-alive" } });
       }
       if (req.method === "GET" && path === "api/pages") {
         if (!isOwner(who)) return json({ error: "only the wiki owner can do this" }, 403);

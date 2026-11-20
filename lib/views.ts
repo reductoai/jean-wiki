@@ -26,7 +26,7 @@ export function layout(o: { base: string; page: Page; nav: Nav; body: string; he
   const prev = i > 0 ? order[i - 1] : null;
   const next = i >= 0 && i < order.length - 1 ? order[i + 1] : null;
   return `${head(base, page.title)}
-<body>
+<body data-page="${page.slug}">
 <header class="top"><a class="brand" href="${base}">Jean's wiki</a>
 ${o.owner ? `<div class="actions"><span class="share-state">${shareLabel(o.share)}</span><a class="button" href="?edit">Edit and share</a></div>` : ""}
 <button class="menu" aria-label="Menu" onclick="document.body.classList.toggle('nav-open')">☰</button></header>
@@ -41,7 +41,7 @@ ${o.owner ? `<button class="new-page" data-chapter="${c.number}">+ New page</but
 </main>
 <aside class="toc">${o.headings.length ? `<div class="toc-title">On this page</div>${o.headings.map((h) => `<a class="d${h.depth}" href="#${h.id}">${esc(h.text)}</a>`).join("")}` : ""}</aside>
 <script src="${base}static/diagram.js"></script>
-<script>window.WIKI_BASE=${JSON.stringify(base)}</script><script src="${base}static/newpage.js"></script>
+<script>window.WIKI_BASE=${JSON.stringify(base)}</script><script src="${base}static/newpage.js"></script><script src="${base}static/live.js"></script>
 </body></html>`;
 }
 
