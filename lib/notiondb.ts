@@ -24,10 +24,11 @@ export function dashboard(ws: string): Dash | null {
   return existsSync(seed) ? JSON.parse(readFileSync(seed, "utf8")) : null;
 }
 
+const STATES = ["on", "wait", "later"];
 const text = (p: any) => (p?.title ?? p?.rich_text ?? []).map((t: any) => t.plain_text).join("");
 const pick: Record<Kind, (p: any) => any> = {
   stats: (p) => ({ label: text(p.Label), value: text(p.Value) }),
-  apps: (p) => ({ name: text(p.Name), state: p.State?.select?.name ?? "later", status: text(p.Status), note: text(p.Note) }),
+  apps: (p) => ({ name: text(p.Name), state: STATES.includes(p.State?.select?.name) ? p.State.select.name : "later", status: text(p.Status), note: text(p.Note) }),
   steps: (p) => ({ step: text(p.Step), detail: text(p.Detail), state: p.State?.select?.name ?? "next" }),
   costs: (p) => ({ app: text(p.App), before: p.Before?.number ?? 0, after: p.After?.number ?? 0 }),
 };
@@ -63,7 +64,7 @@ export async function refresh(token: string): Promise<boolean> {
   return changed;
 }
 
-const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 const prLinks = (s: string) => esc(s).replace(/#(\d{4,6})/g, '<a href="https://github.com/reductoai/api/pull/$1">#$1</a>');
 
 export function dashboardHtml(ws: string): string {
