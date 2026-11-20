@@ -100,6 +100,27 @@ function basePath(pathname: string): string {
 const html = (body: string, status = 200) => new Response(body, { status, headers: { "content-type": "text/html; charset=utf-8" } });
 const json = (body: unknown, status = 200) => Response.json(body, { status });
 
+if (process.env.WIKI_GIT_SYNC) {
+  const git = async (...args: string[]) => {
+    const p = Bun.spawn(["git", ...args], { cwd: ROOT, stdout: "pipe", stderr: "ignore", timeout: 20000 });
+    const out = await new Response(p.stdout).text();
+    await p.exited;
+    return out.trim();
+  };
+  let pulling = false;
+  setInterval(async () => {
+    if (pulling) return;
+    pulling = true;
+    try {
+      const before = await git("rev-parse", "HEAD");
+      await git("pull", "--ff-only", "-q", process.env.WIKI_GIT_SYNC!, "main");
+      if ((await git("rev-parse", "HEAD")) !== before) broadcast("*");
+    } finally {
+      pulling = false;
+    }
+  }, 30000);
+}
+
 const server = Bun.serve({
   port: Number(process.env.PORT ?? 3000),
   idleTimeout: 0,

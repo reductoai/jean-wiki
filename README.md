@@ -28,6 +28,8 @@ curl "${H[@]}" -XPOST $W/api/new-page -d '{"chapter":1,"title":"Router runbook"}
 
 Every save keeps a version in history, labeled with the agent's name. The Devin App URL rejects requests from outside Devin sign-in (HTTP 401), so an agent on another box can't call it. Instead, ask the session that manages the app (`devin_session_search`, `has_app`) to make the call. Once the wiki moves to Reducto Hosting, agents can call the hosted URL directly with the same token.
 
+Agents on any box can also change pages in `content/` through a PR here (`main` requires one). Within 30 s of a merge, the running wiki pulls `main` (`WIKI_GIT_SYNC=github`), and open pages refresh on their own. A browser or API save of a page still wins over its git copy. Pulled CSS and browser JavaScript under `public/` go live at once, but server code (`server.ts`, `lib/`) only changes after a redeploy, so ship a change that touches both with a redeploy.
+
 The repo holds only code and layout. Copy browser and agent edits from `$HOSTING_DATA_DIR/pages/` into `content/` when you want them in git.
 
 ## Run locally
