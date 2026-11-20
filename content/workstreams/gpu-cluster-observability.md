@@ -3,7 +3,7 @@
 Next PRs, in order; none started.
 
 <div class="ws-head">
-<div class="ws-stat"><b>6</b><span>steps left</span></div>
+<div class="ws-stat"><b>3</b><span>steps left</span></div>
 <div class="ws-stat"><b>14</b><span>PRs merged</span></div>
 <div class="ws-stat"><b>9</b><span>PRs open</span></div>
 <div class="ws-stat"><b>6</b><span>impact measures</span></div>
@@ -11,7 +11,7 @@ Next PRs, in order; none started.
 
 ## Next steps
 
-<ol class="steps"><li class="now">vLLM 0.34 + FlashInfer 0.7.3: benchmark on one B200.</li><li>B200 node pools: upgrade 1.35.5 → 1.35.8 on use1, uss1, usw1 together.</li><li>usw3: review static ScaledObjects and node-local cache.</li><li>Rollouts and config</li><li>Logs to Datadog</li><li>Monitors</li></ol>
+<ol class="steps"><li class="now">vLLM 0.34 + FlashInfer 0.7.3: benchmark on one B200.</li><li>B200 node pools: upgrade 1.35.5 → 1.35.8 on use1, uss1, usw1 together.</li><li>usw3: review static ScaledObjects and node-local cache.</li></ol>
 
 ## Impact
 
@@ -24,9 +24,7 @@ Next PRs, in order; none started.
 ## Details
 
 <details>
-<summary>Overview</summary>
-
-# Plan
+<summary>Plan</summary>
 
 Next PRs, in order; none started.
 
@@ -35,7 +33,10 @@ Next PRs, in order; none started.
   - Terraform; Jean applies.
 - <b>usw3:</b> review static ScaledObjects and node-local cache.
 
-# Logs
+</details>
+
+<details>
+<summary>Logs</summary>
 
 ✅ = merged. 🟡 = open, waiting on Jean's review.
 

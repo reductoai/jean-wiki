@@ -3,19 +3,15 @@
 Overshoot's fpp_35b-b200-2026-11-12 package: the 1111 engine plus 8-bit vision attention, with scales calibrated for our 20261028 encoder (Reducto's weights unchanged; only vision_scales/ and the vision_scales entry of config.json added). 96 seats, 24576…
 
 <div class="ws-head">
-<div class="ws-stat"><b>6</b><span>steps left</span></div>
+<div class="ws-stat"><b>0</b><span>steps left</span></div>
 <div class="ws-stat"><b>0</b><span>PRs merged</span></div>
 <div class="ws-stat"><b>2</b><span>PRs open</span></div>
-<div class="ws-stat"><b>4</b><span>impact measures</span></div>
+<div class="ws-stat"><b>3</b><span>impact measures</span></div>
 </div>
-
-## Next steps
-
-<ol class="steps"><li class="now">Overshoot's fpp_35b-b200-2026-11-12 package: the 1111 engine plus 8-bit vision attention, with scales calibrated for our 20261028…</li><li>Vendor claims (not yet reproduced): 11.77 pages/s at C12, 19.08 at C96 (+21% / +42% vs 1111); judge 13 wins / 66 ties / 1 loss vs…</li><li>Ask (Jean, 2026-11-12): test it offline and put it behind autoeval. Nothing changes prod serving without Jean's approval.</li><li>Speed gate PASS: at C16, p50 0.66x prod; at C32, p50 0.54x prod. p99 at C64 is higher than prod (24.77 s vs 18.96 s).</li><li>For reference, 1109 on 11-09 (another day, another pod): 1.93 / 14.30 / 16.48 / 18.63 pages/s at C1/16/32/64. C96 not measured.</li><li>Quality: judge vs BF16 nets -3 (prod fold-44 +2, 1109 was -6); head to head 1112 nets +6 over prod. No malformed markup on pages…</li></ol>
 
 ## Impact
 
-<div class="impact-grid"><div class="impact-card"><div class="ic-label">Offline, same B200 pod, prod package (fold-44) to 1112</div><div class="ic-value"><b>1.72</b> to <b>2.10</b> pages/s at <b>1</b> in flight, <b>8.92</b> to <b>13.74</b> at <b>16,</b> <b>9.64</b> to <b>15.53</b> at <b>32,</b> <b>9.49</b> to <b>17.15</b> at <b>64 </b>(<b>1.23x</b> to <b>1.81x</b>).</div></div><div class="impact-card"><div class="ic-label">p99 per page</div><div class="ic-value"><b>11.45</b> to <b>8.34 s</b> at <b>16</b> in flight, <b>18.96</b> to <b>24.77 s</b> at <b>64 </b>(worse).</div></div><div class="impact-card"><div class="ic-label">Wide set, 9,999 pages at 16 in flight</div><div class="ic-value"><b>8.02</b> to <b>10.16</b> pages/s, p99 <b>10.24</b> to <b>6.23 s</b>; judge net +<b>16 </b>(bar -300).</div></div><div class="impact-card"><div class="ic-label">Prod</div><div class="ic-value">the R-1 Modal prod pick is now b200-1112-20 (registry on main, read Nov <b>18</b>). Prod pages/s and GPU cost per 1k pages before vs after that pick change: not measured yet.</div></div></div>
+<div class="impact-grid"><div class="impact-card"><div class="ic-label">Speed gate PASS</div><div class="ic-value">at C16, p50 <b>0.66x</b> prod; at C32, p50 <b>0.54x</b> prod. p99 at C64 is higher than prod (<b>24.77 s</b> vs <b>18.96 s</b>).</div></div><div class="impact-card"><div class="ic-label">For reference, 1109 on 11-09 (another day, another pod)</div><div class="ic-value"><b>1.93 </b>/ <b>14.30 </b>/ <b>16.48 </b>/ <b>18.63</b> pages/s at C1/<b>16</b>/<b>32</b>/<b>64.</b> C96 not measured.</div></div><div class="impact-card"><div class="ic-label">Quality</div><div class="ic-value">judge vs BF16 nets -3 (prod fold-44 +<b>2,</b> <b>1109</b> was -6); head to head <b>1112</b> nets +<b>6</b> over prod. No malformed markup on pages that stopped normally.</div></div></div>
 
 ## PRs
 
@@ -24,15 +20,16 @@ Overshoot's fpp_35b-b200-2026-11-12 package: the 1111 engine plus 8-bit vision a
 ## Details
 
 <details>
-<summary>Overview</summary>
-
-# Summary
+<summary>Summary</summary>
 
 - Overshoot's fpp\_35b-b200-2026-11-12 package: the 1111 engine plus 8-bit vision attention, with scales calibrated for our 20261028 encoder (Reducto's weights unchanged; only <code>vision_scales/</code> and the <code>vision_scales</code> entry of config.json added). 96 seats, 24576 batched tokens, DFlash 31 draft tokens, one B200.
 - Vendor claims (not yet reproduced): 11.77 pages/s at C12, 19.08 at C96 (+21% / +42% vs 1111); judge 13 wins / 66 ties / 1 loss vs BF16 on 81 pages.
 - Ask (Jean, 2026-11-12): test it offline and put it behind autoeval. Nothing changes prod serving without Jean's approval.
 
-# Main result
+</details>
+
+<details>
+<summary>Main result</summary>
 
 Same Modal B200 pod, prod R-1 (b200-b300-fold-44) and 1112 alternated, 300 s per level, n=5 runs per arm. Latency is per page.
 
@@ -142,7 +139,10 @@ Throughput
 - For reference, 1109 on 11-09 (another day, another pod): 1.93 / 14.30 / 16.48 / 18.63 pages/s at C1/16/32/64. C96 not measured.
 - Quality: judge vs BF16 nets -3 (prod fold-44 +2, 1109 was -6); head to head 1112 nets +6 over prod. No malformed markup on pages that stopped normally.
 
-# Current status
+</details>
+
+<details>
+<summary>Current status</summary>
 
 - 🟢 Archived and checked: <code>s3://reducto-shared-ml-workspace/external/fpp/fpp_35b-b200-2026-11-12/</code> (315 files; image tar sha256 <code>001fb86c…68968f7</code>).
 - 🟢 rep-1k offline A/B done (Main result above).
@@ -156,7 +156,12 @@ Throughput
 - 🟡 Autoeval: 1112 gets its own dev app <code>fpp-flash-overshoot-1112</code> and domain <code>full_page_parse_r1_overshoot_1112_replay</code> ([#14671](https://github.com/reductoai/api/pull/14671), per-candidate shadows); <code>modal/dev</code> untouched, 1109 retired with it. 🟢 Live since 2026-11-12 14:26 PT (prod workers e487f61115; sampler and cron from overlay f7af8586ee; R1 floor min 4 + buffer 2). 24 h gate ends 2026-11-13 14:26 PT.
 - Prod gate: wide set + ≥1 day autoeval before any prod recommendation.
 
-# Steps
+</details>
+
+<details>
+<summary>Steps</summary>
+
+
 
 </details>
 

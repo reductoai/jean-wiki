@@ -24,9 +24,7 @@ Static sweep of reductoai/api @ 4df0566ccd (code and config only, no telemetry o
 ## Details
 
 <details>
-<summary>Overview</summary>
-
-# Plan
+<summary>Plan</summary>
 
 Static sweep of reductoai/api @ 4df0566ccd (code and config only, no telemetry or PostHog values read). 8 findings, ranked by impact x confidence.
 
@@ -54,7 +52,10 @@ Static sweep of reductoai/api @ 4df0566ccd (code and config only, no telemetry o
 
 <b>Ask: Jean's stamp.</b> Nothing is built. The plan is on its own page: <a href="https://app.notion.com/p/41d4a78a1c87818182cbf2c3fea40d32">Modal ingress limit: split any Modal server (R-1 mini first)</a>
 
-# Logs
+</details>
+
+<details>
+<summary>Logs</summary>
 
 - \[2026-11-17 14:28 PT\] Sweep done, 8 findings. Fixes picked: 1, 2, 3, 5, 8. No PRs yet.
 - \[2026-11-17 14:43 PT\] Finding 8: [#15182](https://github.com/reductoai/api/pull/15182) ✅ merged by Jean. Deletes the retired <code>together-inference/</code> directory.
@@ -71,7 +72,10 @@ Static sweep of reductoai/api @ 4df0566ccd (code and config only, no telemetry o
 - \[2026-11-17 20:30 PT\] R-1 35B single-H100 profile, re-measured with the shared AIPerf runner (rep-1k, 180 s per level, dev shadow of the R1 class held at one container, load through the Modal proxy): 0.68, 2.11, 2.84, 3.05, 3.00, 3.00 and 3.09 pages/s at 1, 8, 16, 32, 48, 64 and 96 in flight; p90 2.5, 5.7, 8.6, 14.0, 18.5, 23.9 and 33.8 s; 0 errors. The gate (p90 at most 10 s, no error) passes up to 16 in flight: 0.387 USD per 1k pages, 3.0 times the B200 1112 package. The table in [#15237](https://github.com/reductoai/api/pull/15237) now comes from this run. The runner gained <code>--header-env</code> so it can reach an fpp-flash shadow. The dev app is stopped.
 - \[2026-11-17 21:35 PT\] R-1 35B single-H200 profile, [#15249](https://github.com/reductoai/api/pull/15249) open (variant <code>h200-fp8-tp1</code>, a measurement record: no recipe or host). The H100 FP8 TP1 package unchanged on one H200, shared AIPerf runner inside the container on [localhost](http://localhost), rep-1k, 1,000 requests per level, one run per level: 0.79, 2.66, 3.45, 3.70, 3.86, 3.95, 4.07, 4.35, 4.28 and 4.37 pages/s at 1, 8, 16, 20, 24, 28, 32, 48, 64 and 96 in flight; p90 2.1, 4.9, 7.8, 8.8, 10.3, 11.8, 12.9, 18.1, 21.8 and 29.1 s; 0 errors. The gate (p90 at most 10 s, no error) passes up to 20 in flight: 0.341 USD per 1k pages at 4.54 USD per hour, 2.6 times the B200 1112 package. At 16 in flight it is 3.45 pages/s and 0.365 USD per 1k against the H100's 2.84 and 0.387 (different load path: the H100 rows went through the Modal proxy). Judge against B200 BF16: 14 wins, 978 ties, 8 losses, net +6. More KV memory, FP8 KV and BF16 weights were screened on the workstream's old load loop only and gave no gain; the gate breaks on latency before the KV cache fills. The first table in this PR came from that old loop (4.61 pages/s peak at 64 in flight, outside the gate) and was replaced. Both dev apps are stopped.
 
-#### 2026-11-17 16:55 PT, daily router cost read (first run, partial)
+</details>
+
+<details>
+<summary>2026-11-17 16:55 PT, daily router cost read (first run, partial)</summary>
 
 - Scope: 10 router apps. Modal side measured for all; cluster GPU cost and the inference-health page COGS not read (Datadog keys on the VM and in Doppler <code>dev_alex</code> return 403; the page refuses the session sign-in with <code>requester_not_allowed</code>). Asked Xavier for access.
 - Modal spend per 1k ok calls or pages, before vs after the move (Modal bill final through 11-15): Maverick 0.44 to 0.35; R-1 2.75 to 1.17; R-1 mini 1.40 to 4.81 (volume fell about 9x, Modal spend only halved).
@@ -81,7 +85,10 @@ Static sweep of reductoai/api @ 4df0566ccd (code and config only, no telemetry o
 - Sources: Snowflake <code>EXTERNAL_APPS.MODAL.MODAL_USAGE_DAILY</code> plus the Modal billing API; Tinybird <code>otel_model_call_mv</code> (<code>countMergeIf(call_count, outcome = 'ok')</code>); Tinybird <code>otel_metrics_sum</code> <code>router.grants</code> by namespace and cluster; family mapping from <code>cloudflare/inference-health-internal/snapshot/config.yaml</code>. Scripts and exact queries: bot memory <code>files/router-cost-daily/README.md</code>.
 - No code change, no PR.
 
-#### 2026-11-17 17:20 PT, daily router cost read (first run, full)
+</details>
+
+<details>
+<summary>2026-11-17 17:20 PT, daily router cost read (first run, full)</summary>
 
 - Cluster GPU cost added from Datadog (Jean's personal access token, Doppler <code>dev_jean</code>, read only). Rate 5.50 USD per GPU-hour for B200 and usw1 H200. Modal bill is final through 11-15; 11-16 and 11-17 are Modal API estimates.
 - USD per 1k ok calls or pages, before to after the move, Modal + cluster:
@@ -95,7 +102,10 @@ Static sweep of reductoai/api @ 4df0566ccd (code and config only, no telemetry o
 - Sources added: Datadog <code>kubernetes_state.deployment.replicas_available</code> (dynamo-serving workers; usw1 <code>triton-*</code> deployments) and <code>reducto.triton_flash.client_http_attempts</code> (ok, by environment, target host, model). Scripts and exact queries: bot memory <code>files/router-cost-daily/README.md</code>.
 - Not done: live PostHog shares not read; the page's own COGS not read (sign-in refused), recomputed with its loaders and config instead. No code change, no PR.
 
-#### 2026-11-17 17:30 PT, daily router cost read (first run, follow-up)
+</details>
+
+<details>
+<summary>2026-11-17 17:30 PT, daily router cost read (first run, follow-up)</summary>
 
 - Correction: R-1 mini is not a router regression. Its pages fell 15x on 11-04, five days before the move; USD per 1k pages was 1.60 at the high volume, 18.50 at the low volume just before the move, 4.62 after it. The load-test floors of #15054 and #15191 are planned spend (Jean).
 - The table and graph now live on the router migration page, per region and for all regions, with Modal utilization before and after: [Cost per call, before vs after the router](https://app.notion.com/p/4164a78a1c87818ea15bdef76227228c). usw1 H200s are priced at 7.09 USD per GPU-hour (cogs skill).
@@ -103,19 +113,28 @@ Static sweep of reductoai/api @ 4df0566ccd (code and config only, no telemetry o
 - [#15212](https://github.com/reductoai/api/pull/15212): inference-health family patterns now take <code>fpp-2b-tiered</code>, <code>fpp-2b-snapshot</code> and <code>fpp-35b-snapshot</code>, with a test that reads the live Dynamo graphs from the Helm cluster values. Open, CI green.
 - Left for a follow-up: the efficiency view's R-1 summary still misses the tiered and snapshot workers (<code>renderR1</code>, <code>_clusters</code> in <code>efficiency.py</code>).
 
-#### 2026-11-17 17:50 PT, daily router cost read (first run, second follow-up)
+</details>
+
+<details>
+<summary>2026-11-17 17:50 PT, daily router cost read (first run, second follow-up)</summary>
 
 - usw1 H200s are now priced at 5.721 USD per GPU-hour, not 7.09: AWS Cost Explorer, May 2026, usage type <code>USW1-CapacityBlockFee:p5en.48xlarge</code>, 199,914.62 USD upfront for capacity block cr-0d9e87335cf324c07 (one p5en.48xlarge, 8 H200, 2026-06-04 to 2026-12-03, 4,368 h). GPU node only; the block ends 2026-12-03. The 7.09 in the cogs skill is a GCP stand-in rate.
 - With that rate, US: Triton core vision 1.37 to 0.85, Qwen RF-DETR 1.04 to 0.62, change tracking 1.05 to 1.53 and highlight detection 3.01 to 1.21 (both one day, no verdict). Table and graph refreshed on the [router migration page](https://app.notion.com/p/4164a78a1c87818ea15bdef76227228c).
 - [#15226](https://github.com/reductoai/api/pull/15226): the efficiency view's cluster rows now fold the workers of every Dynamo graph into the namespace it serves, so the R-1 summary counts the tiered and snapshot GPUs; snapshot pilots are paid but never busy. Seats were already keyed by namespace (<code><modelKey>-dynamo-load-summary</code>). Open, CI green, Codex clean.
 - Left open: <code>_clusters</code> has no row-level test (it reads Datadog and Tinybird).
 
-#### 2026-11-17 18:05 PT, Modal share alert fired for prod\_eu fpp-2b
+</details>
+
+<details>
+<summary>2026-11-17 18:05 PT, Modal share alert fired for prod_eu fpp-2b</summary>
 
 - [#15233](https://github.com/reductoai/api/pull/15233): the 50% monitor and its 65% <code>triton-qwen-rfdetr</code> copy leave out <code>cluster:unknown</code>, so no environment is named. ✅ Approved by Jean, merged, and applied at 18:08 PT in [run-v0pg86u0ijfj11c7c](https://reducto.scalr.io/v2/e/env-v0p5qlbd4pjdjqdgj/workspaces/ws-v0p6k6p0hu0qqurf6/runs/run-v0pg86u0ijfj11c7c) (3 changed).
 - The Scalr plan also updates <code>inference_router_all_clusters_down</code> (29297426), the unapplied change of [#15209](https://github.com/reductoai/api/pull/15209), not this PR. Its own run (run-v0pg85iuqtkoffh8m) was canceled at 18:07 PT when this merge queued the next one, which applied it.
 
-#### 2026-11-18 08:35 PT, daily router cost read
+</details>
+
+<details>
+<summary>2026-11-18 08:35 PT, daily router cost read</summary>
 
 - Data through 11-17 UTC (the Modal bill for 11-17 is an API estimate), plus 11-18 00:00 to 16:00 UTC for the Modal bill and calls. Table and graph refreshed on the [router migration page](https://app.notion.com/p/4164a78a1c87818ea15bdef76227228c). No code change, no PR.
 - USD per 1k ok calls or pages, all regions, before to after the move, Modal + cluster GPUs:
@@ -130,7 +149,10 @@ Static sweep of reductoai/api @ 4df0566ccd (code and config only, no telemetry o
 - Not done: the inference-health page's own COGS (sign-in refused on 11-17, not retried; recomputed with its loaders and config), live PostHog shares.
 - \[2026-11-18 10:04 PT\] Finding 9 fix (c) confirmed in prod, read-only, on the Nov 17 load test spill after [#15195](https://github.com/reductoai/api/pull/15195) went live (16:25 PT): ✅ 299 direct Modal fpp-35b calls were cancelled by the worker (222 at 16:47 to 16:53 PT, 77 at 17:14 to 17:16 PT). All 299 reached the R1 wrapper; 297 logged <code>fpp.request.abandoned</code> a median 0.04 s (max 0.74 s) after the drop, and no <code>llm_request</code> for any of them ended more than 0.2 s past the drop. The other 2 had finished generating 0.15 and 0.26 s before the caller left, so there was nothing to cancel. In the Basis burst before the fix, about 750 of 942 were generated in full. Also seen: 72 of 95 cancelled R-1 mini calls on router-leased Modal seats match an abandoned event; the other 23 are not matched by my join, not checked further. Spilled pages still wait in vLLM's queue (31 and 59 s on the two I read), as expected with the spill left as it is.
 
-#### 2026-11-19 08:40 PT, daily router cost read
+</details>
+
+<details>
+<summary>2026-11-19 08:40 PT, daily router cost read</summary>
 
 - Data through 11-18 UTC (the Modal bill for 11-18 is an API estimate), plus 11-19 00:00 to 16:00 UTC for the Modal bill and calls. Table and graph refreshed on the [router migration page](https://app.notion.com/p/4164a78a1c87818ea15bdef76227228c). No code change, no PR.
 - USD per 1k ok calls or pages, all regions, before to after the move, Modal + cluster GPUs:
@@ -144,7 +166,10 @@ Static sweep of reductoai/api @ 4df0566ccd (code and config only, no telemetry o
 - EU Triton core vision and Qwen RF-DETR got their first real router traffic on 11-19 (301k and 243k releases by 16:00 UTC), so they stay "not on the router" in this read.
 - Not done: the inference-health page's own COGS (sign-in refused on 11-17, not retried; recomputed with its loaders and config), live PostHog shares, the cause of the Maverick EU rise.
 
-#### 2026-11-19 10:00 PT, daily footgun hunt (first run)
+</details>
+
+<details>
+<summary>2026-11-19 10:00 PT, daily footgun hunt (first run)</summary>
 
 - Scope: the router client (<code>src/lib/inference_router/client.py</code>), the router proxy (<code>inference-router/internal/proxy</code>), the controller config of US prod, then 24 hours of router metrics in Tinybird (<code>router.upstream.status</code>, <code>controller.capacity.errors</code>) to 10:00 PT. dynamo-stable: not swept yet.
 - Checked, nothing to fix: capacity read errors are tens a day for each cluster; <code>lease_unknown</code> 887 of 5.9M <code>fpp-35b</code> calls; cluster 529s 784 of 5.9M; Magpie 400s 266 (request faults).

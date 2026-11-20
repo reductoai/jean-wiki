@@ -24,9 +24,7 @@ inference-health-internal: Latency, Reliability, Efficiency, Automations views
 ## Details
 
 <details>
-<summary>Overview</summary>
-
-# Plan
+<summary>Plan</summary>
 
 - inference-health-internal: Latency, Reliability, Efficiency, Automations views
   - Merge [#13977](https://github.com/reductoai/api/pull/13977) (carries #14382 and #14045)
@@ -47,7 +45,10 @@ inference-health-internal: Latency, Reliability, Efficiency, Automations views
   - GCP container logs: failed requests only (default, decision)
 - Weekly check of active downtimes and unactioned alerts → <code>#inference-alerts-testing</code>
 
-# Logs
+</details>
+
+<details>
+<summary>Logs</summary>
 
 - inference-health-internal
   - COGS Worker + 6-hourly snapshot [#13195](https://github.com/reductoai/api/pull/13195) ✅ + Deploy

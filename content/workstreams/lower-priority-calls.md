@@ -57,7 +57,10 @@ Problem. We pay for Modal dev and staging inference while production GPUs sit pa
 
 <b>Terms.</b> A slot is one call a cluster can run at a time; a cluster has <code>cap</code> slots. A lease is the router's hold on one slot for one call.
 
-### How a low call gets in (router)
+</details>
+
+<details>
+<summary>How a low call gets in (router)</summary>
 
 1. The caller asks <code>/admit</code> with <code>priority: low</code>.
 2. <span discussion-urls="discussion://41b4a78a-1c87-8080-b5c2-c23c0a1e7661/41c4a78a-1c87-8126-8ed9-e903b4010800/41c4a78a-1c87-8008-9004-001c26f0f96e">The router looks for an owned cluster (tier 1, up) with a free slot and fewer low leases than its limit. </span>If two qualify, it takes the one with more free share.
@@ -66,19 +69,28 @@ Problem. We pay for Modal dev and staging inference while production GPUs sit pa
 
 Production only waits when every cluster is full, and then a low call finds no free slot anyway. One edge: a slot that frees with no release (an expired lease, a raised cap) goes to the waiting production calls first, and the low call is refused while one still waits.
 
-### How long a low call waits (caller)
+</details>
+
+<details>
+<summary>How long a low call waits (caller)</summary>
 
 - A refused low call keeps asking until its wait cap: the workload's own deadline, not the API's 120 s page deadline.
 - For autoeval the cap can be hours: no one waits on the page and the API is not involved.
 - A waiting call holds no slot, so it costs production nothing. Dev Modal is the last resort, after the cap.
 
-### How the limit moves (capacity controller, every second, per cluster)
+</details>
+
+<details>
+<summary>How the limit moves (capacity controller, every second, per cluster)</summary>
 
 - <b>Up by 1</b> when low leases fill the limit and the cluster still has a free slot.
 - <b>Halved each second</b> while the cluster is full, holds low leases, and production has any call on Modal or in line. That production call is there for a slot a low call holds; we call this a displacement.
 - <b>Unchanged</b> otherwise. The limit starts at 0 and never passes the cap.
 
-### Worked example: one cluster, cap 100
+</details>
+
+<details>
+<summary>Worked example: one cluster, cap 100</summary>
 
 | Second | Production leases | Low leases | Free slots | Production on Modal | Limit after |
 | --- | --- | --- | --- | --- | --- |
@@ -94,26 +106,38 @@ Production only waits when every cluster is full, and then a low call finds no f
 - Nothing is cancelled. The 30 low calls finish on their own, and each slot they free goes to production, which leaves Modal.
 - With Modal empty and a slot free, the limit climbs by 1 a second again. Low calls refused since second 21 keep asking, and get in once fewer low calls run than the limit. Only a call that reaches its cap runs on dev Modal.
 
-### What a burst costs
+</details>
+
+<details>
+<summary>What a burst costs</summary>
 
 - <b>No production call fails</b> because of low calls. The cost is production calls that run on Modal instead of the cluster, or wait in line when Modal is down or full.
 - One burst sends at most "limit" production calls to Modal, each for at most one low call's length: up to 120 s (the worker's page deadline). The v4c calls ran 62 to 63 s at hourly p99 on dev Modal; we have no cluster timing for them yet.
 
-### Off switch and fail-safes
+</details>
+
+<details>
+<summary>Off switch and fail-safes</summary>
 
 - <b>Off switch.</b> <code>server.low_priority.enabled</code> in the router config, false by default. Off, every low admit is refused.
 - <b>Controller stops.</b> The limit key expires after 5 s, and no key means a limit of 0, so low admission stops by itself.
 - <b>Older router pod.</b> It answers a low admit 400, so it never hands out a production lease by mistake.
 - <b>No endless wait.</b> In all three cases low calls get no slot and run on dev Modal by their wait cap.
 
-### Metrics
+</details>
+
+<details>
+<summary>Metrics</summary>
 
 - <code>controller.low_limit</code>, per cluster: the current limit.
 - <code>controller.low_displaced</code>, per namespace: production calls sent to Modal for a slot a low call held. Each second it counts the rise in production's Modal leases, capped at the low leases on full clusters.
 - <code>low_wait_expired</code>, counted by the caller: low calls that hit their wait cap and ran on dev Modal. A high count means the clusters have little room for low work.
 - Displaced calls times the Modal cost per page is the feature's whole production cost. Compare it with the dev Modal spend the low calls save.
 
-### How often production waits (last week)
+</details>
+
+<details>
+<summary>How often production waits (last week)</summary>
 
 Datadog <code>router.queue.length</code>, prod US, Nov 10 to Nov 17, 5-minute windows. A window counts if a production call waited at any point in it.
 
@@ -124,7 +148,10 @@ Datadog <code>router.queue.length</code>, prod US, Nov 10 to Nov 17, 5-minute wi
 
 In those windows the clusters and Modal are all full, so low calls get nothing. In the other 4 of 5 daytime windows they can run.
 
-### Where the idea comes from
+</details>
+
+<details>
+<summary>Where the idea comes from</summary>
 
 Systems that give spare capacity to low work without killing it use feedback, not a fixed share:
 
@@ -134,7 +161,10 @@ Systems that give spare capacity to low work without killing it use feedback, no
 - [Google SRE, "Handling Overload"](https://sre.google/sre-book/handling-overload/) and [OpenAI Flex](https://platform.openai.com/docs/guides/flex-processing): low requests are refused, not queued, when capacity is short.
 - Borg and spot VMs also reclaim idle capacity, but by killing low work, which we ruled out.
 
-### All 13 sources of the research note
+</details>
+
+<details>
+<summary>All 13 sources of the research note</summary>
 
 1. Borg: [Verma et al., EuroSys 2015](https://research.google/pubs/large-scale-cluster-management-at-google-with-borg/); Tirmazi et al., "Borg: the Next Generation", EuroSys 2020.
 2. Heracles: [Lo et al., ISCA 2015](https://research.google/pubs/heracles-improving-resource-efficiency-at-scale/).
@@ -155,7 +185,10 @@ Systems that give spare capacity to low work without killing it use feedback, no
 <details>
 <summary>Feasibility and Impact</summary>
 
-### There is headroom, not a guaranteed spare budget
+</details>
+
+<details>
+<summary>There is headroom, not a guaranteed spare budget</summary>
 
 Datadog GPU busy time, 09:00 to 18:00 PT, over the measured week:
 
@@ -169,7 +202,10 @@ Datadog GPU busy time, 09:00 to 18:00 PT, over the measured week:
 R-1 router leases averaged about 9.5% of configured cap on use1 and uss1 over the full week, against about 28% GPU busy time. Free seats are not idle compute; direct calls and bursts also use the GPUs. 
 </p>
 
-### Start with a narrow spend envelope
+</details>
+
+<details>
+<summary>Start with a narrow spend envelope</summary>
 
 Same week. Bills include all resources; calls are Modal invocations, not unique jobs or pages.
 
@@ -193,7 +229,10 @@ These are conditional scenarios, not call share targets. Gross savings are zero 
 
 Size check: the 469k dev R-1 calls averaged 0.78/s; production R-1 cluster upstreams handled 155/s in a 2026-11-16 (PT) sample. Mixes differ, but this workload alone will not lift fleet utilization much.
 
-### Router reuse is plausible; priority is missing
+</details>
+
+<details>
+<summary>Router reuse is plausible; priority is missing</summary>
 
 Production R-1 already uses the router. A dev Maverick trace on 2026-11-17 12:40 PT (PT) reached gcp\_use1 through it with 1 ms admission wait (not a low-priority test).
 
@@ -244,7 +283,12 @@ Success means positive net savings and more useful cluster work, with production
 
 ---
 
-# Execution
+</details>
+
+<details>
+<summary>Execution</summary>
+
+
 
 </details>
 

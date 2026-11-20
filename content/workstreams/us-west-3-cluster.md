@@ -1,17 +1,23 @@
 # us-west-3 cluster
 
-We accepted a GCP B200 reservation in us-west3 that comes online Thursday 2026-11-12. We need a GKE cluster ready to put it to work.
+
 
 <div class="ws-head">
-<div class="ws-stat"><b>6</b><span>steps left</span></div>
+<div class="ws-stat"><b>4</b><span>steps left</span></div>
 <div class="ws-stat"><b>6</b><span>PRs merged</span></div>
 <div class="ws-stat"><b>12</b><span>PRs open</span></div>
 <div class="ws-stat"><b>3</b><span>impact measures</span></div>
 </div>
 
+<div class="callout">
+
+**Problem.** We accepted a GCP B200 reservation in us-west3 that comes online Thursday 2026-11-12. We need a GKE cluster ready to put it to work.
+
+</div>
+
 ## Next steps
 
-<ol class="steps"><li class="now">Copy uss1 as a third GCP cluster, prod-gpu-usw3, with its own direct hostname gcp-inference-usw3.platform.reducto.ai and router…</li><li>Build everything except the GPU pool now. The gcp-gke module leaves out the b200 node pool until the reservation has a block, so…</li><li>Include the Snapshot cluster prerequisites like uss1 (Filestore CSI, the filestore-zonal-rwx storage class, the snapshot…</li><li>5 PRs: Terraform, Flux root, models on, monitors, router cutover. Traffic only moves in the last one, after a dev-style smoke on…</li><li>Day one: node-local cache on every Dynamo worker. Today an fpp-35b worker took 16.6 min to Ready on uss1 (cache off, 2026-11-10…</li><li>Day one: rollouts that fit a full pool. fpp-35b maxSurge 0 / maxUnavailable 1 (from #14399), so a promote never waits on GPUs the…</li></ol>
+<ol class="steps"><li class="now">Copy uss1 as a third GCP cluster, prod-gpu-usw3, with its own direct hostname gcp-inference-usw3.platform.reducto.ai and router…</li><li>Build everything except the GPU pool now. The gcp-gke module leaves out the b200 node pool until the reservation has a block, so…</li><li>Include the Snapshot cluster prerequisites like uss1 (Filestore CSI, the filestore-zonal-rwx storage class, the snapshot…</li><li>5 PRs: Terraform, Flux root, models on, monitors, router cutover. Traffic only moves in the last one, after a dev-style smoke on…</li></ol>
 
 ## Impact
 
@@ -24,9 +30,9 @@ We accepted a GCP B200 reservation in us-west3 that comes online Thursday 2026-1
 ## Details
 
 <details>
-<summary>Overview</summary>
+<summary>Summary</summary>
 
-# Summary
+
 
 </details>
 
@@ -47,7 +53,10 @@ We accepted a GCP B200 reservation in us-west3 that comes online Thursday 2026-1
 - Include the Snapshot cluster prerequisites like uss1 (Filestore CSI, the <code>filestore-zonal-rwx</code> storage class, the <code>snapshot</code> namespace), but no Snapshot workers. Leave out the rest we don't need: no multi-cluster gateway or fleet hop (the router calls each cluster's direct hostname), no Triton.
 - 5 PRs: Terraform, Flux root, models on, monitors, router cutover. Traffic only moves in the last one, after a dev-style smoke on the direct hostname.
 
-# Goodies (not on use1/uss1 today)
+</details>
+
+<details>
+<summary>Goodies (not on use1/uss1 today)</summary>
 
 - <b>Day one: node-local cache on every Dynamo worker.</b> Today an fpp-35b worker took 16.6 min to Ready on uss1 (cache off, 2026-11-10 14:40 PT to 14:57) and about 3 min on use1 (cache on). The quack autotune alone is about 700 s of a cold start. This is the uss1 slowness, so usw3 starts with it on.
 - <b>Day one: rollouts that fit a full pool.</b> fpp-35b <code>maxSurge 0</code> / <code>maxUnavailable 1</code> (from [#14399](https://github.com/reductoai/api/pull/14399)), so a promote never waits on GPUs the HPAs already took.
@@ -58,20 +67,29 @@ We accepted a GCP B200 reservation in us-west3 that comes online Thursday 2026-1
 - <b>Only if a cold node shows it: GKE image streaming on the b200 pool.</b> Image pull is not the big part of the 16 min today, so measure first.
 - <b>Skip for now:</b> Snapshot workers (the cluster pieces are in PR 1) and multi-cluster gateway membership. Managed DRANET was added to PR 1 after all, because GKE sets its node label only when it creates the pool.
 
-# Decisions for Jean (defaults in bold)
+</details>
+
+<details>
+<summary>Decisions for Jean (defaults in bold)</summary>
 
 - Reservation size: <b>4 nodes (32 B200), like use1/uss1</b>. The module hard-codes <code>node_count = 4</code>; another size means a variable.
 - Models on usw3: <b>same as uss1 (maverick, fpp-35b, fpp-2b), without the pilots</b>.
 - Flux auth on Thursday: <b>the same deploy key as use1/uss1</b>, GitHub App as a follow-up for all three.
 - Cluster role: <b>a standalone cluster on the router, like uss1</b>, not a member of the global multi-cluster gateway.
 
-# Current status
+</details>
+
+<details>
+<summary>Current status</summary>
 
 - 🟢 Done. usw3 is a full router head for fpp-35b, fpp-2b and maverick: live <code>/capacity</code> slots and <code>lane_dynamo</code> since 2026-11-12 21:16 PT ([#14779](https://github.com/reductoai/api/pull/14779)). Jean confirmed it takes traffic on 2026-11-19 09:49 PT. In the last 5 days it served 41% of fpp-35b router calls.
 - 🟢 4/4 B200 nodes, 32 GPUs reporting DCGM to Datadog (checked 2026-11-19 10:30 PT).
 - 🟡 One follow-up open: Flux GitHub App auth (step 7).
 
-# Steps 🟢/🟡/🔴
+</details>
+
+<details>
+<summary>Steps 🟢/🟡/🔴</summary>
 
 <details>
 <summary>🟢 0. Decisions (today)</summary>
@@ -239,7 +257,10 @@ We accepted a GCP B200 reservation in us-west3 that comes online Thursday 2026-1
 
 </details>
 
-# Alerts and logs: what question each one answers
+</details>
+
+<details>
+<summary>Alerts and logs: what question each one answers</summary>
 
 Checked on 2026-11-10 against <code>main</code> and live Datadog. The usw3 column is what [#14431](https://github.com/reductoai/api/pull/14431) added (merged 2026-11-12 17:43 PT). usw3 has sent DCGM telemetry since 11-13.
 

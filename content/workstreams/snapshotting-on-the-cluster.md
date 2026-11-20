@@ -3,11 +3,15 @@
 Goal: a GPU-checkpointed fpp-35b worker on uss1 comes back from a checkpoint instead of a 3-17 min cold start (restore ~2 min today, ~10 s is the target: Restore toward 10 s: plan (fpp-35b on uss1)). One PR per step; uss1 only.
 
 <div class="ws-head">
-<div class="ws-stat"><b>0</b><span>steps left</span></div>
+<div class="ws-stat"><b>5</b><span>steps left</span></div>
 <div class="ws-stat"><b>16</b><span>PRs merged</span></div>
 <div class="ws-stat"><b>7</b><span>PRs open</span></div>
 <div class="ws-stat"><b>5</b><span>impact measures</span></div>
 </div>
+
+## Next steps
+
+<ol class="steps"><li class="now">Capture commit: still ~19–20 min for a 65 GiB image after #15157 (direct writes). Measured 11-17 with random data: the 1 TiB…</li><li>Parked until sleep level 2 is back: CRIU lazy pages. The chart's criu.lazyPages is dump-only (post-copy, needs a page server; the…</li><li>Image 74 → 25 GiB (sleep level 2, chart knob and shim in place since #15019): blocked on a vLLM whose in-place weight reload…</li><li>Coverage, 9 targets (3 Dynamo models × uss1/usw3/use1), 1 live today. Jean's rule (11-17): every step ships to all three regions…</li><li>Alert on a failed capture or a restore that fell back to cold start: #15200 (gate clean 11-17 3:50 PM PT; Jean merges, then…</li></ol>
 
 ## Impact
 
@@ -20,9 +24,7 @@ Goal: a GPU-checkpointed fpp-35b worker on uss1 comes back from a checkpoint ins
 ## Details
 
 <details>
-<summary>Overview</summary>
-
-# Plan
+<summary>Plan</summary>
 
 Goal: a GPU-checkpointed fpp-35b worker on uss1 comes back from a checkpoint instead of a 3-17 min cold start (restore \~2 min today, \~10 s is the target: <a href="https://app.notion.com/p/4174a78a1c878110b429c03cf77d1007">Restore toward 10 s: plan (fpp-35b on uss1)</a>). One PR per step; uss1 only.
 
@@ -38,7 +40,12 @@ Live today: fpp-35b on uss1 only. Restore \~24 s from the node SSD (\~3 min on a
 
 Plan page with the restore numbers: <a href="https://app.notion.com/p/4174a78a1c878110b429c03cf77d1007">Restore toward 10 s: plan (fpp-35b on uss1)</a>.
 
-# Logs
+</details>
+
+<details>
+<summary>Logs</summary>
+
+
 
 </details>
 

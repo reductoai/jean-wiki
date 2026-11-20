@@ -24,9 +24,7 @@ Redeploy the autoeval-replay cron from current main (Jean): git fetch origin && 
 ## Details
 
 <details>
-<summary>Overview</summary>
-
-# Plan
+<summary>Plan</summary>
 
 1. <b>Redeploy the autoeval-replay cron from current </b><b><code>main</code></b> (Jean): <code>git fetch origin && git checkout origin/main</code>, then <code>uv run rd modal deploy cron prod autoeval-replay</code>. Starts the judged <code>auto_route</code> leg from [PR 15021](https://github.com/reductoai/api/pull/15021).
 2. <b>Read results</b>: judge score per leg. Routed should beat R-1 mini alone.
@@ -42,12 +40,18 @@ Plan for Jean's stamp: three PRs that turn on routing for <code>auto_route</code
 
 Today an <code>auto_route</code> page calls the Modal R-1 mini class directly. That class has no route head (the classifier that sends each page to R-1 mini or R-1), so nothing gets routed.
 
-#### Jean's calls
+</details>
+
+<details>
+<summary>Jean's calls</summary>
 
 1. <b>Scope.</b> Default: opt-in <code>auto_route</code> jobs only. Alternative: all R-1 mini traffic, which needs the fpp-35b guarantee resized first.
 2. <b>Route head.</b> Default: ship the current one now, swap in the retrained one after tomorrow's new R-1. Alternative: wait for the retrain (paused until the new R-1).
 
-#### Plan
+</details>
+
+<details>
+<summary>Plan</summary>
 
 1. Make the routed variant the R-1 mini Modal pick in stg, prod and prod\_eu together.
    - New variant at 128 seats, named by checkpoint date (the shadow build has 42).
@@ -70,17 +74,26 @@ Today an <code>auto_route</code> page calls the Modal R-1 mini class directly. T
    - Gate: head 529s per day, direct Modal calls and R-1 p99, before and after. Rollback: set it back to 2.
    - If not enough: dynamo-stable picks the pool by free seats, not worker count (new image and rollout).
 
-#### Cluster capacity
+</details>
+
+<details>
+<summary>Cluster capacity</summary>
 
 - No change to the stamped [B200 sharing plan](https://app.notion.com/p/41c4a78a1c878179a3f4d03746e1ad63). fpp-2b keeps its 3 guaranteed B200s per cluster. Routed pages land on fpp-35b's guarantee (16 on uss1 and use1, 25 on usw3) and burst into shared GPUs (9 off-peak, 6 on weekdays, none on usw3).
 - Load: at 0.58 the route head sent 28% of pages to R-1 (780 judged pages, Nov 18), so every 100 <code>auto_route</code> pages add about 28 R-1 pages.
 - B300: the Modal class asks for "B200 or better", and the routed build ran 10.8 pages/s on a B300 against 19.8 on a B200. PR 1's performance run finds the cause; if it isn't fixed, PR 1 pins the class to B200.
 
-#### Cost per 1k pages
+</details>
+
+<details>
+<summary>Cost per 1k pages</summary>
 
 GPU at saturation, from the registry tables: R-1 mini \$0.08, R-1 \$0.13, routed R-1 mini at 28% about \$0.10 (estimate). A routed page bills the customer at the R-1 rate. I'll measure cost per call before and after the cutover.
 
-# Logs
+</details>
+
+<details>
+<summary>Logs</summary>
 
 - \[2026-11-16 11:45 PT\] In progress: [PR 14939](https://github.com/reductoai/api/pull/14939) adds <code>settings.alpha.auto_route</code>. R-1 mini's route head sends the pages it scores hard to R-1, and a job whose org has filled its R-1 mini pool runs on R-1.
   - \[2026-11-16 12:13 PT\] Pushed both review fixes: an AU job at its R-1 mini limit stays on R-1 mini ([aec894b](https://github.com/reductoai/api/pull/14939/commits/aec894ba4b)), and the head weights moved from git to Hugging Face at a pinned commit, with their env var in the registry ([792b5bf](https://github.com/reductoai/api/pull/14939/commits/792b5bf9df)). Uploaded with Jean's HF write token.
@@ -173,7 +186,10 @@ Open questions:
 - Shadow reliability ([#15221](https://github.com/reductoai/api/pull/15221), warm dev classes): before, a cold class lost every strict R-1 mini page of one submit (204 attempts); after, 53 of 53 and 52 of 52 succeeded.
 - GPU cost per 1k pages: estimate only, about \$0.10 routed at 28% against \$0.08 for R-1 mini and \$0.13 for R-1 (registry tables, at saturation).
 
-#### Routed Modal pick in prod ([#15367](https://github.com/reductoai/api/pull/15367)): not live yet (read 2026-11-19 09:45 PT)
+</details>
+
+<details>
+<summary>Routed Modal pick in prod (#15367): not live yet (read 2026-11-19 09:45 PT)</summary>
 
 <b>Prod still serves </b><b><code>b200-n128</code></b><b>.</b> The routed pick <code>20261028-b200-nvfp4-route</code> serves only in stg, because no prod release has shipped since #15367 merged at 2026-11-19 02:48 PT. The one prod release tried since then ([2026-11-19 09:38 PT](https://github.com/reductoai/api/actions/runs/44579409547)) failed the deployer allowlist: during the ElastiCache change, only raunakdoesdev, alvin-r and jingsong can deploy prod.
 

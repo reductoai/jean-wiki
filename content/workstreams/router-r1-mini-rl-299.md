@@ -11,7 +11,7 @@ Goal. By Fri 11/20, pick the page router for R-1 mini RL 299 (reducto/fpp_2b_rl2
 
 ## Next steps
 
-<ol class="steps"><li class="now">Fallback for Yifei's data. His 83k pages and labels are not in S3. If they are not found by Wed night (PT), we retrain the old…</li><li>Which R-1 defines "big". Default: prod R-1 (1112). The stored R-1 parses come from reducto_fpp35b_rl1027_6m, so 1112 means…</li><li>Recipe PR (route head): rebase onto the training scaffold, add --checkpoint</li><li>Relabel the route head for RL 299 (Wed)</li><li>Train and export the route head (Thu AM)</li><li>Retrain the old router (Thu AM)</li></ol>
+<ol class="steps"><li class="now">Recipe PR (route head): rebase onto the training scaffold, add --checkpoint</li><li>Relabel the route head for RL 299 (Wed)</li><li>Train and export the route head (Thu AM)</li><li>Retrain the old router (Thu AM)</li><li>Offline comparison on the 2,000 ParseArena pages, never trained on (Thu AM)</li><li>Autoeval the best one or two on RL 299 for at least 24 h (must start Thu PM)</li></ol>
 
 ## PRs
 
@@ -29,7 +29,10 @@ Goal. By Fri 11/20, pick the page router for R-1 mini RL 299 (reducto/fpp_2b_rl2
 1. <b>Fallback for Yifei's data.</b> His 83k pages and labels are not in S3. If they are not found by Wed night (PT), we retrain the old router on the route head's 20.5k pages, with 3-class labels from the same Astra scores. That changes how it was trained, so it needs your OK. Without it, the old router is compared only as shipped.
 2. <b>Which R-1 defines "big".</b> Default: prod R-1 (1112). The stored R-1 parses come from <code>reducto_fpp35b_rl1027_6m</code>, so 1112 means re-parsing the R-1 side too, about 2x the parse cost.
 
-# Plan
+</details>
+
+<details>
+<summary>Plan</summary>
 
 - Recipe PR (route head): rebase onto the training scaffold, add <code>--checkpoint</code>
   - Exit check: the 20261028 checkpoint and the recovered data reproduce <code>8d891b9a</code> (at least 99.5% decision match at 0.58 on the 2,000 ParseArena pages)
@@ -48,7 +51,10 @@ Goal. By Fri 11/20, pick the page router for R-1 mini RL 299 (reducto/fpp_2b_rl2
   - Route head through the <code>b200-route</code> image variant; old router through the <code>bs-router</code> shadow relay
 - Prod (Fri PM): Jean's call and deploy, US, EU and AU together
 
-# Logs
+</details>
+
+<details>
+<summary>Logs</summary>
 
 - Route head
   - Inputs recovered (from Raunak's session): <code>s3://reducto-shared-ml-workspace/jean/handoff/20261115.route-head/</code> holds the 20,486 training pages with R-1 mini parse, R-1 parse and Astra scores; chart labels and prefill features; 2,000 ParseArena pages; the fp32 head and original scripts
@@ -61,7 +67,10 @@ Goal. By Fri 11/20, pick the page router for R-1 mini RL 299 (reducto/fpp_2b_rl2
 - Wed 11/18: plan sent for Jean's stamp
 - Wed 11/18: Jean paused the retrain until the new R-1 version lands
 
-# Impact
+</details>
+
+<details>
+<summary>Impact</summary>
 
 The retrain is paused until the new R-1 lands, so there is no after yet. The baseline is existing measurements; every after cell is pending.
 

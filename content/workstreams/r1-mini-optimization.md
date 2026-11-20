@@ -1,9 +1,9 @@
 # R-1 mini optimization and productionizing
 
-Prod pick: move prod to 20261117 / b200-n128, once the evalkit judge, a wide set and a day of autoeval pass
+RL 299 on B200
 
 <div class="ws-head">
-<div class="ws-stat"><b>6</b><span>steps left</span></div>
+<div class="ws-stat"><b>5</b><span>steps left</span></div>
 <div class="ws-stat"><b>5</b><span>PRs merged</span></div>
 <div class="ws-stat"><b>10</b><span>PRs open</span></div>
 <div class="ws-stat"><b>6</b><span>impact measures</span></div>
@@ -11,7 +11,7 @@ Prod pick: move prod to 20261117 / b200-n128, once the evalkit judge, a wide set
 
 ## Next steps
 
-<ol class="steps"><li class="now">RL 299 on B200</li><li>RL 299 on H100 and H200 (AU's engine)</li><li>RL 299 on A100 80GB</li><li>RL 299 on B300</li><li>Roofline for every chip (plan, awaiting Jean's stamp; asked on #15276: "this is the most we can get from the gpu? do we have a…</li><li>RL 299 on B200 (20261117, Modal dev shadow rl299):</li></ol>
+<ol class="steps"><li class="now">RL 299 on B200</li><li>RL 299 on H100 and H200 (AU's engine)</li><li>RL 299 on A100 80GB</li><li>RL 299 on B300</li><li>Roofline for every chip (plan, awaiting Jean's stamp; asked on #15276: "this is the most we can get from the gpu? do we have a…</li></ol>
 
 ## Impact
 
@@ -24,9 +24,7 @@ Prod pick: move prod to 20261117 / b200-n128, once the evalkit judge, a wide set
 ## Details
 
 <details>
-<summary>Overview</summary>
-
-# Plan
+<summary>Plan</summary>
 
 - RL 299 on B200
   - Prod pick: move prod to <code>20261117</code> / <code>b200-n128</code>, once the evalkit judge, a wide set and a day of autoeval pass
@@ -44,7 +42,10 @@ Prod pick: move prod to 20261117 / b200-n128, once the evalkit judge, a wide set
   - Chips and profiles: A100 80GB <code>20261117-a100-int8</code> first (the question was asked there; it flattens at 4.0 to 4.4 pages/s from 16 to 128 in flight), then B200 <code>b200-n128</code>, H100 and H200 <code>20261117-h100-int8</code>, L40S <code>l40s-1112</code> (1028 weights, the Marketplace chip), B300 <code>20261117-b300-nvfp4</code> once its profile exists. Not Inf2 or TPU v6e: no GPU roofline applies.
   - Cost: about 0.75 GPU-hour a chip, about 4.5 GPU-hours, about \$20 on Modal dev. No prod.
 
-# Logs
+</details>
+
+<details>
+<summary>Logs</summary>
 
 PR states read Nov 18, 12:52 PT. ✅ is merged. The <code>rl299</code> shadow is deployed to Modal dev, and prod release <code>v1.12.24-715</code> carries the #15274 merge. No prod or AU pick has changed. Every judge number is from the workstream's 05-gates judge; evalkit's pinned judge has not run on RL 299 and runs before any pick.
 

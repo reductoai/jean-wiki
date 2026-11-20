@@ -13,9 +13,9 @@ const clip = (s: string, n: number) => (s.length > n ? s.slice(0, n).replace(/\s
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
 const nums = (s: string) => esc(s).replace(/(?<![\w.-])(\$?\d[\d,.]*\s?(?:%|ms|s|K|M|GPUs?|USD|x)?)(?![\w-])/g, "<b>$1</b>");
 
-const parts = md.split(/^(?=## )/m);
-const intro = parts[0].startsWith("## ") ? "" : parts.shift()!;
-const sections = parts.map((p) => ({ title: plain(p.split("\n", 1)[0].slice(3)), body: p.slice(p.indexOf("\n") + 1).trim() }));
+const parts = md.split(/^(?=#{1,3} )/m);
+const intro = /^#{1,3} /.test(parts[0]) ? "" : parts.shift()!;
+const sections = parts.map((p) => ({ title: plain(p.split("\n", 1)[0].replace(/^#+\s*/, "")), body: p.slice(p.indexOf("\n") + 1).trim() }));
 const find = (re: RegExp) => sections.find((s) => re.test(s.title));
 const topItems = (text: string) => text.split("\n").filter((l) => /^(- |\d+\. )/.test(l)).map((l) => plain(l.replace(/^(- |\d+\. )/, ""))).filter(Boolean);
 
@@ -33,7 +33,7 @@ const merged = [...prs.values()].filter((p) => p.merged).length;
 const firstLine = intro.split("\n").find((l) => plain(l).length > 20) ?? sections[0]?.body.split("\n")[0] ?? "";
 const goalLine = plain(firstLine.replace(/^\s*(- |\d+\. )/, ""));
 const plan = find(/plan|next|steps|solution|todo/i);
-const steps = (plan ? topItems(plan.body) : topItems(intro)).slice(0, 6);
+const steps = (plan ? topItems(plan.body) : topItems(intro)).filter((s) => !/^(done\b|✅)/i.test(s) && !/✅/.test(s)).slice(0, 6);
 const impactSec = find(/impact|result/i);
 const impact = impactSec ? topItems(impactSec.body).slice(0, 6) : [];
 const problem = find(/problem|why/i);

@@ -92,7 +92,12 @@ Today, our warm capacity in the EU and AU is not very much used. However, we do 
 
 ---
 
-# Execution
+</details>
+
+<details>
+<summary>Execution</summary>
+
+
 
 </details>
 
