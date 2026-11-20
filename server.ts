@@ -254,8 +254,9 @@ const server = Bun.serve({
         const all = readComments();
         const list = all[slug] ?? [];
         if (req.method === "POST" && path === "api/comment") {
-          const text = String(body.text ?? "").trim().slice(0, 4000);
+          const text = String(body.text ?? "").trim();
           if (!text) return json({ error: "write a comment" }, 400);
+          if (text.length > 4000) return json({ error: "comments are limited to 4,000 characters" }, 400);
           const quote = String(body.quote ?? "").trim().slice(0, 500) || undefined;
           const c: Comment = { id: crypto.randomUUID().slice(0, 8), at: new Date().toISOString(), by: who, text, quote };
           all[slug] = [...list, c];

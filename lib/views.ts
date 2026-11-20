@@ -65,7 +65,7 @@ ${o.owner ? `<button class="new-section">+ New section</button>` : ""}
 </nav>
 <main>${o.tabs ? `<div class="tabs"><a href="${base}${o.tabs.overview.path}" class="${page.planOf ? "" : "active"}">Overview</a><a href="${base}${o.tabs.plan.path}" class="${page.planOf ? "active" : ""}">Plan</a></div>` : ""}<article>${o.body}${sourcesBox(page)}</article>
 <section class="comments" id="comments"><h2>Comments</h2>${commentList(o.comments ?? [], o.who ?? "", o.owner)}
-<form class="cm-form"><div class="cm-quote" hidden><blockquote></blockquote><button type="button" class="cm-unquote" title="Remove quote">×</button></div><textarea name="text" rows="3" placeholder="Add a comment. Select text on the page to quote it."></textarea><button class="button" type="submit">Comment</button></form></section>
+<form class="cm-form"><div class="cm-quote" hidden><blockquote></blockquote><button type="button" class="cm-unquote" title="Remove quote">×</button></div><textarea name="text" rows="3" maxlength="4000" placeholder="Add a comment. Select text on the page to quote it."></textarea><button class="button" type="submit">Comment</button></form></section>
 <footer class="pager">${prev ? `<a href="${base}${prev.path}">← ${esc(prev.title)}</a>` : "<span></span>"}${next ? `<a href="${base}${next.path}">${esc(next.title)} →</a>` : ""}</footer>
 </main>
 <aside class="toc">${o.headings.length ? `<div class="toc-title">On this page</div>${o.headings.map((h) => `<a class="d${h.depth}" href="#${h.id}">${esc(h.text)}</a>`).join("")}` : ""}</aside>
