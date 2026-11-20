@@ -1,0 +1,7 @@
+{
+  "name": "jean-wiki",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "bun server.ts", "test": "bun test" },
+  "dependencies": { "marked": "15.0.12" }
+}

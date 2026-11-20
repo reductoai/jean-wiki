@@ -1,0 +1,13 @@
+[app.info]
+app_id = "jean-wiki"
+app_name = "Jean's wiki"
+
+[app.settings]
+visibility = "internal"
+route = "jean-wiki"
+
+[server]
+start = "bun server.ts"
+
+[storage]
+files = true
