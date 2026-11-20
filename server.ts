@@ -225,7 +225,10 @@ const server = Bun.serve({
       if (req.method === "POST" && path === "api/move") {
         if (!isOwner(who)) return json({ error: "only the wiki owner can do this" }, 403);
         const { slug, chapter, index, parent } = await req.json();
-        const cs = move(chapters(), String(slug), Number(chapter), Number(index ?? Infinity), parent ? String(parent) : undefined);
+        const archived = readArchive();
+        const rest = (chapters().find((c) => c.number === Number(chapter))?.pages ?? []).filter((p) => p.slug !== String(slug) && p.parent !== String(slug));
+        const at = rest.filter((p) => !archived[p.slug])[Number(index ?? Infinity)];
+        const cs = move(chapters(), String(slug), Number(chapter), at ? rest.indexOf(at) : rest.length, parent ? String(parent) : undefined);
         if (!cs) return json({ error: "unknown page or section" }, 400);
         saveLayout(cs);
         return json({ ok: true });
