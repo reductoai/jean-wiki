@@ -27,7 +27,7 @@ Every call gets a priority, a class plus an org weight, and the router serves ca
   <g font-size="12">
     <text x="400" y="58">Enterprise tier, weight 4</text><rect x="560" y="46" width="140" height="16" rx="3" fill="#34845f"/>
     <text x="400" y="88">Growth tier, weight 2</text><rect x="560" y="76" width="70" height="16" rx="3" fill="#34845f" opacity=".7"/>
-    <text x="400" y="118">Standard tier, weight 1</text><rect x="560" y="106" width="35" height="16" rx="3" fill="#34845f" opacity=".5"/>
+    <text x="400" y="118">Base tier, weight 1</text><rect x="560" y="106" width="35" height="16" rx="3" fill="#34845f" opacity=".5"/>
     <text x="400" y="148">Trial tier, weight 1</text><rect x="560" y="136" width="35" height="16" rx="3" fill="#34845f" opacity=".5"/>
   </g>
   <text x="400" y="182" font-size="11" fill="#5b6b8c">Slots each org gets while all of them wait.</text>
@@ -99,7 +99,7 @@ Every call gets a priority, a class plus an org weight, and the router serves ca
 
 - Class targets: 5 s, 20 s, 12 h and 3 d are whiteboard examples.
 - Class source: endpoint and sync vs async to start, or a customer-facing priority field too?
-- Tier weights: start enterprise 4, growth 2, standard and trial 1?
+- Tier weights: start enterprise 4, growth 2, base and trial 1?
 - Sources: the per-org fair admission research in Notion, and [#15178](https://github.com/reductoai/api/pull/15178).
 
 </details>
