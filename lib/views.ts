@@ -36,7 +36,7 @@ ${nav.chapters.map((c) => `<div class="part"><div class="chapter">${c.number}&nb
 ${c.pages.map((p, j) => link(p, `<span class="num">${c.number}.${j + 1}</span> ${esc(p.title)}`)).join("\n")}
 ${o.owner ? `<button class="new-page" data-chapter="${c.number}">+ New page</button>` : ""}</div>`).join("\n")}
 </nav>
-<main><article>${sourcesBox(page)}${o.body}</article>
+<main><article>${o.body}${sourcesBox(page)}</article>
 <footer class="pager">${prev ? `<a href="${base}${prev.path}">← ${esc(prev.title)}</a>` : "<span></span>"}${next ? `<a href="${base}${next.path}">${esc(next.title)} →</a>` : ""}</footer>
 </main>
 <aside class="toc">${o.headings.length ? `<div class="toc-title">On this page</div>${o.headings.map((h) => `<a class="d${h.depth}" href="#${h.id}">${esc(h.text)}</a>`).join("")}` : ""}</aside>
@@ -84,5 +84,5 @@ function sourcesBox(page: Page) {
   if (!page.sources?.length) return "";
   const group = (label: string, items: Source[]) =>
     items.length ? `<div class="src-group">${label}</div><ul>${items.map((s) => `<li><a href="${s.url}">${s.kind ? `<code>${esc(s.title)}</code>` : esc(s.title)}</a></li>`).join("")}</ul>` : "";
-  return `<details class="sources"><summary>Relevant sources</summary>${group("Notion", page.sources.filter((s) => !s.kind))}${group("Code in reductoai/api", page.sources.filter((s) => s.kind === "code"))}</details>`;
+  return `<details class="sources"><summary>Sources</summary>${group("Notion", page.sources.filter((s) => !s.kind))}${group("Code in reductoai/api", page.sources.filter((s) => s.kind === "code"))}</details>`;
 }
