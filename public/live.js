@@ -8,7 +8,7 @@
       const y = scrollY;
       fetch(location.href).then((r) => r.text()).then((html) => {
         const doc = new DOMParser().parseFromString(html, "text/html");
-        for (const sel of ["main article", "nav.side", "aside.toc"]) {
+        for (const sel of ["main article", "nav.side", "aside.toc", "footer.pager"]) {
           const a = document.querySelector(sel), b = doc.querySelector(sel);
           if (a && b) a.replaceWith(b);
         }
