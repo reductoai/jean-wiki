@@ -33,13 +33,15 @@ ${o.owner ? `<div class="actions"><span class="share-state">${shareLabel(o.share
 <nav class="side">
 ${nav.todo ? `<div class="part">${link(nav.todo, "Todo")}</div>` : ""}
 ${nav.chapters.map((c) => `<div class="part"><div class="chapter">${c.number}&nbsp; ${esc(c.title)}</div>
-${c.pages.map((p, j) => link(p, `<span class="num">${c.number}.${j + 1}</span> ${esc(p.title)}`)).join("\n")}</div>`).join("\n")}
+${c.pages.map((p, j) => link(p, `<span class="num">${c.number}.${j + 1}</span> ${esc(p.title)}`)).join("\n")}
+${o.owner ? `<button class="new-page" data-chapter="${c.number}">+ New page</button>` : ""}</div>`).join("\n")}
 </nav>
 <main><article>${sourcesBox(page)}${o.body}</article>
 <footer class="pager">${prev ? `<a href="${base}${prev.path}">← ${esc(prev.title)}</a>` : "<span></span>"}${next ? `<a href="${base}${next.path}">${esc(next.title)} →</a>` : ""}</footer>
 </main>
 <aside class="toc">${o.headings.length ? `<div class="toc-title">On this page</div>${o.headings.map((h) => `<a class="d${h.depth}" href="#${h.id}">${esc(h.text)}</a>`).join("")}` : ""}</aside>
 <script src="${base}static/diagram.js"></script>
+<script>window.WIKI_BASE=${JSON.stringify(base)}</script><script src="${base}static/newpage.js"></script>
 </body></html>`;
 }
 

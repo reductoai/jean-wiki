@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { render } from "./lib/render.ts";
-import { CHAPTERS, PAGES, TODO, type Page } from "./lib/site.ts";
+import { CHAPTERS as BASE_CHAPTERS, TODO, type Chapter, type Page } from "./lib/site.ts";
 import { layout, editor, denied } from "./lib/views.ts";
 
 const ROOT = import.meta.dir;
@@ -11,6 +11,24 @@ const OWNERS: string[] = JSON.parse(readFileSync(join(ROOT, "content/access.json
 export type Share = { mode: "private" | "reducto" | "people"; emails: string[] };
 
 const sharesFile = join(DATA, "shares.json");
+const customFile = join(DATA, "custom-pages.json");
+type Custom = Page & { chapter: number };
+const readCustom = (): Custom[] => (existsSync(customFile) ? JSON.parse(readFileSync(customFile, "utf8")) : []);
+const chapters = (): Chapter[] => BASE_CHAPTERS.map((c) => ({ ...c, pages: [...c.pages, ...readCustom().filter((p) => p.chapter === c.number)] }));
+const pages = (): Page[] => [TODO, ...chapters().flatMap((c) => c.pages)];
+const slugify = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
+
+function addPage(chapter: number, title: string): Page | null {
+  const c = BASE_CHAPTERS.find((x) => x.number === chapter);
+  const name = slugify(title);
+  if (!c || !name) return null;
+  const dir = c.pages[0].slug.split("/")[0];
+  const page: Custom = { chapter, slug: `${dir}/${name}`, path: `${dir}/${name}`, title: title.trim() };
+  if (pages().some((p) => p.slug === page.slug)) return null;
+  mkdirSync(DATA, { recursive: true });
+  writeFileSync(customFile, JSON.stringify([...readCustom(), page], null, 2));
+  return page;
+}
 const readShares = (): Record<string, Share> => (existsSync(sharesFile) ? JSON.parse(readFileSync(sharesFile, "utf8")) : {});
 const shareOf = (slug: string): Share => readShares()[slug] ?? { mode: "private", emails: [] };
 
@@ -21,7 +39,9 @@ const historyDir = (slug: string) => join(DATA, "history", slug);
 function source(slug: string): { markdown: string; edited: boolean } {
   const f = editedFile(slug);
   if (existsSync(f)) return { markdown: readFileSync(f, "utf8"), edited: true };
-  return { markdown: readFileSync(repoFile(slug), "utf8"), edited: false };
+  if (existsSync(repoFile(slug))) return { markdown: readFileSync(repoFile(slug), "utf8"), edited: false };
+  const title = pages().find((p) => p.slug === slug)?.title ?? slug;
+  return { markdown: `# ${title}\n\nWrite here.\n`, edited: false };
 }
 
 function history(slug: string) {
@@ -72,8 +92,14 @@ const server = Bun.serve({
     }
 
     if (path.startsWith("api/")) {
+      if (req.method === "POST" && path === "api/new-page") {
+        if (!isOwner(who)) return json({ error: "only the wiki owner can do this" }, 403);
+        const { chapter, title } = await req.json();
+        const page = addPage(Number(chapter), String(title ?? ""));
+        return page ? json({ ok: true, path: page.path }) : json({ error: "pick a new, non-empty title" }, 400);
+      }
       const slug = url.searchParams.get("page") ?? "";
-      const page = PAGES.find((p) => p.slug === slug);
+      const page = pages().find((p) => p.slug === slug);
       if (!page) return json({ error: "unknown page" }, 404);
       if (!isOwner(who)) return json({ error: "only the wiki owner can do this" }, 403);
       if (req.method === "POST" && path === "api/preview") {
@@ -102,7 +128,7 @@ const server = Bun.serve({
       return json({ error: "not found" }, 404);
     }
 
-    const page = PAGES.find((p) => p.path === path || p.path === `${path}/`);
+    const page = pages().find((p) => p.path === path || p.path === `${path}/`);
     if (!page) return html(layout({ base, page: TODO, nav: navFor(who), body: "<h1>Not found</h1>", headings: [], owner: false }), 404);
     if (!canRead(who, page.slug)) return html(denied(base, who), 403);
 
@@ -117,7 +143,7 @@ const server = Bun.serve({
 
 function navFor(who: string) {
   const visible = (p: Page) => canRead(who, p.slug);
-  return { todo: visible(TODO) ? TODO : null, chapters: CHAPTERS.map((c) => ({ ...c, pages: c.pages.filter(visible) })).filter((c) => c.pages.length) };
+  return { todo: visible(TODO) ? TODO : null, chapters: chapters().map((c) => ({ ...c, pages: c.pages.filter(visible) })).filter((c) => c.pages.length) };
 }
 
 console.log(`jean-wiki on :${server.port}`);
