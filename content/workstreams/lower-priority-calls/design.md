@@ -9,7 +9,7 @@
 - Latency targets are settings, not fixed numbers.
 - No org and no class waits forever.
 - One org's burst can't block the others.
-- Only Interactive and Standard calls scale up prod Modal.
+- A call uses prod Modal only when it would otherwise miss its target.
 - Defaults keep today's behavior. Each namespace has a kill switch.
 
 **Solution.** Every call gets a priority, a class plus an org weight, and the router serves calls in priority order.
