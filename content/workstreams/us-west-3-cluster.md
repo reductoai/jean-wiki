@@ -1,6 +1,6 @@
 # us-west-3 cluster
 
-
+**Finished.** prod-gpu-usw3 serves traffic: its 4 B200 nodes and all 56 serving pods are Ready, and it is in the router and Flux promote sets.
 
 <div class="callout">
 
