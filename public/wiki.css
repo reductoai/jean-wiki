@@ -109,3 +109,14 @@ article p, article ul, article table, article .diagram { margin-bottom: 1.4em; }
 article li { margin: 0.5em 0; }
 h2 { margin-top: 64px; } h3 { margin-top: 40px; }
 .notion { padding: 8px 0 8px 22px; }
+
+/* DeepWiki-style: quiet surfaces, numbered nav, color only on accents and diagrams */
+header.top::before { height: 2px; }
+nav.side { background: var(--soft); border-right: 1px solid var(--line); }
+article > h1:first-of-type, article > details.sources + h1 { background: none; border: 0; padding: 0; border-radius: 0; font-size: 34px; letter-spacing: -0.02em; }
+h2 { padding-left: 0; border-left: 0; padding-top: 24px; border-top: 1px solid var(--line); }
+.notion { background: none; border-left: 2px solid var(--line); border-radius: 0; }
+.notion h2 { border-top: 0; }
+.sources { background: #fff; border: 1px solid var(--line); border-radius: 8px; }
+.diagram { background: var(--soft); border: 1px solid var(--line); }
+th { background: var(--soft); color: var(--ink); }
