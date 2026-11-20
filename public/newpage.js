@@ -2,7 +2,7 @@
   const B = window.WIKI_BASE;
   const post = (p, body) => fetch(`${B}api/${p}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }).then((r) => r.json());
   document.addEventListener("click", async (e) => {
-    const np = e.target.closest(".new-page"), ns = e.target.closest(".new-section"), rm = e.target.closest(".remove-section");
+    const np = e.target.closest(".new-page"), ns = e.target.closest(".new-section"), rm = e.target.closest(".remove-section"), nsub = e.target.closest(".new-sub"), rsub = e.target.closest(".remove-sub");
     if (np) {
       const title = prompt("New page title");
       if (!title) return;
