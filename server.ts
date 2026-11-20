@@ -100,6 +100,15 @@ function basePath(pathname: string): string {
 const html = (body: string, status = 200) => new Response(body, { status, headers: { "content-type": "text/html; charset=utf-8" } });
 const json = (body: unknown, status = 200) => Response.json(body, { status });
 
+if (process.env.WIKI_GIT_SYNC) {
+  const head = () => Bun.spawnSync(["git", "rev-parse", "HEAD"], { cwd: ROOT }).stdout.toString().trim();
+  setInterval(() => {
+    const before = head();
+    Bun.spawnSync(["git", "pull", "--ff-only", "-q", process.env.WIKI_GIT_SYNC!, "main"], { cwd: ROOT });
+    if (head() !== before) broadcast("*");
+  }, 30000);
+}
+
 const server = Bun.serve({
   port: Number(process.env.PORT ?? 3000),
   idleTimeout: 0,
