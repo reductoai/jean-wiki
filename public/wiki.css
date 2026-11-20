@@ -205,6 +205,8 @@ article h2 { letter-spacing: -0.01em; }
 .pr-grid { display: flex; flex-wrap: wrap; gap: 6px; font-family: "Geist", sans-serif; }
 .pr-chip { display: grid; grid-template-columns: auto 1fr; gap: 0 8px; border: 1px solid var(--line); border-left: 3px solid #2563eb; border-radius: 8px; padding: 6px 10px; text-decoration: none; color: inherit; font-size: 12px; }
 .pr-chip.merged { border-left-color: #16a34a; }
+.pr-chip.closed { border-left-color: #9ca3af; color: var(--muted); }
+.pr-chip.closed b { text-decoration: line-through; }
 .pr-chip span { font-family: "Geist Mono", ui-monospace, monospace; text-transform: uppercase; font-size: 10px; color: var(--muted); align-self: center; }
 .pr-chip em { grid-column: 1 / -1; font-style: normal; color: var(--muted); }
 .callout { border-left: 3px solid #a1a1aa; background: #fafafa; padding: 2px 14px; border-radius: 6px; margin: 8px 0; }

@@ -35,7 +35,7 @@ const pick: Record<Kind, (p: any) => any> = {
   steps: (p) => ({ step: text(p.Step), detail: text(p.Detail), state: p.State?.select?.name ?? "next", owner: text(p.Owner), prs: text(p.PRs) }),
   costs: (p) => ({ app: text(p.App), before: p.Before?.number ?? 0, after: p.After?.number ?? 0 }),
   impact: (p) => ({ measure: text(p.Measure), value: text(p.Value) }),
-  prs: (p) => ({ pr: text(p.PR), repo: text(p.Repo) || "api", state: p.State?.select?.name === "merged" ? "merged" : "open", note: text(p.Note) }),
+  prs: (p) => ({ pr: text(p.PR), repo: text(p.Repo) || "api", state: ["merged", "closed"].includes(p.State?.select?.name) ? p.State.select.name : "open", note: text(p.Note) }),
 };
 
 async function query(db: string, token: string): Promise<any[]> {
@@ -90,7 +90,7 @@ export function dashboardHtml(ws: string, planHref = ""): string {
   const stats = d.stats.length ? d.stats : [
     { value: String(steps.length), label: "steps left" },
     { value: String(mergedPrs), label: "PRs merged" },
-    { value: String(d.prs.length - mergedPrs), label: "PRs open" },
+    { value: String(d.prs.filter((p) => p.state === "open").length), label: "PRs open" },
     { value: String(d.impact.length), label: "impact measures" },
   ];
   let out = `<div class="ws-head">${stats.map((s) => `<div class="ws-stat"><b>${esc(s.value)}</b><span>${esc(s.label)}</span></div>`).join("")}</div>\n\n`;
