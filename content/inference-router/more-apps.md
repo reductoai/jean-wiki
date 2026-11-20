@@ -2,7 +2,36 @@
 
 Goal: every Modal app on the router, Modal floors at 1, each cheaper per call.
 
-## Plan
+<div class="ws-head">
+<div class="ws-stat"><b>7</b><span>apps on the router</span></div>
+<div class="ws-stat"><b>4</b><span>waiting on you</span></div>
+<div class="ws-stat"><b>-41%</b><span>R-1 cost per 1k pages</span></div>
+<div class="ws-stat"><b>$20.6K</b><span>a week of Modal still off the router</span></div>
+</div>
+
+## Apps
+
+<div class="app-grid"><div class="app-card on"><div class="ac-name">Maverick</div><div class="ac-state">100%</div><div class="ac-note">All regions</div></div><div class="app-card on"><div class="ac-name">R-1</div><div class="ac-state">100%</div><div class="ac-note">US and EU</div></div><div class="app-card on"><div class="ac-name">R-1 mini</div><div class="ac-state">100%</div><div class="ac-note">US and EU</div></div><div class="app-card on"><div class="ac-name">Citation 7B</div><div class="ac-state">100%</div><div class="ac-note">US, no fallbacks</div></div><div class="app-card on"><div class="ac-name">FigSum</div><div class="ac-state">100%</div><div class="ac-note">Slots mode, floor 1</div></div><div class="app-card on"><div class="ac-name">Magpie</div><div class="ac-state">100%</div><div class="ac-note">US and EU</div></div><div class="app-card on"><div class="ac-name">Triton apps</div><div class="ac-state">100%</div><div class="ac-note">US; EU at 100% since Nov 19</div></div><div class="app-card wait"><div class="ac-name">Chicken</div><div class="ac-state">Share 0 PR</div><div class="ac-note"><a href="https://github.com/reductoai/api/pull/15451">#15451</a> waits on your merge</div></div><div class="app-card wait"><div class="ac-name">Extract confidence v3</div><div class="ac-state">Share 0 PR</div><div class="ac-note"><a href="https://github.com/reductoai/api/pull/15468">#15468</a> waits on your merge</div></div><div class="app-card wait"><div class="ac-name">Ordering</div><div class="ac-state">Share 0 PR</div><div class="ac-note"><a href="https://github.com/reductoai/api/pull/15477">#15477</a> waits on your merge</div></div><div class="app-card wait"><div class="ac-name">Extract confidence 1.7B</div><div class="ac-state">Built</div><div class="ac-note">Opens after #15451 merges</div></div><div class="app-card later"><div class="ac-name">Layout (Eve Legal)</div><div class="ac-state">Plan</div><div class="ac-note">Needs an HTTP route first; waits on your stamp</div></div><div class="app-card later"><div class="ac-name">Promptable</div><div class="ac-state">Stays direct</div><div class="ac-note">Router keeps the same floor</div></div><div class="app-card later"><div class="ac-name">Small apps</div><div class="ac-state">Later</div><div class="ac-note">Only if the first four save</div></div></div>
+
+## Next steps
+
+<ol class="steps">
+<li class="now"><b>Merge the share 0 PRs</b>: chicken, extract confidence v3, ordering, and the unused confidence class (<a href="https://github.com/reductoai/api/pull/15464">#15464</a>, about $177 a day idle).</li>
+<li><b>Ramp them</b> in all regions together, as for Triton.</li>
+<li><b>Layout</b>: replay Eve Legal first; build the HTTP route only if it saves.</li>
+<li><b>Remove the ramp flags</b> for everyone.</li>
+</ol>
+
+## Cost per call
+
+USD per 1k calls (per 1k pages for R-1 and R-1 mini), all regions, before and after the move. Measured Nov 19.
+
+<div class="cost-bars"><div class="cb-legend"><span class="cb before"></span> before <span class="cb after good"></span> after</div><div class="cb-row"><div class="cb-app">Magpie</div><div class="cb-bars"><div class="cb before" style="width:100%"><span>14.54</span></div><div class="cb after good" style="width:49%"><span>7.1</span></div></div><div class="cb-ch good">-51%</div></div><div class="cb-row"><div class="cb-app">R-1 (pages)</div><div class="cb-bars"><div class="cb before" style="width:100%"><span>3.73</span></div><div class="cb after good" style="width:59%"><span>2.21</span></div></div><div class="cb-ch good">-41%</div></div><div class="cb-row"><div class="cb-app">Highlight detection</div><div class="cb-bars"><div class="cb before" style="width:100%"><span>3.99</span></div><div class="cb after good" style="width:56%"><span>2.25</span></div></div><div class="cb-ch good">-44%</div></div><div class="cb-row"><div class="cb-app">Qwen RF-DETR</div><div class="cb-bars"><div class="cb before" style="width:100%"><span>0.75</span></div><div class="cb after good" style="width:56%"><span>0.42</span></div></div><div class="cb-ch good">-44%</div></div><div class="cb-row"><div class="cb-app">Triton core vision</div><div class="cb-bars"><div class="cb before" style="width:100%"><span>1.67</span></div><div class="cb after good" style="width:74%"><span>1.23</span></div></div><div class="cb-ch good">-26%</div></div><div class="cb-row"><div class="cb-app">Maverick</div><div class="cb-bars"><div class="cb before" style="width:100%"><span>0.66</span></div><div class="cb after good" style="width:77%"><span>0.51</span></div></div><div class="cb-ch good">-23%</div></div><div class="cb-row"><div class="cb-app">R-1 mini (pages)</div><div class="cb-bars"><div class="cb before" style="width:100%"><span>2.21</span></div><div class="cb after good" style="width:98%"><span>2.16</span></div></div><div class="cb-ch good">-2%</div></div><div class="cb-row"><div class="cb-app">Citation 7B</div><div class="cb-bars"><div class="cb before" style="width:91%"><span>2.28</span></div><div class="cb after bad" style="width:100%"><span>2.51</span></div></div><div class="cb-ch bad">+10%</div></div><div class="cb-row"><div class="cb-app">FigSum</div><div class="cb-bars"><div class="cb before" style="width:73%"><span>1.09</span></div><div class="cb after bad" style="width:100%"><span>1.5</span></div></div><div class="cb-ch bad">+38%</div></div><div class="cb-row"><div class="cb-app">Change tracking</div><div class="cb-bars"><div class="cb before" style="width:39%"><span>1.41</span></div><div class="cb after bad" style="width:100%"><span>3.59</span></div></div><div class="cb-ch bad">+155%</div></div></div>
+
+## Details
+
+<details>
+<summary>Plan</summary>
 
 - Citation 7b(all regions)
   - AU: no router route
@@ -36,9 +65,12 @@ Goal: every Modal app on the router, Modal floors at 1, each cheaper per call.
   - Verify per app: p99 per call does not move; Modal USD per 1k calls before and after; the extra network leg through the router, not measured yet
   - Small apps (deep extract v4c, OCR v3, citation, parse trust, classify) only if the first four save
 
-## Logs
+</details>
 
-### AU R-1 mini
+<details>
+<summary>Logs</summary>
+
+#### AU R-1 mini
 
 - Capacity sidecar for the INT8 class: [#15203](https://github.com/reductoai/api/pull/15203) ✅ + Deploy (answers in prod\_au, 1.4 s a count)
 - Flag <code>inference_router_au_fpp_2b_pct</code> created in PostHog at 0
@@ -52,13 +84,13 @@ Goal: every Modal app on the router, Modal floors at 1, each cheaper per call.
 - At 100%, first 9 minutes: 22 calls, all 200, no fallbacks, none direct, admit wait p50 1.2 s, p99 2.6 s.
 - At 100%, 14:59 to 23:02 (to 08:00 in central Europe): 1,354 router calls, all 200, no fallbacks. Admit wait p50 52 ms, p99 2.8 s, max 5.0 s; 22% of calls waited 1 s or more on the 6 seats. Largest burst 86 calls a minute, so a 14:38-size burst is untested at 100%.
 
-### EU Maverick 
+#### EU Maverick 
 
 - namespace ✓ [#14848](https://github.com/reductoai/api/pull/14848) + Deploy ✅
 - callers ✓ [#14853](https://github.com/reductoai/api/pull/14853) + Deploy ✅
 - eu-prod router deployed 17:06 (48cce118b3). Ramp: 10 (17:07) → 25 (17:20) → 50 (17:34) → 100 (17:48). No fallbacks. Bursts wait 2 to 5 s at p99: the router class has 1 warm container.
 
-### Magpie
+#### Magpie
 
 - [#14852](https://github.com/reductoai/api/pull/14852) ✅ + Deploy
 - \[2026-11-16 15:46 PT\] Ramp, US: 10 (15:17) → 25 (15:31) → 50 (15:46) → 100 (16:01). No fallbacks.
@@ -68,7 +100,7 @@ Goal: every Modal app on the router, Modal floors at 1, each cheaper per call.
 - Slots mode, floor 1, EU: [#15196](https://github.com/reductoai/api/pull/15196) ✅ + Deploy (Nov 17 16:45 release, [run](https://github.com/reductoai/api/actions/runs/44207302381)). Live since 16:32: the controller writes 1 every minute, ready equals target (was 2 against 1 under the cron), no cron write at 17:00. First 30 minutes: 6 router calls (EU night), all 200, no fallbacks. Holds after the 18:25 release ([run](https://github.com/reductoai/api/actions/runs/44223075070)).
 - EU at 100%, 14:59 to 23:02: 3,676 router calls, no fallbacks, admit wait p99 9 ms. One 400 (request over the context window; the job completed on its fallback model). Slots mode since 16:33: ready equals target every minute, target rose to 2 twice and returned to 1, no cron write.
 
-### Triton segmentation:
+#### Triton segmentation:
 
 - \[2026-11-16 11:49 PT\] Move segmentation to the router: ✓ [#14977](https://app.devin.ai/review/reductoai/api/pull/14977), at 0%. ✅ + Deploy
 - \[2026-11-16 15:46 PT\] Ramp, US (change tracking, highlight detection): 10 (15:17) → 25 (15:31) → 50 (15:46) → 100 (16:01) → back to 25 (16:09). At 100 a burst queued in the router: admit wait p50 7 s, 20 calls timed out and went to direct Modal, no failed steps. usw1 has 20 to 24 seats and the Modal cap is 0, so nothing spills.
@@ -78,30 +110,30 @@ Goal: every Modal app on the router, Modal floors at 1, each cheaper per call.
 - Same window: change tracking 9,642 router calls, all 200, 1 fallback (14:40, during a 1 → 8 burst, cause not confirmed). Highlight detection 10,797 calls, 8 usw1 500s, each served by direct Modal.
 - After the 18:25 release ([run](https://github.com/reductoai/api/actions/runs/44223075070)), 18:20 to 18:44: floor 1, ready equals target every minute, 532 and 512 router calls, all 200, no fallbacks.
 
-### EU Triton (core CV, Qwen RF-DETR, change tracking, highlight detection):
+#### EU Triton (core CV, Qwen RF-DETR, change tracking, highlight detection):
 
-### Routes at share 0: [#15209](https://github.com/reductoai/api/pull/15209) ✅ + Deploy (Nov 17 18:25 release; eu-prod router 22:12 on 0386928344, [run](https://github.com/reductoai/api/actions/runs/44249258960)). Live: the router config has the four routes, the controller measures the four classes, the four EU shares started at 0.
+#### Routes at share 0: [#15209](https://github.com/reductoai/api/pull/15209) ✅ + Deploy (Nov 17 18:25 release; eu-prod router 22:12 on 0386928344, [run](https://github.com/reductoai/api/actions/runs/44249258960)). Live: the router config has the four routes, the controller measures the four classes, the four EU shares started at 0.
 
-### 10% (Nov 18 10:45 PT, the four EU PostHog values): 2,161 routed calls in 75 min, 6 fallbacks (a Modal 503 burst, same rate on direct calls), admit wait p99 49 ms, app spend flat at \$82/h.
+#### 10% (Nov 18 10:45 PT, the four EU PostHog values): 2,161 routed calls in 75 min, 6 fallbacks (a Modal 503 burst, same rate on direct calls), admit wait p99 49 ms, app spend flat at \$82/h.
 
-### 25% (Nov 18 12:20 PT): 6,508 routed calls in 100 min, 6 fallbacks (0.09%), admit wait p99 81 ms, app spend \$81.83/h vs \$78.64 the same hour Nov 17. At 14:02 PT EU core-cv hung for 2 min (also Nov 17 14:00 PT, no router): direct calls failed at 30 s, routed ones at 45 s.
+#### 25% (Nov 18 12:20 PT): 6,508 routed calls in 100 min, 6 fallbacks (0.09%), admit wait p99 81 ms, app spend \$81.83/h vs \$78.64 the same hour Nov 17. At 14:02 PT EU core-cv hung for 2 min (also Nov 17 14:00 PT, no router): direct calls failed at 30 s, routed ones at 45 s.
 
-### EU core CV: moved to [EU core CV](https://app.notion.com/p/41d4a78a1c8781ceabf3c88b28d4894f)
+#### EU core CV: moved to [EU core CV](https://app.notion.com/p/41d4a78a1c8781ceabf3c88b28d4894f)
 
-### 100% (Nov 19 01:35 PT): first 16 min 8,905 routed calls, all 200, no fallbacks, admit wait p99 0.3 s. Spend at 100% not billed yet.
+#### 100% (Nov 19 01:35 PT): first 16 min 8,905 routed calls, all 200, no fallbacks, admit wait p99 0.3 s. Spend at 100% not billed yet.
 
-### YAML default 25: [#15309](https://github.com/reductoai/api/pull/15309), open.
+#### YAML default 25: [#15309](https://github.com/reductoai/api/pull/15309), open.
 
-### EU core CV: moved to [EU core CV](https://app.notion.com/p/41d4a78a1c8781ceabf3c88b28d4894f)
+#### EU core CV: moved to [EU core CV](https://app.notion.com/p/41d4a78a1c8781ceabf3c88b28d4894f)
 
-###  [#14863](https://github.com/reductoai/api/pull/14863)  on inference router ✅ + Deploy (16:40 release, eu-prod router 17:06)
+####  [#14863](https://github.com/reductoai/api/pull/14863)  on inference router ✅ + Deploy (16:40 release, eu-prod router 17:06)
 
 - Ramp, US and EU: 10 (17:07) → 25 (17:20) → 50 (17:34) → 100 (17:48). No fallbacks.
 - EU burst at 17:49 (1,881 calls in a minute, usually under 30): admit wait p50 7.5 s for 2 minutes while Modal went 1 → 16 containers. Back to 25 for a minute (17:54), then 100: the burst caused it, not the share.
 - Slots mode, floor 1, US and EU: [#15206](https://github.com/reductoai/api/pull/15206) ✅ + Deploy (Nov 17 18:27 release). Live: ready equals target, no cron write since Nov 17 18:00. It dropped the cron's peak spare: calls waiting over 5 s for a seat went 0.8% → 4.9% (US) and 2.1% → 5.6% (EU), Nov 17 vs Nov 18, 06:00 to 14:00.
 
 
-### Apps still off the router
+#### Apps still off the router
 
 - Chicken at share 0, US and EU: [#15451](https://github.com/reductoai/api/pull/15451), clean, waits on Jean's merge
 - Extract confidence 1.7B at share 0, US only (EU floor is 0; a controller floor is at least 1): built and reviewed, opens once #15451 merges
@@ -109,7 +141,7 @@ Goal: every Modal app on the router, Modal floors at 1, each cheaper per call.
 - Ordering at share 0, US and EU: [#15477](https://github.com/reductoai/api/pull/15477), clean, waits on Jean's merge
 - Unused confidence RPC class, floor 1 to 0 in US and EU: [#15464](https://github.com/reductoai/api/pull/15464), clean, waits on Jean's merge. About 177 USD a day idle; 0 calls in 7 days (measured Nov 19)
 
-### Rollout dashboard
+#### Rollout dashboard
 
 - \[2026-11-16 15:29 PT\] [Rollout tab](https://us3.datadoghq.com/dashboard/jhy-7wx-adw/inference-router): router side and Triton pick up every namespace / model, no list.
 - Direct side by namespace: [#15032](https://github.com/reductoai/api/pull/15032) ✅ + Deploy (17:17 release). Direct side now by namespace too, no app list (18:10); citation 7b is one row.
@@ -142,8 +174,10 @@ Goal: every Modal app on the router, Modal floors at 1, each cheaper per call.
 
 </details>
 
+</details>
 
-## Cost per call, before vs after the router
+<details>
+<summary>Cost per call, before vs after the router</summary>
 
 Measured 2026-11-19 (data through 11-18 UTC). USD per 1k ok calls, or per 1k pages for R-1 and R-1 mini. Cost is the Modal bill plus cluster GPUs: 5.50 USD per B200-hour and 5.721 USD per usw1 H200-hour. The H200 rate is the AWS capacity block cr-0d9e87335cf324c07 (AWS Cost Explorer, May 2026, usage type <code>USW1-CapacityBlockFee:p5en.48xlarge</code>: 199,914.62 USD upfront for one p5en.48xlarge with 8 H200, 2026-06-04 to 2026-12-03, 4,368 h). It covers the GPU node only, and the block ends 2026-12-03. Modal utilization is busy seat time over billed container time. Refreshed on each daily run.
 
@@ -196,7 +230,7 @@ Caveats:
 - Before windows start 10-20 (R-1 mini 10-28, Magpie 11-06) and end the day before the region's first router day (Triton core vision and Qwen RF-DETR: 11-12).
 - Sources and queries: [Inference footguns](https://app.notion.com/p/41b4a78a1c8781e88b9eedaaf8354377) log of 2026-11-17.
 
-### Impact
+#### Impact
 
 - Citation 7b in US: 100% of calls on the router, no fallbacks. Measured in prod.
 - table\_ensemble: 1,475 fallbacks vs 5,504 ok, 0 router errors in 6 h. Measured from router pod logs, 2026-11-18 (Mary).
@@ -214,7 +248,7 @@ Caveats:
 - Modal spend: paid Modal GPU-hours a day went from 2,336 to 960 for fpp-flash and from 575 to 334 for Maverick. EU R-1 and R-1 mini floors went from 6 and 5 to 1 ([#15004](https://github.com/reductoai/api/pull/15004)): about 6.2 B200s, about \$28k a month by floor size, not read from the bill.
 - Modal utilization (busy seat time over billed container time) did not rise: Maverick 3.6% to 3.0%, fpp-flash 4.0% to 2.4%.
 
-### AU R-1 mini router (Logs)
+#### AU R-1 mini router (Logs)
 
 - PR 1, router namespace <code>fpp-2b</code> and controller, no caller: [#15424](https://github.com/reductoai/api/pull/15424) ✅. Scalr applied prod-au eks-addons by itself at the merge.
   - Router installed in au-prod ([run](https://github.com/reductoai/api/actions/runs/44627515909)); smoke test fails with 504, no cap until the controller runs.
@@ -222,7 +256,7 @@ Caveats:
 - PR 2, callers at 0% with own flag: [#15428](https://github.com/reductoai/api/pull/15428) clean on main, ready for the merge. Also stops the gate reading the prod\_au of every AU session as a replay pin.
 - Citation 7b (all regions):
 
-### AU R-1 mini router (restored)
+#### AU R-1 mini router (restored)
 
 - AU R-1 mini
   - Jean: re-run the failed AU job of the [prod release](https://github.com/reductoai/api/actions/runs/44627380051), so the AU controller starts
@@ -240,7 +274,7 @@ Caveats:
   - Measure: 7 days before the ramp, 7 days at 100%, 7 days after PR 3
     - USD per 1k pages, Modal USD a day, p99, router fallbacks, Gemini fallbacks (2.4% today), utilization.
 
-### AU R-1 and R-1 mini on H100s (plan, waiting for Jean's stamp)
+#### AU R-1 and R-1 mini on H100s (plan, waiting for Jean's stamp)
 
 <b>Ask: stamp this plan, or overrule any of the three defaults at the end.</b>
 
@@ -267,17 +301,17 @@ Why it fits: R-1 mini matches today's AU package in the same container (12.74 pa
   - AU jobs that ask for R-1 run on R-1 at cutover: 0.387 USD per 1k pages, 4.5 times today's R-1 mini answer (0.086 USD).
 - Not in this plan: lending, Terraform, prod Doppler, and the prod release itself (Jean's).
 
-### FigSum slots (Impact)
+#### FigSum slots (Impact)
 
 - Regressions (same read): FigSum 1.09 to 1.50 USD per 1k calls, because the router keeps \~4.4 US and 3.2 to 3.6 EU containers ready vs the old 1 + 1; Citation 7B EU \~200 to 514 USD a day (all regions 2.28 to 2.51 per 1k calls). Jensen has a fix PR started.
 
-### FigSum slots (restored)
+#### FigSum slots (restored)
 
 - EU burst (Nov 18 09:13): 1,500 calls queued 2 min after a FigSum redeploy, ready stayed at 1 for 3 min, 2,188 admit-deadline fallbacks. Cold start after a redeploy, not fixed.
 - Spare container (controller buffer 1), US and EU: [#15336](https://github.com/reductoai/api/pull/15336) ✅ + Deploy (Nov 18 17:39 release). Nov 19, 06:00 to 14:00: ready = target + 1 in 374/480 min (US) and 392/479 (EU); calls waiting over 5 s 1.0% (US) and 2.0% (EU); 1 admit-deadline fallback per region. Cost: about 300 USD a day for both regions vs no spare, about 131 vs the cron (B200 at 6.25 USD/h, GPU only).
 - Rollout dashboard
 
-### EU core CV (Logs)
+#### EU core CV (Logs)
 
 - 50% (Nov 18 16:55 PT, Jean's go), held through EU morning to 01:32 PT: 51,073 routed calls, 18 fallbacks (0.04%, core CV calls the Modal container rejected as overloaded; direct Modal served them, jobs completed). Admit wait p99 1.7 s, max 7.8 s on core CV. App spend \$528 for 17:00 to 01:00 PT vs \$520 the same hours a day earlier.
 - <b>Triton core CV / Qwen RF-DETR:</b> routing ✓ [#14314](https://github.com/reductoai/api/pull/14314) → capacity ✓ [#14766](https://github.com/reductoai/api/pull/14766) → floor cutover ✓ [#14898](https://github.com/reductoai/api/pull/14898) (deployed 11/16).
@@ -285,13 +319,16 @@ Why it fits: R-1 mini matches today's AU package in the same container (12.74 pa
 - Core CV orders fewer burst containers: [#15426](https://github.com/reductoai/api/pull/15426) ✅ (Nov 19 13:40 PT), ships with the next prod release.
 - Figsum
 
-### EU core CV (Impact)
+#### EU core CV (Impact)
 
 - EU core CV at 100%, 02:00 to 10:00 PT Nov 19 against Nov 18: calls +54% (337,338 against 219,009), ready containers +105% (7.6 against 3.7), so about a third more containers per call. Most of the spend rise is traffic. Fix: [#15426](https://github.com/reductoai/api/pull/15426), merged Nov 19, not in prod yet (replay: 8.2 to 3.7 ready containers; waits over 5 s 0.09% to 0.41%, uncertain).
 - Admit wait p99: Citation 7B US 2.4 s to 866 ms with slots mode ([#15050](https://github.com/reductoai/api/pull/15050)). After only: Magpie US 7 ms, Citation 7B EU 2.8 s on 6 seats, EU Triton core CV 1.7 s at 50%.
 
-### EU core CV (restored)
+#### EU core CV (restored)
 
 - EU Triton
   - After the prod release with #15426: compare core CV ready containers and waits over 5 s with the replay
   - Slots mode once 100% holds
+
+</details>
+

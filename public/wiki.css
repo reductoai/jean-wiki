@@ -169,3 +169,22 @@ h4 { margin: 12px 0 4px; }
 .notion { padding: 2px 0 2px 16px; margin: 8px 0; }
 .sources { margin: 24px 0 0; }
 nav.side a { padding-top: 3px; padding-bottom: 3px; }
+
+/* Workstream dashboard */
+.ws-head { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 12px 0 4px; font-family: "Geist", sans-serif; }
+.ws-stat { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+.ws-stat b { display: block; font-size: 22px; } .ws-stat span { font-size: 12px; color: var(--muted); }
+.app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; font-family: "Geist", sans-serif; }
+.app-card { border: 1px solid var(--line); border-left: 3px solid #a1a1aa; border-radius: 6px; padding: 8px 10px; font-size: 13px; }
+.app-card.on { border-left-color: #16a34a; } .app-card.wait { border-left-color: #2563eb; background: #f8faff; } .app-card.later { opacity: .75; }
+.ac-name { font-weight: 600; } .ac-state { font-size: 12px; color: var(--muted); } .ac-note { font-size: 12px; margin-top: 2px; }
+.steps { padding-left: 20px; } .steps li.now::marker { color: #2563eb; font-weight: 700; }
+.cost-bars { font-family: "Geist", sans-serif; font-size: 13px; }
+.cb-row { display: grid; grid-template-columns: 150px 1fr 52px; gap: 8px; align-items: center; margin: 4px 0; }
+.cb-bars { display: grid; gap: 2px; }
+.cb { height: 12px; border-radius: 3px; background: #d4d4d8; position: relative; display: inline-block; }
+.cb span { position: absolute; left: calc(100% + 4px); top: -2px; font-size: 11px; color: var(--muted); white-space: nowrap; }
+.cb.after.good { background: #16a34a; } .cb.after.bad { background: #dc2626; }
+.cb-ch { text-align: right; font-weight: 600; } .cb-ch.good { color: #16a34a; } .cb-ch.bad { color: #dc2626; }
+.cb-legend { font-size: 12px; color: var(--muted); margin-bottom: 4px; } .cb-legend .cb { width: 14px; vertical-align: -1px; }
+@media (max-width: 700px) { .ws-head { grid-template-columns: repeat(2, 1fr); } }
