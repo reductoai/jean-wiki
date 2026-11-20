@@ -110,7 +110,7 @@ export function dashboardHtml(ws: string, planHref = ""): string {
     }).join("")}</div>\n\n`;
   }
   if (d.impact.length) out += `## Impact\n\n<div class="impact-grid">${d.impact.map((m) => `<div class="impact-card">${m.measure ? `<div class="ic-label">${esc(m.measure)}</div>` : ""}<div class="ic-value">${nums(m.value)}</div></div>`).join("")}</div>\n\n`;
-  if (d.prs.length) out += `## PRs\n\n<div class="pr-grid">${d.prs.map((p) => `<a class="pr-chip ${p.state}" href="https://github.com/reductoai/${encodeURIComponent(p.repo)}/pull/${encodeURIComponent(p.pr.replace(/\D/g, ""))}"><b>${esc(p.pr)}</b><span>${p.state}</span><em>${esc(p.note)}</em></a>`).join("")}</div>\n\n`;
+  if (d.prs.length) out += `## PRs\n\n<div class="pr-grid">${d.prs.map((p) => `<a class="pr-chip mini ${p.state}" title="${esc(p.note).replace(/>/g, "&gt;")}" href="https://github.com/reductoai/${encodeURIComponent(p.repo)}/pull/${encodeURIComponent(p.pr.replace(/\D/g, ""))}"><b>${esc(p.pr)}</b><span>${p.state}</span></a>`).join("")}</div>\n\n`;
   return out + `<p class="source">Numbers, cards and steps come from <a href="${notionPage}">Jean's wiki content</a> in Notion. Edit the rows there; this page updates within a minute.</p>\n\n`;
 }
 
