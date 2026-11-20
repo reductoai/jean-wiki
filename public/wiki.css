@@ -100,3 +100,12 @@ code { background: var(--accent-soft); color: var(--accent); }
 .dot { fill: var(--honey); stroke: var(--accent); stroke-width: 2; }
 .button { background: var(--accent); border-color: var(--accent); }
 .pager a { background: var(--accent-soft); padding: 8px 14px; border-radius: 8px; }
+
+body { line-height: 1.75; }
+article { max-width: 700px; font-family: "Valkyrie", "Valkyrie T4", Charter, "Iowan Old Style", Georgia, serif; font-size: 18px; }
+article h1, article h2, article h3, article h4, article table, article .diagram, article .sources, article .source, article summary { font-family: "Geist", ui-sans-serif, system-ui, sans-serif; }
+main { padding: 48px 64px 96px; }
+article p, article ul, article table, article .diagram { margin-bottom: 1.4em; }
+article li { margin: 0.5em 0; }
+h2 { margin-top: 64px; } h3 { margin-top: 40px; }
+.notion { padding: 8px 0 8px 22px; }

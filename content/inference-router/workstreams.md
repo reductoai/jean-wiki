@@ -1,14 +1,24 @@
 # Workstreams and impact
 
-Each workstream below comes from its page in my Notion Daily notes. Edit the work in Notion; this page shows the last sync.
+Each workstream opens its Notion page, synced. Edit the work in Notion.
 
 ## More apps on the inference router
 
+<details>
+<summary>Plan, logs and impact from Notion</summary>
+
 {{notion:more-apps-on-the-router shift=2}}
+
+</details>
 
 ## EU R-1 through the inference router
 
+<details>
+<summary>Problem, solution and status from Notion</summary>
+
 {{notion:eu-r1-through-the-router shift=2}}
+
+</details>
 
 ## Background pages
 
