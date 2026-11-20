@@ -133,3 +133,24 @@ article li { margin: 0.25em 0; }
 h2 { margin-top: 32px; padding-top: 16px; } h3 { margin-top: 24px; }
 article > h1:first-of-type { margin: 0 0 12px; }
 .sources { margin: 40px 0 0; }
+
+/* DeepWiki: neutral greys, one blue accent, sans throughout */
+:root { --accent:#2563eb; --accent-soft:#eff4ff; --plum:#2563eb; --plum-200:#d4d4d8;
+  --honey:#a1a1aa; --honey-soft:#f4f4f5; --pine:#52525b; --pine-soft:#f4f4f5; --slate:#71717a; --slate-soft:#f4f4f5; --rust:#2563eb; --rust-soft:#f4f4f5; }
+header.top::before { display: none; }
+.brand::before { background: var(--ink); }
+article { font-family: "Geist", ui-sans-serif, system-ui, sans-serif; font-size: 15px; }
+h2, h3, h2 a.anchor, h3 a.anchor { color: var(--ink); }
+nav.side .chapter { color: var(--ink); }
+nav.side a.on { color: var(--ink); background: #e4e4e7; box-shadow: none; }
+code { background: #f4f4f5; color: var(--ink); }
+.button { background: var(--ink); border-color: var(--ink); }
+.new-page { color: var(--muted); border-color: var(--line); }
+.notion h2 { color: var(--ink); }
+.source a, summary, .src-group { color: var(--muted); }
+.node rect, .node.n-flag rect, .node.n-worker rect, .node.n-valkey rect, .node.n-controller rect, .node.n-gpu rect, .node.n-modal rect { fill: #fff; stroke: #a1a1aa; }
+.node.n-router rect { fill: var(--accent-soft); stroke: var(--accent); }
+.node.on rect { fill: var(--accent); stroke: var(--accent); }
+.dot { fill: var(--accent); stroke: #fff; }
+.diagram-bar button.on, .diagram-bar button:hover { background: var(--ink); border-color: var(--ink); }
+.pager a { background: none; border: 1px solid var(--line); }
