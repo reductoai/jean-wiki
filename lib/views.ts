@@ -27,7 +27,7 @@ export function commentList(comments: Comment[], me: string, owner: boolean): st
   return `<div class="comment-list"><div class="cm-count">${open.length} open${done.length ? ` · ${done.length} resolved` : ""}</div><ul>${open.map(one).join("")}</ul>${done.length ? `<details class="cm-done"><summary>Resolved (${done.length})</summary><ul>${done.map(one).join("")}</ul></details>` : ""}</div>`;
 }
 
-export function layout(o: { base: string; page: Page; nav: Nav; body: string; headings: Heading[]; owner: boolean; share?: Share; tabs?: { overview: Page; plan: Page }; comments?: Comment[]; who?: string }) {
+export function layout(o: { base: string; page: Page; nav: Nav; body: string; headings: Heading[]; owner: boolean; share?: Share; tabs?: { overview: Page; plan: Page; design?: Page }; comments?: Comment[]; who?: string }) {
   const { base, page, nav } = o;
   const link = (p: Page, label: string) =>
     `<a href="${base}${p.path}" class="${p.slug === page.slug ? "active" : ""}"${o.owner && p.slug !== "todo" ? ` draggable="true" data-slug="${esc(p.slug)}"` : ""}>${label}</a>`;
@@ -63,7 +63,7 @@ ${items(c, ci)}
 ${o.owner ? `<div class="section-tools">${c.pages.length ? "" : `<span class="empty">Drag pages here</span>`}<button class="new-page" data-chapter="${c.number}">+ New page</button><button class="new-sub" data-chapter="${c.number}">+ Subsection</button>${c.pages.length || c.builtin ? "" : `<button class="remove-section" data-chapter="${c.number}">Remove section</button>`}</div>` : ""}</div>`).join("\n")}
 ${o.owner ? `<button class="new-section">+ New section</button>` : ""}
 </nav>
-<main>${o.tabs ? `<div class="tabs"><a href="${base}${o.tabs.overview.path}" class="${page.planOf ? "" : "active"}">Overview</a><a href="${base}${o.tabs.plan.path}" class="${page.planOf ? "active" : ""}">Plan</a></div>` : ""}<article>${o.body}${sourcesBox(page)}</article>
+<main>${o.tabs ? `<div class="tabs">${[o.tabs.overview, o.tabs.plan, o.tabs.design].filter((t) => t).map((t, i) => `<a href="${base}${t!.path}" class="${t!.slug === page.slug ? "active" : ""}">${["Overview", "Plan", "Design"][i]}</a>`).join("")}</div>` : ""}<article>${o.body}${sourcesBox(page)}</article>
 <section class="comments" id="comments"><h2>Comments</h2>${commentList(o.comments ?? [], o.who ?? "", o.owner)}
 <form class="cm-form"><div class="cm-quote" hidden><blockquote></blockquote><button type="button" class="cm-unquote" title="Remove quote">×</button></div><textarea name="text" rows="3" maxlength="4000" placeholder="Add a comment. Select text on the page to quote it."></textarea><button class="button" type="submit">Comment</button></form></section>
 <footer class="pager">${prev ? `<a href="${base}${prev.path}">← ${esc(prev.title)}</a>` : "<span></span>"}${next ? `<a href="${base}${next.path}">${esc(next.title)} →</a>` : ""}</footer>
