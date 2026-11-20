@@ -36,11 +36,14 @@ function saveLayout(cs: Chapter[]) {
 const pages = (): Page[] => [TODO, ...chapters().flatMap((c) => c.pages.filter((p) => !p.sub))];
 /** The workstream a page's dashboard shows, if any. */
 const wsOf = (slug: string) => source(slug).markdown.match(/\{\{dashboard:([\w-]+)\}\}/)?.[1];
-const planPage = (p: Page): Page => ({ slug: `${p.slug}/plan`, path: `${p.path.replace(/\/$/, "")}/plan`, title: `Plan: ${p.title}`, planOf: p.slug });
-/** Every page, plus a Plan subpage for each page with a dashboard. */
+const tabPage = (p: Page, tab: "plan" | "design"): Page => ({ slug: `${p.slug}/${tab}`, path: `${p.path.replace(/\/$/, "")}/${tab}`, title: `${tab[0].toUpperCase()}${tab.slice(1)}: ${p.title}`, planOf: p.slug });
+const planPage = (p: Page) => tabPage(p, "plan");
+/** A workstream's Design tab, when it has a design page. */
+const designPage = (p: Page) => (existsSync(repoFile(`${p.slug}/design`)) || existsSync(editedFile(`${p.slug}/design`)) ? tabPage(p, "design") : undefined);
+/** Every page, plus Plan and Design subpages for each page with a dashboard. */
 const allPages = (): Page[] => {
-  const ps = pages();
-  return [...ps, ...ps.filter((p) => p.slug !== "todo" && wsOf(p.slug)).map(planPage)];
+  const ws = pages().filter((p) => p.slug !== "todo" && wsOf(p.slug));
+  return [...pages(), ...ws.map(planPage), ...ws.flatMap((p) => designPage(p) ?? [])];
 };
 const findPage = (slug: string) => allPages().find((p) => p.slug === slug);
 const slugify = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
@@ -313,7 +316,7 @@ const server = Bun.serve({
     }
     const { html: body, headings } = render(markdown, base, page.path.replace(/\/$/, ""));
     const overview = page.planOf ? pages().find((p) => p.slug === page.planOf)! : page;
-    const tabs = page.planOf || (page.slug !== "todo" && wsOf(page.slug)) ? { overview, plan: planPage(overview) } : undefined;
+    const tabs = page.planOf || (page.slug !== "todo" && wsOf(page.slug)) ? { overview, plan: planPage(overview), design: designPage(overview) } : undefined;
     return html(layout({ base, page, nav: navFor(who), body, headings, owner: isOwner(who), share: shareOf(overview.slug), tabs, comments: readComments()[page.slug] ?? [], who }));
   },
 });
