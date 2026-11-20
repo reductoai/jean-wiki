@@ -15,11 +15,12 @@ const CFG = JSON.parse(readFileSync(join(ROOT, "content/dashboards/notion.json")
 const DATA = process.env.HOSTING_DATA_DIR ?? join(ROOT, ".data");
 const cacheFile = join(DATA, "notion-cache.json");
 let cache: Record<string, Dash> = existsSync(cacheFile) ? JSON.parse(readFileSync(cacheFile, "utf8")) : {};
+let synced = existsSync(cacheFile);
 
 export const notionPage = `https://app.notion.com/p/${CFG.page}`;
 
 export function dashboard(ws: string): Dash | null {
-  if (cache[ws]) return cache[ws];
+  if (synced) return cache[ws] ?? null;
   const seed = join(ROOT, "content/dashboards", `${ws}.json`);
   return existsSync(seed) ? JSON.parse(readFileSync(seed, "utf8")) : null;
 }
@@ -62,8 +63,9 @@ export async function refresh(token: string): Promise<boolean> {
       (next[ws][kind] as any[]).push(pick[kind](row.properties));
     }
   }
-  const changed = JSON.stringify(next) !== JSON.stringify(cache);
+  const changed = !synced || JSON.stringify(next) !== JSON.stringify(cache);
   if (changed) {
+    synced = true;
     cache = next;
     mkdirSync(DATA, { recursive: true });
     writeFileSync(cacheFile, JSON.stringify(cache));
