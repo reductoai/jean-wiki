@@ -2,31 +2,7 @@
 
 Goal: every Modal app on the router, Modal floors at 1, each cheaper per call.
 
-<div class="ws-head">
-<div class="ws-stat"><b>7</b><span>apps on the router</span></div>
-<div class="ws-stat"><b>4</b><span>waiting on you</span></div>
-<div class="ws-stat"><b>-41%</b><span>R-1 cost per 1k pages</span></div>
-<div class="ws-stat"><b>$20.6K</b><span>a week of Modal still off the router</span></div>
-</div>
-
-## Apps
-
-<div class="app-grid"><div class="app-card on"><div class="ac-name">Maverick</div><div class="ac-state">100%</div><div class="ac-note">All regions</div></div><div class="app-card on"><div class="ac-name">R-1</div><div class="ac-state">100%</div><div class="ac-note">US and EU</div></div><div class="app-card on"><div class="ac-name">R-1 mini</div><div class="ac-state">100%</div><div class="ac-note">US and EU</div></div><div class="app-card on"><div class="ac-name">Citation 7B</div><div class="ac-state">100%</div><div class="ac-note">US, no fallbacks</div></div><div class="app-card on"><div class="ac-name">FigSum</div><div class="ac-state">100%</div><div class="ac-note">Slots mode, floor 1</div></div><div class="app-card on"><div class="ac-name">Magpie</div><div class="ac-state">100%</div><div class="ac-note">US and EU</div></div><div class="app-card on"><div class="ac-name">Triton apps</div><div class="ac-state">100%</div><div class="ac-note">US; EU at 100% since Nov 19</div></div><div class="app-card wait"><div class="ac-name">Chicken</div><div class="ac-state">Share 0 PR</div><div class="ac-note"><a href="https://github.com/reductoai/api/pull/15451">#15451</a> waits on your merge</div></div><div class="app-card wait"><div class="ac-name">Extract confidence v3</div><div class="ac-state">Share 0 PR</div><div class="ac-note"><a href="https://github.com/reductoai/api/pull/15468">#15468</a> waits on your merge</div></div><div class="app-card wait"><div class="ac-name">Ordering</div><div class="ac-state">Share 0 PR</div><div class="ac-note"><a href="https://github.com/reductoai/api/pull/15477">#15477</a> waits on your merge</div></div><div class="app-card wait"><div class="ac-name">Extract confidence 1.7B</div><div class="ac-state">Built</div><div class="ac-note">Opens after #15451 merges</div></div><div class="app-card later"><div class="ac-name">Layout (Eve Legal)</div><div class="ac-state">Plan</div><div class="ac-note">Needs an HTTP route first; waits on your stamp</div></div><div class="app-card later"><div class="ac-name">Promptable</div><div class="ac-state">Stays direct</div><div class="ac-note">Router keeps the same floor</div></div><div class="app-card later"><div class="ac-name">Small apps</div><div class="ac-state">Later</div><div class="ac-note">Only if the first four save</div></div></div>
-
-## Next steps
-
-<ol class="steps">
-<li class="now"><b>Merge the share 0 PRs</b>: chicken, extract confidence v3, ordering, and the unused confidence class (<a href="https://github.com/reductoai/api/pull/15464">#15464</a>, about $177 a day idle).</li>
-<li><b>Ramp them</b> in all regions together, as for Triton.</li>
-<li><b>Layout</b>: replay Eve Legal first; build the HTTP route only if it saves.</li>
-<li><b>Remove the ramp flags</b> for everyone.</li>
-</ol>
-
-## Cost per call
-
-USD per 1k calls (per 1k pages for R-1 and R-1 mini), all regions, before and after the move. Measured Nov 19.
-
-<div class="cost-bars"><div class="cb-legend"><span class="cb before"></span> before <span class="cb after good"></span> after</div><div class="cb-row"><div class="cb-app">Magpie</div><div class="cb-bars"><div class="cb before" style="width:100%"><span>14.54</span></div><div class="cb after good" style="width:49%"><span>7.1</span></div></div><div class="cb-ch good">-51%</div></div><div class="cb-row"><div class="cb-app">R-1 (pages)</div><div class="cb-bars"><div class="cb before" style="width:100%"><span>3.73</span></div><div class="cb after good" style="width:59%"><span>2.21</span></div></div><div class="cb-ch good">-41%</div></div><div class="cb-row"><div class="cb-app">Highlight detection</div><div class="cb-bars"><div class="cb before" style="width:100%"><span>3.99</span></div><div class="cb after good" style="width:56%"><span>2.25</span></div></div><div class="cb-ch good">-44%</div></div><div class="cb-row"><div class="cb-app">Qwen RF-DETR</div><div class="cb-bars"><div class="cb before" style="width:100%"><span>0.75</span></div><div class="cb after good" style="width:56%"><span>0.42</span></div></div><div class="cb-ch good">-44%</div></div><div class="cb-row"><div class="cb-app">Triton core vision</div><div class="cb-bars"><div class="cb before" style="width:100%"><span>1.67</span></div><div class="cb after good" style="width:74%"><span>1.23</span></div></div><div class="cb-ch good">-26%</div></div><div class="cb-row"><div class="cb-app">Maverick</div><div class="cb-bars"><div class="cb before" style="width:100%"><span>0.66</span></div><div class="cb after good" style="width:77%"><span>0.51</span></div></div><div class="cb-ch good">-23%</div></div><div class="cb-row"><div class="cb-app">R-1 mini (pages)</div><div class="cb-bars"><div class="cb before" style="width:100%"><span>2.21</span></div><div class="cb after good" style="width:98%"><span>2.16</span></div></div><div class="cb-ch good">-2%</div></div><div class="cb-row"><div class="cb-app">Citation 7B</div><div class="cb-bars"><div class="cb before" style="width:91%"><span>2.28</span></div><div class="cb after bad" style="width:100%"><span>2.51</span></div></div><div class="cb-ch bad">+10%</div></div><div class="cb-row"><div class="cb-app">FigSum</div><div class="cb-bars"><div class="cb before" style="width:73%"><span>1.09</span></div><div class="cb after bad" style="width:100%"><span>1.5</span></div></div><div class="cb-ch bad">+38%</div></div><div class="cb-row"><div class="cb-app">Change tracking</div><div class="cb-bars"><div class="cb before" style="width:39%"><span>1.41</span></div><div class="cb after bad" style="width:100%"><span>3.59</span></div></div><div class="cb-ch bad">+155%</div></div></div>
+{{dashboard:more-apps}}
 
 ## Details
 

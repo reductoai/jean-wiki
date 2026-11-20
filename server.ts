@@ -100,6 +100,13 @@ function basePath(pathname: string): string {
 const html = (body: string, status = 200) => new Response(body, { status, headers: { "content-type": "text/html; charset=utf-8" } });
 const json = (body: unknown, status = 200) => Response.json(body, { status });
 
+if (process.env.NOTION_TOKEN) {
+  const { refresh } = await import("./lib/notiondb.ts");
+  const tick = () => refresh(process.env.NOTION_TOKEN!).then((changed) => changed && broadcast("*")).catch((e) => console.error("notion refresh:", e.message));
+  tick();
+  setInterval(tick, 20000);
+}
+
 if (process.env.WIKI_GIT_SYNC) {
   const git = async (...args: string[]) => {
     const p = Bun.spawn(["git", ...args], { cwd: ROOT, stdout: "pipe", stderr: "ignore", timeout: 20000 });

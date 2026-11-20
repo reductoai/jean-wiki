@@ -1,6 +1,7 @@
 import { Marked } from "marked";
 import { loadNotion, notionToMarkdown, section, shiftHeadings } from "./notion.ts";
 import { LINKS } from "./site.ts";
+import { dashboardHtml } from "./notiondb.ts";
 
 export type Heading = { depth: number; text: string; id: string };
 
@@ -12,7 +13,7 @@ const pt = (iso: string) =>
 
 /** Expands `{{notion:slug}}`, `{{notion:slug#Heading}}` (optional ` shift=N`) and `{{diagram:name}}`. */
 export function expand(md: string, base: string): string {
-  return md.replace(/\{\{(notion|diagram):([^}#\s]+)(?:#([^}]*?))?(?:\s+shift=(\d))?\}\}/g, (_, kind, slug, heading, shift) => {
+  return md.replace(/\{\{dashboard:([\w-]+)\}\}/g, (_, ws) => dashboardHtml(ws)).replace(/\{\{(notion|diagram):([^}#\s]+)(?:#([^}]*?))?(?:\s+shift=(\d))?\}\}/g, (_, kind, slug, heading, shift) => {
     if (kind === "diagram") return `<div class="diagram" data-diagram="${slug}"></div>`;
     const page = loadNotion(slug);
     if (!page) return `_Notion snapshot "${slug}" is missing._`;
