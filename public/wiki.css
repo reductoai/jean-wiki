@@ -65,3 +65,4 @@ details { border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; 
   nav.side { transform: translateX(-100%); transition: transform .2s; z-index: 4; } .nav-open nav.side { transform: none; }
   .menu { display: block; } main { margin-left: 0; padding: 20px; } .editing .editor { grid-template-columns: 1fr; height: auto; }
 }
+.sources { font-size: 14px; background: var(--soft); border-color: var(--line); margin: 0 0 20px; } .sources ul { margin: 6px 0; }

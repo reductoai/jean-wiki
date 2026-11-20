@@ -35,7 +35,7 @@ ${nav.todo ? `<div class="part">${link(nav.todo, "Todo")}</div>` : ""}
 ${nav.chapters.map((c) => `<div class="part"><div class="chapter">${c.number}&nbsp; ${esc(c.title)}</div>
 ${c.pages.map((p, j) => link(p, `<span class="num">${c.number}.${j + 1}</span> ${esc(p.title)}`)).join("\n")}</div>`).join("\n")}
 </nav>
-<main><article>${o.body}</article>
+<main><article>${sourcesBox(page)}${o.body}</article>
 <footer class="pager">${prev ? `<a href="${base}${prev.path}">← ${esc(prev.title)}</a>` : "<span></span>"}${next ? `<a href="${base}${next.path}">${esc(next.title)} →</a>` : ""}</footer>
 </main>
 <aside class="toc">${o.headings.length ? `<div class="toc-title">On this page</div>${o.headings.map((h) => `<a class="d${h.depth}" href="#${h.id}">${esc(h.text)}</a>`).join("")}` : ""}</aside>
@@ -77,3 +77,8 @@ export function denied(base: string, who: string) {
 </article></main></body></html>`;
 }
 
+
+function sourcesBox(page: Page) {
+  if (!page.sources?.length) return "";
+  return `<details class="sources"><summary>Relevant sources</summary><ul>${page.sources.map((s) => `<li><a href="${s.url}">${esc(s.title)}</a></li>`).join("")}</ul></details>`;
+}
