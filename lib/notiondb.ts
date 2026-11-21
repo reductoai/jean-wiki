@@ -114,6 +114,23 @@ export function dashboardHtml(ws: string, planHref = ""): string {
   return out + `<p class="source">Numbers, cards and steps come from <a href="${notionPage}">Jean's wiki content</a> in Notion. Edit the rows there; this page updates within a minute.</p>\n\n`;
 }
 
+const costRow = (ws: string, app: string) => dashboard(ws)?.costs?.find((c) => c.app === app.trim());
+
+/** `before | after | change` table cells for one Costs row, so a hand-written table can't drift from Notion. */
+export function costCells(ws: string, app: string): string {
+  const c = costRow(ws, app);
+  if (!c) return "no row | no row | no row";
+  const ch = c.before ? Math.round(((c.after - c.before) / c.before) * 100) : 0;
+  return `${c.before.toFixed(2)} | ${c.after.toFixed(2)} | ${ch > 0 ? "+" : ""}${ch}%`;
+}
+
+/** "Cheaper" or "Costlier" after the move, from the same Costs row. */
+export function costVerdict(ws: string, app: string): string {
+  const c = costRow(ws, app);
+  if (!c) return "no row";
+  return c.after < c.before ? "Cheaper" : c.after > c.before ? "Costlier" : "Same";
+}
+
 const STEP_LABEL: Record<string, string> = { done: "Done", now: "In progress", next: "Next" };
 
 function progress(steps: Dash["steps"]): string {

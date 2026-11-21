@@ -129,32 +129,32 @@
   {
    "app": "Magpie",
    "before": 14.54,
-   "after": 7.1
+   "after": 6.27
   },
   {
    "app": "R-1 (pages)",
    "before": 3.73,
-   "after": 2.21
+   "after": 2.07
   },
   {
    "app": "Highlight detection",
-   "before": 3.99,
-   "after": 2.25
+   "before": 3.75,
+   "after": 4.34
   },
   {
    "app": "Qwen RF-DETR",
-   "before": 0.75,
-   "after": 0.42
+   "before": 2.8,
+   "after": 2.41
   },
   {
    "app": "Triton core vision",
-   "before": 1.67,
-   "after": 1.23
+   "before": 0.74,
+   "after": 0.99
   },
   {
    "app": "Maverick",
    "before": 0.66,
-   "after": 0.51
+   "after": 0.5
   },
   {
    "app": "R-1 mini (pages)",
@@ -169,12 +169,17 @@
   {
    "app": "FigSum",
    "before": 1.09,
-   "after": 1.5
+   "after": 1.54
   },
   {
    "app": "Change tracking",
-   "before": 1.41,
-   "after": 3.59
+   "before": 3.06,
+   "after": 5.44
+  },
+  {
+   "app": "Citation 7B EU",
+   "before": 4.47,
+   "after": 7.41
   }
  ]
 }

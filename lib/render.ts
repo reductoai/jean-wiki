@@ -1,7 +1,7 @@
 import { Marked } from "marked";
 import { loadNotion, notionToMarkdown, section, shiftHeadings } from "./notion.ts";
 import { LINKS } from "./site.ts";
-import { dashboardHtml, planHtml } from "./notiondb.ts";
+import { costCells, costVerdict, dashboardHtml, planHtml } from "./notiondb.ts";
 
 export type Heading = { depth: number; text: string; id: string };
 
@@ -11,9 +11,10 @@ export const slugify = (s: string) =>
 const pt = (iso: string) =>
   new Date(iso).toLocaleString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) + " PT";
 
-/** Expands `{{notion:slug}}`, `{{notion:slug#Heading}}` (optional ` shift=N`) and `{{diagram:name}}`. */
+/** Expands `{{notion:slug}}`, `{{notion:slug#Heading}}` (optional ` shift=N`), `{{diagram:name}}`, and `{{cost:ws/App}}` and `{{verdict:ws/App}}` (table cells from a Costs row). */
 export function expand(md: string, base: string, self = ""): string {
-  return md.replace(/\{\{dashboard:([\w-]+)\}\}/g, (_, ws) => dashboardHtml(ws, self ? `${base}${self}/plan` : ""))
+  return md.replace(/\{\{(cost|verdict):([\w-]+)\/([^}]+)\}\}/g, (_, kind, ws, app) => (kind === "cost" ? costCells(ws, app) : costVerdict(ws, app)))
+    .replace(/\{\{dashboard:([\w-]+)\}\}/g, (_, ws) => dashboardHtml(ws, self ? `${base}${self}/plan` : ""))
     .replace(/\{\{plan:([\w-]+)\}\}/g, (_, ws) => planHtml(ws, self ? `${base}${self.replace(/\/plan$/, "")}` : "")).replace(/\{\{(notion|diagram):([^}#\s]+)(?:#([^}]*?))?(?:\s+shift=(\d))?\}\}/g, (_, kind, slug, heading, shift) => {
     if (kind === "diagram") return `<div class="diagram" data-diagram="${slug}"></div>`;
     const page = loadNotion(slug);
