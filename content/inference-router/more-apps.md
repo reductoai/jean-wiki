@@ -155,41 +155,41 @@ Goal: every Modal app on the router, Modal floors at 1, each cheaper per call.
 <details>
 <summary>Cost per call, before vs after the router</summary>
 
-Measured 2026-11-19 (data through 11-18 UTC). USD per 1k ok calls, or per 1k pages for R-1 and R-1 mini. Cost is the Modal bill plus cluster GPUs: 5.50 USD per B200-hour and 5.721 USD per usw1 H200-hour. The H200 rate is the AWS capacity block cr-0d9e87335cf324c07 (AWS Cost Explorer, May 2026, usage type <code>USW1-CapacityBlockFee:p5en.48xlarge</code>: 199,914.62 USD upfront for one p5en.48xlarge with 8 H200, 2026-06-04 to 2026-12-03, 4,368 h). It covers the GPU node only, and the block ends 2026-12-03. Modal utilization is busy seat time over billed container time. Refreshed on each daily run.
+Measured 2026-11-19 (data through 11-18 UTC); the Triton US and EU rows were recounted from Tinybird on 2026-11-20 (data through 11-19 UTC). The all-regions Before, After, Change and Verdict cells come from the Costs rows in Notion, the same rows as the cost chart above. USD per 1k ok calls, or per 1k pages for R-1 and R-1 mini. Cost is the Modal bill plus cluster GPUs: 5.50 USD per B200-hour and 5.721 USD per usw1 H200-hour. The H200 rate is the AWS capacity block cr-0d9e87335cf324c07 (AWS Cost Explorer, May 2026, usage type <code>USW1-CapacityBlockFee:p5en.48xlarge</code>: 199,914.62 USD upfront for one p5en.48xlarge with 8 H200, 2026-06-04 to 2026-12-03, 4,368 h). It covers the GPU node only, and the block ends 2026-12-03. Modal utilization is busy seat time over billed container time. Refreshed on each daily run.
 
 | App | Region | Before | After | Change | Modal utilization, before | Modal utilization, after | After window | Verdict |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| <b>Maverick</b> | All regions | 0.66 | 0.51 | -23% | 3.6% | 3.1% | 11-06 to 11-18 | Cheaper |
+| <b>Maverick</b> | All regions | {{cost:more-apps/Maverick}} | 3.6% | 3.1% | 11-06 to 11-18 | {{verdict:more-apps/Maverick}} |
 | Maverick | US | 0.60 | 0.41 | -31% | 2.7% | 2.7% | 11-06 to 11-18 | Cheaper |
 | Maverick | EU | 1.05 | 1.17 | +11% | 4.8% | 2.5% | 11-17 to 11-18 | Costlier |
-| <b>R-1 (pages)</b> | All regions | 3.73 | 2.21 | -41% | 4.0% | 2.9% | 11-09 to 11-18 | Cheaper |
+| <b>R-1 (pages)</b> | All regions | {{cost:more-apps/R-1 (pages)}} | 4.0% | 2.9% | 11-09 to 11-18 | {{verdict:more-apps/R-1 (pages)}} |
 | R-1 (pages) | US | 3.09 | 1.94 | -37% | 5.2% | 4.2% | 11-09 to 11-18 | Cheaper |
 | R-1 (pages) | EU | 35.42 | 4.94 | -86% | 0.7% | 1.8% | 11-17 to 11-18 | Cheaper |
-| <b>R-1 mini (pages)</b> | All regions | 2.21 | 2.16 | -2% | 4.8% | 2.9% | 11-09 to 11-18 | No verdict: volume-driven |
+| <b>R-1 mini (pages)</b> | All regions | {{cost:more-apps/R-1 mini (pages)}} | 4.8% | 2.9% | 11-09 to 11-18 | No verdict: volume-driven |
 | R-1 mini (pages) | US | 1.62 | 1.35 | -17% | 6.3% | 4.2% | 11-09 to 11-18 | No verdict: volume-driven |
 | R-1 mini (pages) | EU | 71.86 | 30.64 | -57% | 0.9% | 1.8% | 11-17 to 11-18 | Cheaper |
 | R-1 mini (pages) | AU | 24.15 |  |  | 1.1% |  |  | Not on the router |
-| <b>Citation 7B</b> | All regions | 2.28 | 2.51 | +10% | 6.0% | 5.0% | 11-17 to 11-18 | Costlier |
+| <b>Citation 7B</b> | All regions | {{cost:more-apps/Citation 7B}} | 6.0% | 5.0% | 11-17 to 11-18 | {{verdict:more-apps/Citation 7B}} |
 | Citation 7B | US | 2.11 | 2.23 | +6% | 6.3% | 5.5% | 11-17 to 11-18 | Costlier |
-| Citation 7B | EU | 4.47 | 6.98 | +56% | 3.7% | 2.2% | 11-17 to 11-18 | Costlier |
-| <b>FigSum</b> | All regions | 1.09 | 1.50 | +38% | 7.6% | 3.0% | 11-17 to 11-18 | Costlier |
+| Citation 7B | EU | {{cost:more-apps/Citation 7B EU}} | 3.7% | 2.2% | 11-17 to 11-18 | {{verdict:more-apps/Citation 7B EU}} |
+| <b>FigSum</b> | All regions | {{cost:more-apps/FigSum}} | 7.6% | 3.0% | 11-17 to 11-18 | {{verdict:more-apps/FigSum}} |
 | FigSum | US | 0.90 | 1.17 | +29% | 7.8% | 3.7% | 11-17 to 11-18 | Costlier |
 | FigSum | EU | 1.51 | 2.50 | +65% | 7.4% | 2.1% | 11-17 to 11-18 | Costlier |
-| <b>Magpie</b> | All regions | 14.54 | 7.10 | -51% | 3.5% | 14.3% | 11-17 to 11-18 | Cheaper |
+| <b>Magpie</b> | All regions | {{cost:more-apps/Magpie}} | 3.5% | 14.3% | 11-17 to 11-18 | {{verdict:more-apps/Magpie}} |
 | Magpie | US | 10.51 | 4.98 | -53% | 4.8% | 21.3% | 11-17 to 11-18 | Cheaper |
 | Magpie | EU | 101.77 | 36.71 | -64% | 0.5% | 1.1% | 11-17 to 11-18 | Cheaper |
-| <b>Triton core vision</b> | All regions | 1.67 | 1.23 | -26% | n/a | n/a | 11-14 to 11-18 | Cheaper |
-| Triton core vision | US | 1.37 | 1.00 | -27% | n/a | n/a | 11-14 to 11-18 | Cheaper |
-| Triton core vision | EU | 8.75 |  |  | n/a |  |  | Not on the router |
-| <b>Qwen RF-DETR</b> | All regions | 0.75 | 0.42 | -44% | n/a | n/a | 11-14 to 11-18 | Cheaper |
-| Qwen RF-DETR | US | 1.04 | 0.56 | -46% | n/a | n/a | 11-14 to 11-18 | Cheaper |
-| Qwen RF-DETR | EU | 0.38 |  |  | n/a |  |  | Not on the router |
-| <b>Change tracking</b> | All regions | 1.41 | 3.59 | +155% | n/a | n/a | 11-17 to 11-18 | Costlier |
-| Change tracking | US | 1.05 | 2.82 | +170% | n/a | n/a | 11-17 to 11-18 | Costlier |
-| Change tracking | EU | 190.58 |  |  | n/a |  |  | Not on the router |
-| <b>Highlight detection</b> | All regions | 3.99 | 2.25 | -44% | n/a | n/a | 11-17 to 11-18 | Cheaper |
-| Highlight detection | US | 3.02 | 1.78 | -41% | n/a | n/a | 11-17 to 11-18 | Cheaper |
-| Highlight detection | EU | 76,876.76 |  |  | n/a |  |  | Not on the router |
+| <b>Triton core vision</b> | All regions | {{cost:more-apps/Triton core vision}} | n/a | n/a | 11-14 to 11-19 | {{verdict:more-apps/Triton core vision}} |
+| Triton core vision | US | 0.68 | 0.95 | +40% | n/a | n/a | 11-14 to 11-19 | Costlier |
+| Triton core vision | EU | 1.12 | 0.96 | -14% | n/a | n/a | 11-19 | No verdict: one day of router traffic |
+| <b>Qwen RF-DETR</b> | All regions | {{cost:more-apps/Qwen RF-DETR}} | n/a | n/a | 11-14 to 11-19 | {{verdict:more-apps/Qwen RF-DETR}} |
+| Qwen RF-DETR | US | 2.47 | 2.02 | -18% | n/a | n/a | 11-14 to 11-19 | Cheaper |
+| Qwen RF-DETR | EU | 4.70 | 3.21 | -32% | n/a | n/a | 11-19 | No verdict: one day of router traffic |
+| <b>Change tracking</b> | All regions | {{cost:more-apps/Change tracking}} | n/a | n/a | 11-17 to 11-19 | {{verdict:more-apps/Change tracking}} |
+| Change tracking | US | 2.27 | 4.28 | +89% | n/a | n/a | 11-17 to 11-19 | Costlier |
+| Change tracking | EU | 823.82 | 512.30 | -38% | n/a | n/a | 11-19 | No verdict: one day of router traffic |
+| <b>Highlight detection</b> | All regions | {{cost:more-apps/Highlight detection}} | n/a | n/a | 11-17 to 11-19 | {{verdict:more-apps/Highlight detection}} |
+| Highlight detection | US | 2.84 | 3.41 | +20% | n/a | n/a | 11-17 to 11-19 | Costlier |
+| Highlight detection | EU | 12,796.22 | 1,911.46 | -85% | n/a | n/a | 11-19 | No verdict: one day of router traffic |
 
 <image source="notion-file-block://41d4a78a-1c87-8144-82ef-ff8eb8f6f3ec/31377ef8-f9d8-4c5c-bc0d-4b0e614cd7c0?space_id=4bcae9ff-d0ea-416d-b2f5-a9d6be0a2ecc&name=router_cost_before_after_2026-11-19.png">
 Cost per 1k ok calls before and after the router move, all regions and US, and Modal utilization, with the change per app
@@ -198,11 +198,11 @@ Cost per 1k ok calls before and after the router move, all regions and US, and M
 Caveats:
 
 - Regions: cost is split by Modal environment, calls by caller environment. Cluster GPUs are US only. A region with no Modal bill for an app (AU, for all but R-1 mini) is served by the US apps and counts with US.
-- "Costlier" rows have two days of router traffic (11-17 and 11-18), and the Modal bill is an estimate for 11-18. FigSum is costlier at equal volume: its Modal app billed 220 GPU-hours a day against 151, at 3.0% utilization against 7.6%. Citation 7B in the US cost 1.85 on 11-18, its first full day in slots mode, below its 2.11 before; in the EU it billed 514 USD on 11-18 against about 200 a day before. Change tracking is mostly volume: 198k and 120k calls against 183k to 273k on weekdays before, with a fixed 137 USD a day of usw1. Maverick EU has no cluster GPUs, so only its Modal bill moves. Details: [Inference footguns](https://app.notion.com/p/41b4a78a1c8781e88b9eedaaf8354377) log of 2026-11-19.
+- "Costlier" rows have two days of router traffic (11-17 and 11-18), and the Modal bill is an estimate for 11-18. FigSum is costlier at equal volume: its Modal app billed 220 GPU-hours a day against 151, at 3.0% utilization against 7.6%. Citation 7B in the US cost 1.85 on 11-18, its first full day in slots mode, below its 2.11 before; in the EU it billed 514 USD on 11-18 against about 200 a day before. Change tracking is not mostly volume: on US weekdays it cost 1.77 to 2.95 before and 3.79 to 4.72 after, on 99k to 129k calls a day after against 107k to 194k before. Maverick EU has no cluster GPUs, so only its Modal bill moves. Details: [Inference footguns](https://app.notion.com/p/41b4a78a1c8781e88b9eedaaf8354377) log of 2026-11-19.
 - R-1 mini: pages fell 15x on 11-04 (2.7M to 0.14M a day), five days before the move. All regions it cost 1.60 at the high volume (10-28 to 11-03), 18.50 at the low volume (11-04 to 11-08) and 2.16 after the move. The load-test floors of [#15054](https://github.com/reductoai/api/pull/15054) and [#15191](https://github.com/reductoai/api/pull/15191) are planned spend and sit in its Modal bill.
 - Modal utilization did not rise with the move (Maverick 3.6% to 3.1%, fpp-flash 4.0% to 2.9%). The saving comes from billing fewer Modal container hours as calls moved to cluster GPUs: fpp-flash 2,336 to 987 paid GPU-hours a day, Maverick 575 to 343.
 - Modal utilization takes each Modal app whole, so R-1 and R-1 mini share the fpp-flash number. Triton has none: calls through the router or to usw1 write no call rows.
-- Triton rows count calls from the client metric in Datadog and split the two segmentation GPUs of usw1 evenly between change tracking and highlight detection. EU Triton is not on the router; its change tracking and highlight detection apps are almost idle.
+- Triton rows count ok calls in Tinybird, not from Datadog's client metric, which dropped most of them and made core vision and highlight detection look cheaper. They split the two segmentation GPUs of usw1 evenly between change tracking and highlight detection. EU Triton has one day of router traffic (11-19), so its rows have no verdict; its change tracking and highlight detection apps are almost idle.
 - Before windows start 10-20 (R-1 mini 10-28, Magpie 11-06) and end the day before the region's first router day (Triton core vision and Qwen RF-DETR: 11-12).
 - Sources and queries: [Inference footguns](https://app.notion.com/p/41b4a78a1c8781e88b9eedaaf8354377) log of 2026-11-17.
 
