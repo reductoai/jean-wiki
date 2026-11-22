@@ -12,6 +12,7 @@ My workstreams by priority. Each one opens its page.
 - **p1** [Inference observability](workstreams/inference-observability)
 - **p1** [Global is fair game](workstreams/global-is-fair-game)
 - **p1** R-1 and R-1 mini serving profiles
+- [Training queue on the GPU clusters](workstreams/training-queue)
 
 ## Running
 

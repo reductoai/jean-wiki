@@ -46,6 +46,7 @@ export const CHAPTERS: Chapter[] = [
       { slug: "workstreams/overshoot-1112-r1-35b", path: "workstreams/overshoot-1112-r1-35b", title: "Overshoot 1112 R-1 35B package", sources: [n("Overshoot 1112 R-1 35B package", "4164a78a1c878172b7cfcb952321422f")] },
       { slug: "workstreams/exa-eval", path: "workstreams/exa-eval", title: "Exa eval", sources: [n("Exa eval", "41c4a78a1c8781009a33ece713086e73")] },
       { slug: "workstreams/gpu-cluster-observability", path: "workstreams/gpu-cluster-observability", title: "GPU cluster observability and utilization", sources: [n("GPU cluster observability and utilization", "41b4a78a1c87810f8533dda3777fba9f")] },
+      { slug: "workstreams/training-queue", path: "workstreams/training-queue", title: "Training queue on the GPU clusters", sources: [n("Training queue on the GPU clusters", "4204a78a1c878142be3bede694682ebc"), n("Plan: training queue on the GPU clusters", "4204a78a1c87811ca592f6d384bcaefc")] },
       { slug: "workstreams/inference-docs-cleanup", path: "workstreams/inference-docs-cleanup", title: "Inference docs and memory cleanup", sources: [n("Inference docs and memory cleanup", "41b4a78a1c87810ba012d0525c1fa9e3")] },
     ],
   },
@@ -57,5 +58,7 @@ export const PAGES: Page[] = [TODO, ...CHAPTERS.flatMap((c) => c.pages)];
 export const LINKS: Record<string, string> = {
   "41c4a78a1c8781b189d1ff1ff6626677": "",
   "4164a78a1c87818ea15bdef76227228c": "inference-router/more-apps",
+  "4204a78a1c878142be3bede694682ebc": "workstreams/training-queue",
+  "4204a78a1c87811ca592f6d384bcaefc": "workstreams/training-queue/plan",
   "4164a78a1c87810ca8c1d9697c4f5971": "inference-router/eu-r1",
 };
