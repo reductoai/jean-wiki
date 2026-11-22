@@ -1,0 +1,40 @@
+{
+ "stats": [],
+ "apps": [],
+ "steps": [
+  {
+   "step": "Measure idle B200s",
+   "detail": "Read only: free GPU hours per cluster and per node over the last 14 days. Stop if the median is under 2 free GPUs.",
+   "state": "next"
+  },
+  {
+   "step": "Slurm control plane on uss1",
+   "detail": "PR 1, the GCP canary: Slinky charts, HelmRelease, PriorityClass gpu-training, control plane, and a login pod with /home on a new Filestore share, NodeSet at 0. It touches no GPU.",
+   "state": "next"
+  },
+  {
+   "step": "Training pods and KEDA scaling on uss1",
+   "detail": "PR 2: NodeSet plus KEDA scaling. Test: run a 4 GPU job, force an inference scale-up, and confirm the worker gets its GPU within 60 s and the job requeues and resumes.",
+   "state": "next"
+  },
+  {
+   "step": "Resumable 1 to 4 GPU preset",
+   "detail": "PR 3, training side: an sbatch preset with --requeue, periodic checkpoints under /home, and resume on start, saving optimizer and RNG state.",
+   "state": "next",
+   "owner": "Raymond"
+  },
+  {
+   "step": "All three clusters, one queue",
+   "detail": "PR 4: install on use1 and usw3, shared accounting database, federation, /home mounted everywhere. Jean applies the Terraform: controller access between clusters and the Filestore export to all node subnets.",
+   "state": "next"
+  },
+  {
+   "step": "Measure impact",
+   "detail": "Training GPU hours served from idle B200s against RunPod and Modal spend, with inference p99 and Modal spill unchanged.",
+   "state": "next"
+  }
+ ],
+ "costs": [],
+ "impact": [],
+ "prs": []
+}
